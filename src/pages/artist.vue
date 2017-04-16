@@ -1,0 +1,359 @@
+<template>
+	<div id="fixheader">
+		<mt-header id="artheader" fixed :title="(art.artist.name||'歌手')">
+			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
+		</mt-header>
+		<div id="artist_header" ref="main" :style="{top:-scrolltop+'px'}">
+			<img src="../../static/images/cm2_default_artist_banner@2x.jpg" />
+			<img id="art_cover" :src="(cover||art.artist.picUrl)+'?param=640y520'" :style="{'filter':'blur('+opa+'px) brightness(.8)'} " />
+			<div id="ahw_wrap">
+				<div class="ahw_btn" :style="{'visibility':(opa1>.7?'visible':'hidden')}">
+					<img src="../../static/images/cm2_list_icn_subscribe@2x.png" v-if="!art.artist.followed" />
+					<img src="../../static/images/cm2_pro_btn_icn_subed@2x.png" v-else/> {{art.artist.followed?'已':''}}收藏
+				</div>
+			</div>
+		</div>
+		<tab :tabs="tab" :tabidx="cur" v-on:switchtab="switchtab" class="tab-split"></tab>
+		<div id="art_main">
+			<div class="tab_cnt" v-show="cur==0">
+				<songlist :list="art.hotSongs"></songlist>
+				<div v-if="art.more">
+					<div url="" class="cntloading">查看所有曲目></div>
+				</div>
+				<loading v-if="!loaded"></loading>
+			</div>
+			<div class="tab_cnt " v-show="cur==1">
+				<router-link :to="{name: 'album',params:{id:re.id}}" v-for="re in tab[1].album.hotAlbums" :key="re.id" class="flexlist flex-image albums">
+					<div class="flexleft fl-image">
+						<img :src="(re.picUrl||'../../static/images/a6l.png')+'?param=100y100'" class="music_cover" />
+						<img class="albums_cover" src="../../static/images/a6l.png" />
+					</div>
+					<div class="flexlist">
+						<div class="flexmain">
+							<div>{{re.name}}
+								<span v-if="re.alias[0]">({{re.alias[0]}})</span>
+							</div>
+							<div class="relistdes">{{re.artist.name}}
+								<span v-if="re.artist.alias[re.artist.alias.length-1]">({{re.artist.alias[re.artist.alias.length-1]}})</span>
+							</div>
+						</div>
+					</div>
+				</router-link>
+				<loading v-if="!tab[1].loaded||tab[1].album.more"></loading>
+			</div>
+			<div class="tab_cnt" v-show="cur==2">
+				<div class="flex-boxlist mvs flex-two">
+					<div v-for="re in tab[2].mvs.mvs" class="tl_cnt">
+						<div class="cover">
+							<div class="img_playcount">
+								<img src="../../static/images/video.png" />{{re.playCount|playcount}}</div>
+							<img :src="re.imgurl16v9+'?param=320y180'" class="mv_cover" />
+						</div>
+						<div class="tl_info">
+							<div>{{re.name}}</div>
+							<div class="tli_des">{{re.artistName}}</div>
+						</div>
+					</div>
+				</div>
+				<loading v-if="!tab[2].loaded"></loading>
+			</div>
+			<div class="tab_cnt" v-show="cur==3">
+				<div v-if="tab[3].loaded">
+					<div class="listheader">
+						<span>歌手简介</span>
+					</div>
+					<span class="artist_des">{{tab[3].desc.briefDesc}}</span>
+					<div class="cntloading" id="descallbtn" @click="popupVisible=true">查看完整介绍>
+					</div>
+					<div class="listheader" v-if="tab[3].artists.artists">
+						<span>相似歌手</span>
+					</div>
+					<div id="simiwrap">
+						<div class="flex-boxlist">
+							<div class="tl_cnt" v-for="item in tab[3].artists.artists">
+								<div class="cover">
+									<img :src="item.img1v1Url+'?param=100y100'" class="music_cover" />
+								</div>
+								<span>{{item.name}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<loading v-else></loading>
+			</div>
+		</div>
+		<mt-popup v-model="popupVisible" position="right">
+			<mt-header fixed title="歌手介绍">
+				<mt-button slot="left" @click="popupVisible=false" icon="back"></mt-button>
+			</mt-header>
+			<div id="pop_cnt">
+				<div class="listheader" id="pop_hasheader">
+					<span>歌手简介</span>
+				</div>
+				<span class="artist_des">{{tab[3].desc.briefDesc}}
+                                                </span>
+				<div v-for="item in tab[3].desc.introduction">
+					<div class="listheader">
+						<span>{{item.ti}}</span>
+					</div>
+					<span class="artist_des">{{item.txt}}</span>
+				</div>
+			</div>
+		</mt-popup>
+	</div>
+</template>
+
+<script>
+	import api from '@/api';
+	import loading from "@/components/loading";
+	import tab from "@/components/tabs";
+	import bs64 from "@/base64";
+	import songlist from "@/components/songlist";
+	import utils from "@/utils"
+	const tabcnt = [{
+		name: '热门50',
+		loaded: false
+	}, {
+		name: '专辑',
+		album: {
+			hotAlbums: []
+		},
+		text: 0,
+		offset: 0,
+		loaded: false
+	}, {
+		name: 'MV',
+		text: 0,
+		offset: 0,
+		mvs: {
+			mvs: []
+		},
+		loaded: false
+	}, {
+		name: '歌手信息',
+		desc: {},
+		artists: {},
+		loaded: false
+	}]
+	export default {
+		name: 'artist',
+		data() {
+			return {
+				scrolltop: 0,
+				cur: '0',
+				opa: 0,
+				opa1: 1,
+				id: -1,
+				cover: "",
+				popupVisible: false,
+				loaded: false,
+				art: {
+					artist: {}
+				},
+				tab: utils.clone(tabcnt)
+			}
+		},
+		components: {
+			songlist,
+			tab,
+			loading
+		},
+		beforeRouteEnter: (to, from, next) => {
+			next(vm => {
+				if(parseInt(to.params.id) !== parseInt(vm.id)) {
+					console.log("null")
+					vm.loaded = false;
+					vm.id=vm.$route.params.id;
+					vm.cover="";
+					vm.cur="0"
+					var img = vm.$route.query.img;
+					img && (vm.cover = bs64.id2Url(img));
+					vm.art = {
+						artist: {}
+					}
+					vm.tab = utils.clone(tabcnt);
+					vm.load();
+				}
+			})
+		},
+		activated() {
+			var cw = window.screen.width;
+			var st = window.screen.width * 0.8125 - 40
+			window.onscroll = () => {
+				if(window.pageYOffset > st) {
+					this.scrolltop = st;
+				} else {
+					this.opa1 = 1 - window.pageYOffset / cw;
+					this.opa = window.pageYOffset / cw * 10
+					this.scrolltop = pageYOffset
+				}
+			}
+		},
+		deactivated() {
+			window.onscroll = null
+		},
+		methods: {
+			switchtab(index) {
+				this.cur = index.toString();
+				if(this.cur == 1 && !this.tab[1].loaded) {
+					this.loadAlbum(false)
+				}
+				if(this.cur == 2 && !this.tab[2].loaded) {
+					this.loadMvs(false)
+				}
+				if(this.cur == 3 && !this.tab[3].loaded) {
+					api.artist_desc(this.id).then(res => {
+						this.tab[3].loaded = true;
+						this.tab[3].desc = res.data;
+						api.artist_simi(this.id).then(res => {
+							this.tab[3].artists = res.data
+						})
+					})
+				}
+			},
+			loadAlbum(more = true) {
+				this.tab[1].busy = true
+				api.artist_album(this.id, this.tab[1].offset).then(res => {
+					this.tab[1].offset += res.data.hotAlbums.length;
+					this.tab[1].busy = false;
+					res.data.hotAlbums = this.tab[1].album.hotAlbums.concat(res.data.hotAlbums)
+					this.tab[1].album = res.data
+					this.tab[1].loaded = true
+				})
+			},
+			loadMvs(more = true) {
+				this.tab[2].busy = true;
+				api.artist_mv(this.$route.params.id, this.tab[2].offset).then(res => {
+					this.tab[2].offset += res.data.mvs.length;
+					this.tab[2].busy = false;
+					res.data.mvs = this.tab[2].mvs.mvs.concat(res.data.mvs)
+					this.tab[2].mvs = res.data
+					this.tab[2].loaded = true
+				})
+			},
+			load() {
+				api.artist(this.$route.params.id).then(res => {
+					this.loaded = true;
+					this.art = res.data;
+					this.tab[1].text = res.data.artist.albumSize;
+					this.tab[2].text = res.data.artist.mvSize
+				}).catch(() => {
+					this.loaded = true
+				});
+			}
+		},
+		filters: {
+			playcount(v) {
+				return v < 10e3 ? v : ((v / 10e3).toFixed(0) + '万')
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	#artheader {
+		background-image: linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
+		background-color: transparent;
+	}
+	
+	#headerblur {
+		background: none;
+	}
+	
+	#art_cover {
+		transform: scale(1.25)
+	}
+	
+	#artist_header {
+		position: fixed;
+		height: 0;
+		overflow: hidden;
+		z-index: 2;
+		padding-top: 81.25%;
+		width: 100%;
+		left: 0;
+		top: 0;
+	}
+	
+	.blurbg {
+		transform: scale(1)
+	}
+	
+	#fixheader {
+		padding-top: 81.25%;
+	}
+	
+	#fixheader #artist_header {
+		position: fixed;
+	}
+	
+	#ahw_wrap {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		padding: 5em 1em 1em;
+		box-sizing: border-box;
+		text-align: right;
+		background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, .6))
+	}
+	
+	.ahw_btn {
+		display: inline-block;
+		padding: .5em 1em;
+		border: 1px solid #fff;
+		color: #fff;
+		border-radius: 3em;
+		line-height: 1
+	}
+	
+	.ahw_btn img {
+		height: 1em
+	}
+	
+	.tab {
+		margin-bottom: .2em
+	}
+	
+	#descallbtn {
+		color: #999
+	}
+	
+	#artist_header>img {
+		width: 100%;
+		position: absolute;
+		left: 0;
+		bottom: 0;
+	}
+	
+	.mvs .cover {
+		padding-top: 56.2%
+	}
+	
+	.mvs {
+		padding-right: 1em;
+	}
+	
+	.artist_des {
+		padding: 0 .5em 1em;
+		color: #666;
+		display: block;
+		line-height: 1.8;
+	}
+	
+	#simiwrap {
+		overflow: hidden;
+	}
+	
+	.mint-popup {
+		height: 100%;
+		position: fixed;
+	}
+	
+	#pop_cnt {
+		padding-top: 50px;
+		height: 100%;
+		overflow: auto;
+		box-sizing: border-box
+	}
+</style>
