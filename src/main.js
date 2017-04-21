@@ -4,6 +4,7 @@ import router from './router'
 import Mint from 'mint-ui';
 import 'mint-ui/lib/style.css'
 import '@/assets/layout.css'
+import store from '@/store/store'
 import axios from 'axios'
 import api from "@/api"
 axios.defaults.timeout = 5000
@@ -42,9 +43,10 @@ Vue.use(Mint);
 new Vue({
     el: '#app',
     router,
+    store,
     template: '<App/>',
     components: { App },
-    mounted() {
-        api.likeall().then(res => { localStorage.setItem("likelist", (res.data.ids||[]).join(",")) })
+    async mounted() {
+    	await this.$store.dispatch('getlike')
     }
 })

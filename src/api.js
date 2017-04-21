@@ -78,7 +78,7 @@ export default {
     music_url(id) {
         return axios("music/url?id=" + id + '&br=128000')
     },
-    music_detail(id) {
+    async music_detail(id) {
         return axios("music/detail?id=" + id)
     },
     fm() {

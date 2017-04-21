@@ -47,16 +47,16 @@
 		</div>
 		<div class="plist-detail">
 			<div v-if="loaded">
-				<div id="playall" bindtap="playall" class="flexlist flex-center">
+				<div id="playall" @click="playall" class="flexlist flex-center">
 					<div class="flexleft flexnum ">
 						<img src="../../static/images/pl-playall.png" />
 					</div>
-					<div class="flexlist">
+					<div class="flexlist" >
 						<span id="pa-count">播放全部 <span> (共{{list.playlist.trackCount}}首)</span>
 						</span>
 					</div>
 				</div>
-				<songlist :list="list.playlist.tracks" :toplist.sync="istoptype" :trackids="list.playlist.trackIds"></songlist>
+				<songlist :list="list.playlist.tracks" :curplay="music.id" :toplist.sync="istoptype" :trackids="list.playlist.trackIds"></songlist>
 			</div>
 			<loading v-else></loading>
 		</div>
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+	import { mapGetters, mapMutations } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import loading from "@/components/loading"
@@ -78,10 +79,9 @@
 						creator: {}
 					},
 				},
-				istoptype:0,
+				istoptype: 0,
 				opacity: 0,
 				name: '',
-				curplay: -1,
 				offset: 0,
 				id: -1,
 				loaded: false,
@@ -97,7 +97,6 @@
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
 				if(parseInt(to.params.id) !== parseInt(vm.id)) {
-				console.log("null")
 					vm.name = "";
 					vm.loaded = false;
 					vm.cover = "";
@@ -113,9 +112,10 @@
 		activated() {
 			var st = this.$refs.main;
 			st = st.getBoundingClientRect().height;
+			this.title = window.pageYOffset > 100 ? '' : '歌单';
+			this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
 			window.onscroll = () => {
-				var opa = window.pageYOffset > 100;
-				this.title = opa ? '' : '歌单';
+				this.title = window.pageYOffset > 100 ? '' : '歌单';
 				this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
 			}
 		},
@@ -127,7 +127,7 @@
 				var img = this.$route.query.img;
 				var name = this.$route.query.name;
 				this.name = name;
-				this.id=this.$route.params.id;
+				this.id = this.$route.params.id;
 				this.istoptype = this.$route.query.istop;
 				img && (this.cover = bs64.id2Url(img));
 				api.playlist(this.id, this.offset, 1000).then(res => {
@@ -144,7 +144,22 @@
 				}).catch(() => {
 					this.loaded = true
 				});
+			},
+			playall(){
+				console.log("playall");
+				console.log(this.canplay[0]);
+				this.$store.commit("setplaytype",1);
+				this.$store.commit("setplaylist",this.canplay);
+				this.$store.commit("setmusic",this.canplay[0])
+				this.$store.commit("playindex",0);
+				this.$store.dispatch("only_murl")
 			}
+		},
+		computed: {
+			...mapGetters([
+				'playing',
+				'music'
+			])
 		},
 		filters: {
 			playcount(v) {

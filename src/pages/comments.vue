@@ -99,15 +99,26 @@
     components: {
       loading
     },
-    created() {
-      this.name = this.$route.query.name;
-      this.comments(false)
-    },
+    beforeRouteEnter: (to, from, next) => {
+			next(vm => {
+				if(parseInt(to.params.id) !== parseInt(vm.id)) {
+					vm.loaded = false;
+					vm.cover = "";
+					vm.offset=0;
+					vm.rec ={hotComments:[],comments:[],total:0},
+					vm.comments(false)
+				}
+			})
+		},
     methods: {
       comments(more = true, id) {
-        this.busy = true
+        this.busy = true;
+        this.id=this.$route.params.id;
         if (more && !this.rec.more) return;
-        api.comments(this.$route.params.id, this.offset, 1).then(res => {
+        var ctype=this.$route.query.ctype;
+        console.log(ctype);
+        ctype=ctype?ctype:1;
+        api.comments(this.id, this.offset, ctype).then(res => {
           var data = res.data;
           for (let i in data.hotComments) {
             data.hotComments[i].content = this.emoji(data.hotComments[i].content)

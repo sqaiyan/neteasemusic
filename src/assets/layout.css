@@ -10,8 +10,9 @@ img {
 input:focus {
     outline: none
 }
-
-body {
+html{height: 100%;}
+#app{height: 100%;}
+body {height: 100%;
     font-family: '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
     color: #000;
     font-size: 14px;
@@ -87,6 +88,7 @@ a {
     backdrop-filter: blur(15px);
     z-index: 100;
     align-items: center;
+   
 }
 
 #pp_pic {
@@ -354,62 +356,6 @@ a {
     animation-delay: -.2s
 }
 
-#playing-status {
-    display: flex;
-    color: #fff;
-    margin: 20px
-}
-
-#playing-status progress {
-    width: 520px;
-    margin: 0 auto;
-    color: #000;
-    position: relative;
-    border-radius: 4px;
-}
-
-#playing-status #playstate {
-    position: absolute;
-    display: block;
-    height: 8px;
-    width: 8px;
-    overflow: hidden;
-    background-color: #d33a31;
-    border: 12px solid #fff;
-    border-radius: 50%;
-    top: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    z-index: 2
-}
-
-#dpstate {
-    position: absolute;
-    height: 2px;
-    width: 0;
-    background-color: #d33a31;
-    overflow: hidden;
-    left: 0;
-    top: 50%;
-    margin-top: -1px;
-}
-
-#playing-status .time {
-    width: 80px;
-    text-align: center;
-    display: block;
-    font-size: 24px;
-}
-
-#playing-status slider {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    opacity: 0;
-    z-index: 10
-}
-
 .tab {
     display: flex;
     border-bottom: 1px solid rgba(200, 200, 200, .5);
@@ -563,10 +509,10 @@ a {
 
 #lrclist {
     position: absolute;
-    left: 30px;
-    top: 10px;
-    right: 30px;
-    bottom: 260px;
+    left: 1em;
+    top:40px;margin-top:1.2em;
+    right: 1em;
+    bottom:9em;
     text-align: center;
     overflow: hidden;
     color: #fff;
@@ -576,15 +522,14 @@ a {
 #lrcwrap {
     top: 50%;
     position: absolute;
-    font-size: 30px;
     width: 100%;
     transition: all ease 1s;
     text-align: center;
+    padding-bottom: 14.4em;
 }
 
 #lrcwrap .lrcur {
     opacity: 1;
-    font-size: 31px;
     transition: all ease 1s;
 }
 
@@ -596,11 +541,11 @@ a {
     opacity: .1;
 }
 
-#lrcwrap view {
+#lrcwrap div {
     line-height: 1.2;
     word-break: break-all;
     opacity: .5;
-    height: 72px;
+    height: 2.4em;
     overflow: hidden;
     transition: all ease .5s;
     display: flex;
@@ -614,15 +559,10 @@ a {
     display: block
 }
 
-#lrcwrap view text {
+#lrcwrap div span {
     display: block;
     text-align: center;
     width: 100%
-}
-
-#lrclist .cntloading {
-    top: 50%;
-    position: relative;
 }
 
 #lrclist:after,
@@ -651,7 +591,7 @@ a {
     top: 50%;
     color: #fff;
     width: 100%;
-    margin-top: -16px;
+    margin-top:-2.5em;
 }
 
 .sm_title {
@@ -667,14 +607,14 @@ a {
     color: #aaa
 }
 
-.commentscount text {
+.commentscount span {
     position: absolute;
-    font-size: 22px;
+    font-size: .8em;
     left: 50%;
     top: 50%;
-    margin-left: 10px;
-    margin-top: -35px;
-    color: #ddd
+    margin-left: .5em;
+    margin-top: -1.5em;
+    color: #eee
 }
 
 .flex-boxlist {
