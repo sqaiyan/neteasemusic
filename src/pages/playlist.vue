@@ -5,7 +5,7 @@
 		</div>
 		<mt-header fixed :title="(title||list.playlist.name)">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
-			<mt-button icon="more" slot="right"></mt-button>
+			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
 		</mt-header>
 		<div id="plist-header" ref="main">
 			<div class="blurbg" :style="{'background-image':'url('+cover+')'}"></div>
@@ -56,7 +56,7 @@
 						</span>
 					</div>
 				</div>
-				<songlist :list="list.playlist.tracks" :curplay="music.id" :toplist.sync="istoptype" :trackids="list.playlist.trackIds"></songlist>
+				<songlist :list="list.playlist.tracks" v-on:playindex="playindex" :curplay="music.id" :toplist.sync="istoptype" :trackids="list.playlist.trackIds"></songlist>
 			</div>
 			<loading v-else></loading>
 		</div>
@@ -68,6 +68,7 @@
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import loading from "@/components/loading"
+	import playico from "@/components/playico"
 	import songlist from "@/components/songlist";
 	export default {
 		name: 'playlist',
@@ -92,7 +93,8 @@
 		},
 		components: {
 			songlist,
-			loading
+			loading,
+			playico
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
@@ -100,6 +102,7 @@
 					vm.name = "";
 					vm.loaded = false;
 					vm.cover = "";
+					vm.canplay=[];
 					vm.list = {
 						playlist: {
 							creator: {}
@@ -145,20 +148,23 @@
 					this.loaded = true
 				});
 			},
-			playall(){
-				console.log("playall");
-				console.log(this.canplay[0]);
+			playindex(i){
 				this.$store.commit("setplaytype",1);
 				this.$store.commit("setplaylist",this.canplay);
+				this.$store.commit("playindex",i);
+			},
+			playall(){
+				this.playindex(0);
 				this.$store.commit("setmusic",this.canplay[0])
-				this.$store.commit("playindex",0);
 				this.$store.dispatch("only_murl")
 			}
+			
 		},
 		computed: {
 			...mapGetters([
 				'playing',
-				'music'
+				'music',
+				"playtype"
 			])
 		},
 		filters: {
@@ -170,6 +176,7 @@
 </script>
 
 <style scoped>
+	.flexlist:hover{background-color: transparent;}
 	.mint-header {
 		background: rgba(0, 0, 0, 0)
 	}

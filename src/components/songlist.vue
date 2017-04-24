@@ -1,6 +1,6 @@
 <template>
   <div class="songs">
-    <router-link :to="{name: 'playing',params:{id:re.id},query:{img:re.al.pic_str||re.al.pic}}" :class="'flexlist flex-center '+(re.id===curplay?'cur ':' ')+(toplist==1?'istop':'')" v-for="(re,idx) in list" :key="re.id">
+    <router-link v-for="(re,idx) in list" :key="re.id" :to="{name: 'playing',params:{id:re.id},query:{img:re.al.pic_str||re.al.pic}}"  @click.native="playindex(idx)" :class="'flexlist flex-center '+(re.id===curplay?'cur ':' ')+(toplist==1?'istop':'')" >
       <div class="flexleft flexnum ">
         <div v-if="re.id===curplay">
           <img src="../../static/images/aal.png" alt="">
@@ -57,7 +57,10 @@
       }
     },
     methods: {
-      switchtab(index) {}
+      playindex(index) {
+      	console.log('mmmmmmmmmmmm',index)
+      	this.$emit("playindex",index)
+      }
     }
   }
 </script>

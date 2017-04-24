@@ -1,6 +1,6 @@
 <template>
-	<div id="playing-status">
-		<mt-range :barHeight="barHeight" v-model="playtime" :max="duration">
+	<div id="playing-status" :class="{loading:musicloading}">
+		<mt-range :barHeight="barHeight" v-model="v" v-on:change="change" :max="duration">
 			<div slot="start">{{playtime|time}}</div>
 			<div slot="end">{{duration|time}}</div>
 		</mt-range>
@@ -27,6 +27,22 @@
 			min: {
 				type: Number,
 				default: 0
+			},
+			musicloading:{
+				type:Boolean,
+				default:true
+			}
+		},
+		computed:{
+			v:function(){
+				return Math.ceil(this.playtime)
+			}
+			
+		},
+		methods:{
+			change(v){
+				console.log(this.v)
+				this.$emit('change',v)
 			}
 		},
 		filters: {
@@ -74,7 +90,7 @@
 		transform: none;
 		margin-top: -1px;
 	}
-	
+	.loading .mt-range-thumb:after{border-color: #000;}
 	.mt-range-thumb:after {
 		border: 2px solid #d33a31;
 		height: 0;
@@ -87,6 +103,5 @@
 		border-radius: 1em;
 		margin-top: -2px;
 		margin-left: -2px;
-		;
 	}
 </style>

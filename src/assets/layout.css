@@ -119,7 +119,7 @@ a {
     font-size: 28px;
 }
 
-#pp_name view {
+#pp_name div {
     height: 1.4em;
     white-space: nowrap;
     overflow: hidden;
@@ -234,7 +234,120 @@ a {
     height: 1.2em;
     margin: 0 .2em
 }
-
+#playingpage {
+		background: url('../../static/images/cm2_default_play_bg-ip6@2x.jpg') center top no-repeat;
+		-webkit-background-size: 100% auto;
+		background-size: 100% auto;
+	}
+	
+	#playing-zz {
+		text-align: center;
+		position: absolute;
+		z-index: 20;
+		width: 100%;
+		top: 0;
+		overflow: hidden;
+		margin-top: 40px;
+	}
+	
+	#playing-zz img {
+		width: 30%;
+		margin-top: -8%;
+		margin-left: 10%;
+		margin-bottom: 30px;
+		transform: rotate(-20deg);
+		transform-origin: 26% 17%;
+		transition: all linear .5s
+	}
+	
+	#playing-main {
+		margin: 32% auto 0;
+		position: relative;
+		z-index: 10;
+		width: 80%;
+		animation-delay: .5s;
+		animation: circle 20s linear infinite;
+		animation-play-state: paused;
+	}
+	
+	#playingmainbg {
+		width: 100%;
+		position: relative;
+		z-index: 1
+	}
+	
+	#pmaincover {
+		position: absolute;
+		width: 64%;
+		left: 18%;
+		top: 18%;
+		z-index: 3;
+		height: 0;
+		padding-top: 64%;
+		border-radius: 50%;
+		overflow: hidden;
+		background-size: 100% 100%;
+	}
+	
+	#playing-actwrap {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		box-sizing: border-box;
+		overflow: hidden;
+		z-index: 10
+	}
+	
+	#playing-info {
+		display: flex;
+		margin: 0 10%
+	}
+	
+	.pi-act {
+		flex: 1;
+		text-align: center;
+		position: relative
+	}
+	
+	.pi-act img {
+		width: 60%;
+	}
+	
+	#playingaction {
+		margin: 2% 0 4%;
+		display: flex
+	}
+	
+	.pa-baction,
+	.pa-maction,
+	.pa-saction {
+		flex: 1;
+		text-align: center;
+		width: 100%
+	}
+	
+	.pa-baction img {
+		width: 75%;
+	}
+	
+	.pa-maction img {
+		width: 55%;
+		margin-top: 8%
+	}
+	
+	.pa-saction img {
+		width: 70%;
+		margin-top: 2%
+	}
+	
+	.playing #playing-main {
+		animation-play-state: running !important;
+	}
+	
+	.playing #playing-zz img {
+		transform: rotate(-0deg)
+	}
 @keyframes circle {
     0% {
         transform: rotate(0deg)
@@ -939,10 +1052,9 @@ a {
     top: .4em
 }
 
-#playall {
-    padding: .5em 0 .2em
+#playall .flexlist {
+    padding: .5em 0 .5em
 }
-
 #playall img {
     height: 1.5em;
 }

@@ -4,13 +4,13 @@
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
 			<img src="" />
 		</mt-header>
-		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+music.al.picUrl+')'}"></div>
+		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(cover||music.al.picUrl)+')'}">{{cover}}----</div>
 		<div id="playing-zz" v-show="!showlrc" @click="showlrc=!showlrc">
 			<img src="../../static/images/aag.png" />
 		</div>
 		<div id="playing-main" v-show="!showlrc" @click="showlrc=!showlrc">
 			<img id="playingmainbg" src="../../static/images/play.png" />
-			<div :style="{'background-image':'url('+music.al.picUrl+'?param=200y200)'}" bindtap="loadlrc" id="pmaincover"></div>
+			<div :style="{'background-image':'url('+(cover||music.al.picUrl)+'?param=200y200)'}" bindtap="loadlrc" id="pmaincover"></div>
 		</div>
 		<div id="lrclist" @click="showlrc=!showlrc" :playtime="playtime">
 			<lrcTpl :lrc="lrcObj" :showlrc="showlrc" :playtime="playtime" lrcindex="1"></lrcTpl>
@@ -35,27 +35,20 @@
 					<img src="../../static/images/cm2_play_icn_more@2x.png" />
 				</div>
 			</div>
-			<playpercent :playtime="playtime" :duration="music.dt"></playpercent>
+			<playpercent :playtime="playtime" v-on:change="change" :musicloading="musicloading" :duration="music.dt"></playpercent>
 			<div id="playingaction">
-				<div class="pa-saction" bindtap="playshuffle" v-if="shuffle==1">
-					<img src="../../static/images/cm2_icn_loop@2x.png" />
+				<div class="pa-saction" @click="setshuffle" v-if="shuffle==1">
+					<img :src="'../../static/images/cm2_icn_'+(shuffle==1?'loop':(shuffle==2?'one':'shuffle'))+'@2x.png'" />
 				</div>
-				<div class="pa-saction" bindtap="playshuffle" v-if="shuffle==2">
-					<img src="../../static/images/cm2_icn_one@2x.png" />
-				</div>
-				<div class="pa-saction" bindtap="playshuffle" v-if="shuffle==3">
-					<img src="../../static/images/cm2_icn_shuffle@2x.png" />
-				</div>
-				<div class="pa-maction" data-other="-1" bindtap="playother">
+				
+				<div class="pa-maction" @click="prev" bindtap="playother">
 					<img src="../../static/images/ajh.png" />
 				</div>
-				<div class="pa-baction" v-show="playing" @click="playingtoggle">
-					<img id='pa-playing' src="../../static/images/ajd.png" />
+				<div class="pa-baction" @click="playingtoggle">
+					<img id='pa-playing' :src="'../../static/images/aj'+(playing?'d':'f')+'.png'" />
 				</div>
-				<div class="pa-baction" v-show="!playing" @click="playingtoggle">
-					<img id='pa-pause' src="../../static/images/ajf.png" />
-				</div>
-				<div class="pa-maction" data-other="1" bindtap="playother">
+				
+				<div class="pa-maction" @click="next">
 					<img src="../../static/images/ajb.png" />
 				</div>
 				<div class="pa-saction" bindtap="togpinfo">
@@ -69,7 +62,8 @@
 <script>
 	import { mapGetters, mapMutations } from 'vuex'
 	import api from "@/api"
-	import u from "@/utils.js"
+	import u from "@/utils.js";
+	import bs64 from "@/base64";
 	import lrcTpl from "@/components/lrc"
 	import playpercent from "@/components/playpercent"
 	export default {
@@ -79,10 +73,7 @@
 				loaded: false,
 				id: 0,
 				showlrc: false,
-				commentscount: 0,
-				lrcObj: {
-					lrc: [{}]
-				}
+				cover: "",
 			}
 		},
 		components: {
@@ -91,38 +82,31 @@
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
-				vm.$store.commit("setplaytype",1)
-				if(parseInt(to.params.id) !== parseInt(vm.id)) {
+				vm.$store.commit("setplaytype", 1)
+				if(parseInt(to.params.id) !== parseInt(vm.music.id)) {
 					vm.loaded = false;
-					vm.$store.commit('setmusic', {
-						al: {},
-						ar: [{
-							name: ''
-						}],
-						name: ''
-					})
-					vm.showlrc=false;
-					vm.$store.commit("playtimechange",0)
-					vm.commentscount = 0;
-					vm.lrcObj = {
-						lrc: [{}]
-					};
+					vm.$store.commit('resetmusic')
+					vm.showlrc = false;
+					vm.cover = ""
 					vm.get();
+
 				}
 			})
 		},
-		computed: {
-			...mapGetters(['playtime',
-				'playing',
-				'music',
-				'shuffle',
-				'playing',
-				"likeall"
-			])
-		},
 		watch: {
 			music(v) {
+				if(!this.music.id)return;
 				this.showlrc && this.loadLrc(v.id);
+				if(!this.music.playurl) {
+					console.log('ppppppppppp')
+					this.cover = "";
+					this.$store.commit("setlrc", {
+						lrc: [{}]
+					})
+					this.$store.dispatch('only_murl');
+					this.getcommit()
+				}
+				this.$router.replace({name:'playing',params:{id:this.music.id},query:{img:this.music.al.pic}})
 			},
 			showlrc(v) {
 				if(v && !this.lrcObj.code) {
@@ -130,30 +114,42 @@
 				}
 			}
 		},
+		created() {
+			if(!this.music.id) {
+				//	this.get()
+			}
+		},
 		methods: {
 			loadLrc(id) {
 				if(!id) return;
-				this.lrcObj = {
-					lrc: [{}]
-				};
 				api.lyric(id).then(res => {
 					var lrc = u.parse_lrc(res.data.lrc && res.data.lrc.lyric ? res.data.lrc.lyric : '');
 					res.data.lrc = lrc.now_lrc;
 					res.data.scroll = lrc.scroll ? 1 : 0;
-					this.lrcObj = res.data;
+					this.$store.commit("setlrc", res.data)
 				})
 			},
 			playingtoggle() {
 				this.$store.commit("setplaying", !this.playing);
 			},
 			async get() {
-				this.id = this.$route.params.id;
-				api.comments(this.id, 0, 2).then(res => {
-					this.commentscount = res.data.total
+				var img = this.$route.query.img;
+				img && (this.cover = bs64.id2Url(img));
+				await this.$store.dispatch('getmusic', this.$route.params.id);
+			},
+			getcommit() {
+				api.comments(this.music.id, 0, 2).then(res => {
+					this.$store.commit('commentscount', res.data.total);
 				})
-				await this.$store.dispatch('getmusic_url', this.id);
-				//this.$store.commit("setplaying", 1);
-			}
+			},
+			change(v){
+				console.log(v)
+			},
+			...mapMutations([
+				'next',
+				'prev',
+				'setshuffle'
+			])
 		},
 		computed: {
 			...mapGetters([
@@ -161,7 +157,11 @@
 				'music',
 				'playtime',
 				'shuffle',
-				'likeall'
+				'likeall',
+				'lrcObj',
+				'commentscount',
+				'musicloading',
+				'list_am'
 			])
 		}
 	}
@@ -173,126 +173,11 @@
 		border-bottom: 1px solid rgba(255, 255, 255, .2);
 	}
 	
-	#playingpage {
-		background: url('../../static/images/cm2_default_play_bg-ip6@2x.jpg') center top no-repeat;
-		-webkit-background-size: 100% auto;
-		background-size: 100% auto;
-	}
-	
 	.blurbg {
 		z-index: 0;
 		height: 100%;
 		padding: 0;
 		background-position: center center;
 		background-size: auto 100%;
-	}
-	
-	#playing-zz {
-		text-align: center;
-		position: absolute;
-		z-index: 20;
-		width: 100%;
-		top: 0;
-		overflow: hidden;
-		margin-top: 40px;
-	}
-	
-	#playing-zz img {
-		width: 30%;
-		margin-top: -8%;
-		margin-left: 10%;
-		margin-bottom: 30px;
-		transform: rotate(-20deg);
-		transform-origin: 26% 17%;
-		transition: all linear .5s
-	}
-	
-	#playing-main {
-		margin: 32% auto 0;
-		position: relative;
-		z-index: 10;
-		width: 80%;
-		animation-delay: .5s;
-		animation: circle 20s linear infinite;
-		animation-play-state: paused;
-	}
-	
-	#playingmainbg {
-		width: 100%;
-		position: relative;
-		z-index: 1
-	}
-	
-	#pmaincover {
-		position: absolute;
-		width: 64%;
-		left: 18%;
-		top: 18%;
-		z-index: 3;
-		height: 0;
-		padding-top: 64%;
-		border-radius: 50%;
-		overflow: hidden;
-		background-size: 100% 100%;
-	}
-	
-	#playing-actwrap {
-		position: absolute;
-		left: 0;
-		bottom: 0;
-		width: 100%;
-		box-sizing: border-box;
-		overflow: hidden;
-		z-index: 10
-	}
-	
-	#playing-info {
-		display: flex;
-		margin: 0 10%
-	}
-	
-	.pi-act {
-		flex: 1;
-		text-align: center;
-		position: relative
-	}
-	
-	.pi-act img {
-		width: 60%;
-	}
-	
-	#playingaction {
-		margin: 2% 0 4%;
-		display: flex
-	}
-	
-	.pa-baction,
-	.pa-maction,
-	.pa-saction {
-		flex: 1;
-		text-align: center;
-		width: 100%
-	}
-	
-	.pa-baction img {
-		width: 75%;
-	}
-	
-	.pa-maction img {
-		width: 65%;
-		margin-top: 2%
-	}
-	
-	.pa-saction img {
-		width: 70%;
-		margin-top: 2%
-	}
-	
-	.playing #playing-main {
-		animation-play-state: running !important;
-	}
-	
-	.playing #playing-zz img {
-		transform: rotate(-0deg)
 	}
 </style>

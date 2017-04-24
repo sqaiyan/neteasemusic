@@ -199,7 +199,8 @@ function id2Url(pic_str) {
     res = res.replace(/\//g, '_')
     res = res.replace(/\+/g, '-');
     res += '==';
-    return 'http://p' + Math.floor(1 + Math.random() * 4) + '.music.126.net/' + res + '/' + pic_str + '.jpg'
+    //Math.floor(1 + Math.random() * 4)
+    return 'http://p4.music.126.net/' + res + '/' + pic_str + '.jpg'
 }
 
 module.exports = {

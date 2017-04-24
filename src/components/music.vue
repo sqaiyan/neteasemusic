@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<audio :src.sync="playurl" @timeupdate="playingtime" @ended="next" @canplay="toplay" @error="audioerror" id="audio"></audio>
+		<audio :src.sync="playurl" @timeupdate="playingtime" @waiting="waiting" @ended="next" @canplay="toplay" @error="audioerror" id="audio"></audio>
 	</div>
 </template>
 
@@ -10,7 +10,10 @@
 		name: 'music',
 		methods: {
 			toplay() {
-				this.$store.commit("setplaying", 1);
+				this.$store.commit("setplaying", true);
+			},
+			waiting(){
+				this.$store.commit("waiting")
 			},
 			playingtime() {
 				this.$store.commit("playtimechange", document.getElementById("audio").currentTime);

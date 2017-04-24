@@ -6,10 +6,13 @@ const store = new Vuex.Store({
   state: {
     music: {al:{},ar:[{}]},
     playing: false,
+    lrcObj:{lrc: [{}]},
+    musicloading:true,
     playurl:'',
     musicload: false,
     playtype:1,
     shuffle:1,
+    commentscount:0,
     list_am: [],
     index_am: 0,
     list_fm:[],
@@ -17,10 +20,14 @@ const store = new Vuex.Store({
     list_dj:[],
     index_dj:0,
     playtime: 0,
-    likeall:""
+    likeall:"",
+    user:{},
+    uplaylist:[]
   },
   getters: {
 	music: state => state.music,
+	commentscount:state=>state.commentscount,
+	lrcObj:state=>state.lrcObj,
 	playtype:state=>state.playtype,
 	playurl:state=>state.playurl,
     playing: state => state.playing,
@@ -33,13 +40,15 @@ const store = new Vuex.Store({
     index_fm: state => state.index_fm,
     index_dj: state => state.index_dj,
     playtime: state => state.playtime,
-    likeall: state => state.likeall
+    likeall: state => state.likeall,
+    musicloading:state=>state.musicloading
   },
   mutations: {
 	 setplaying(state,t) {
       state.playing =t;
       if(t){
     	  state.musicload=true;
+    	  state.musicloading=false;
     	  document.getElementById('audio').play()
       }else{
     	  document.getElementById('audio').pause()
@@ -50,6 +59,27 @@ const store = new Vuex.Store({
     	  res.heart=true
       }
       state.music = res;
+    },
+    waiting(state){
+    	state.musicloading=true
+    },
+    setlrc(state,res){
+    	console.log(res)
+    	state.lrcObj=res;
+    },
+    commentscount(state,c){
+    	state.commentscount=c;
+    },
+    resetmusic(state){//初始音乐
+    	state.music= {al:{},ar:[{}]};
+    	state.commentscount=0;
+    	state.playtime=0;
+    	state.playtime=0
+    	state.lrcObj = {
+				lrc: [{}]
+		};
+    	state.musicloading=true;
+    	//dispatch("d")
     },
     setmusic_url (state, url) {
     	state.playurl=url
@@ -74,30 +104,42 @@ const store = new Vuex.Store({
     playindex(state,i){
     	if(state.playtype==1){
     		state.index_am=i;
-    		
     	}else{
     		state.index_dj=i;
-    		commit("setmusic",state.list_dj[i])
     	}
     },
-    next ({commit,state}) { // 播放下一曲
+    next (state) { // 播放下一曲
       console.log("next")
-      switch(state.playtype){
-      case 1:
-    	  commit("other_am",1);
-    	  break;
-      case 2:
-    	  commit("next_fm");
-    	  break;
-      case 3:
-    	  commit("other_dj",1);
-    	  break;
+      state.playing=false
+      if(state.playtype==1){
+    	  if(!state.list_am.length)return;
+    	  state.index_am++;
+    	  state.index_am=state.index_am>=state.list_am.length?0:state.index_am;
+    	  state.music=state.list_am[state.index_am];
       }
     },
-    next_fm({dispatch,state}){
+    
+    prev (state) { // 播放上一曲
+    	 console.log("prev")
+         state.playing=false
+         if(state.playtype==1){
+       	  if(!state.list_am.length)return;
+       	  state.index_am--;
+       	  state.index_am=state.index_am<0?state.list_am.length-1:state.index_am;
+       	  console.log(state.index_am,state.list_am[state.index_am])
+       	  state.music=state.list_am[state.index_am];
+         }
+    },
+    setshuffle(state){
+    	if(state.playtype==1){
+    		
+    	}else{
+    		
+    	}
+    },
+    next_fm(state){
     	state.index_fm++;
     	if(state.index_fm>state.list_fm.length){
-    		dispatch("next_fm");
     	}else{
     		state.music=state.list_fm[state.index_fm]
     	}
@@ -108,14 +150,11 @@ const store = new Vuex.Store({
     	commit("setmusic",fm[0]);
     	dispatch("only_murl")
     },
-    prev (state) { // 播放上一曲
-     
-    },
-    setlikeall(state,res){
-    	state.likeall=res.join(",")
-    }
   },
   actions: {
+	d(){
+		console.log("commit to dispatch")
+	},
 	next_fm({commit}){
 		api.fm().then(res=>{
 			commit("setfm",res.data.data);
@@ -133,15 +172,20 @@ const store = new Vuex.Store({
     		commit('setmusic_url',res.data.data[0].url);
     	})
     },
-    only_murl(state){// 获取歌曲播放地址
-    	console.log(state.music)
+    only_murl({commit,state}){// 获取歌曲播放地址
     	api.music_url(state.music.id).then(res=>{
     		commit('setmusic_url',res.data.data[0].url);
     	})
     },
-    async getlike({commit}){// 获取红心歌曲
+    async getlike({commit,state}){// 获取红心歌曲
     	api.likeall().then(res=>{
-    		commit('setlikeall',res.data.ids||[])
+    		state.likeall=(res.data.ids||[]).join(",")
+    	})
+    },
+    getuplaylist(state){//用户创建的歌单
+    	if(!state.user.id)return;
+    	api.userplaylist().then(res=>{
+    		state.uplaylist=res.data.playlist.filter((i)=>{i.userId==state.user})
     	})
     }
   }
