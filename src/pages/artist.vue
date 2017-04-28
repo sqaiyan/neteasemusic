@@ -2,6 +2,7 @@
 	<div id="fixheader">
 		<mt-header id="artheader" fixed :title="(art.artist.name||'歌手')">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
+			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
 		</mt-header>
 		<div id="artist_header" ref="main" :style="{top:-scrolltop+'px'}">
 			<img src="../../static/images/cm2_default_artist_banner@2x.jpg" />
@@ -69,13 +70,13 @@
 						<span>相似歌手</span>
 					</div>
 					<div id="simiwrap">
-						<div class="flex-boxlist">
-							<div class="tl_cnt" v-for="item in tab[3].artists.artists">
+						<div class="flex-boxlist" :style="{'width':w/4*tab[3].artists.artists.length+'px'}">
+							<router-link replace :style="{'flex':'0 0 '+w*0.21+'px','margin':'.5em '+(w*0.02)+'px 1em'}" redirect :to="{name:'artist',params:{id:item.id}}" class="tl_cnt" v-for="item in tab[3].artists.artists">
 								<div class="cover">
 									<img :src="item.img1v1Url+'?param=100y100'" class="music_cover" />
 								</div>
 								<span>{{item.name}}</span>
-							</div>
+							</router-link>
 						</div>
 					</div>
 				</div>
@@ -108,8 +109,10 @@
 	import loading from "@/components/loading";
 	import tab from "@/components/tabs";
 	import bs64 from "@/base64";
+	import playico from "@/components/playico"
 	import songlist from "@/components/songlist";
 	import utils from "@/utils"
+	import { mapGetters, mapMutations } from 'vuex'
 	const tabcnt = [{
 		name: '热门50',
 		loaded: false
@@ -132,7 +135,9 @@
 	}, {
 		name: '歌手信息',
 		desc: {},
-		artists: {},
+		artists: {
+			artists: []
+		},
 		loaded: false
 	}]
 	export default {
@@ -156,16 +161,16 @@
 		components: {
 			songlist,
 			tab,
-			loading
+			loading,
+			playico
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
 				if(parseInt(to.params.id) !== parseInt(vm.id)) {
-					console.log("null")
 					vm.loaded = false;
-					vm.id=vm.$route.params.id;
-					vm.cover="";
-					vm.cur="0"
+					vm.id = vm.$route.params.id;
+					vm.cover = "";
+					vm.cur = "0"
 					var img = vm.$route.query.img;
 					img && (vm.cover = bs64.id2Url(img));
 					vm.art = {
@@ -176,9 +181,24 @@
 				}
 			})
 		},
+		beforeRouteUpdate(to, from, next) {
+			next()
+			this.loaded = false;
+			this.id = to.params.id;
+			this.cover = "";
+			this.cur = "0"
+			var img = to.query.img;
+			img && (this.cover = bs64.id2Url(img));
+			this.art = {
+				artist: {}
+			}
+			this.tab = utils.clone(tabcnt);
+			this.load();
+		},
 		activated() {
 			var cw = window.screen.width;
-			var st = window.screen.width * 0.8125 - 40
+			var st = window.screen.width * 0.62 - 40;
+			this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
 			window.onscroll = () => {
 				if(window.pageYOffset > st) {
 					this.scrolltop = st;
@@ -232,6 +252,7 @@
 				})
 			},
 			load() {
+				this.id = this.$route.params.id
 				api.artist(this.$route.params.id).then(res => {
 					this.loaded = true;
 					this.art = res.data;
@@ -241,6 +262,16 @@
 					this.loaded = true
 				});
 			}
+		},
+		computed: {
+			w: function() {
+				return window.screen.width
+			},
+			...mapGetters([
+				'playing',
+				'music',
+				"playtype"
+			])
 		},
 		filters: {
 			playcount(v) {
@@ -269,7 +300,7 @@
 		height: 0;
 		overflow: hidden;
 		z-index: 2;
-		padding-top: 81.25%;
+		padding-top: 62%;
 		width: 100%;
 		left: 0;
 		top: 0;
@@ -280,7 +311,7 @@
 	}
 	
 	#fixheader {
-		padding-top: 81.25%;
+		padding-top: 62%;
 	}
 	
 	#fixheader #artist_header {
@@ -323,7 +354,7 @@
 		width: 100%;
 		position: absolute;
 		left: 0;
-		bottom: 0;
+		top: 0;
 	}
 	
 	.mvs .cover {
@@ -343,6 +374,7 @@
 	
 	#simiwrap {
 		overflow: hidden;
+		overflow-x: auto;
 	}
 	
 	.mint-popup {
@@ -355,5 +387,13 @@
 		height: 100%;
 		overflow: auto;
 		box-sizing: border-box
+	}
+	
+	#simiwrap .tl_cnt {
+		width: 20%;
+		text-align: center;
+		flex: 0 0 21%;
+		margin-left: 2%;
+		margin-right: 2%;
 	}
 </style>

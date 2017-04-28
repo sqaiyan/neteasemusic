@@ -34,7 +34,7 @@
 					<span>{{list.playlist.subscribedCount||'收藏'}}</span>
 				</div>
 				<div>
-					<router-link :to="{name:'comment',params:{id:list.playlist.commentThreadId}}">
+					<router-link :to="{name:'comment',params:{id:list.playlist.commentThreadId||0}}">
 						<img src="../../static/images/cm2_list_detail_icn_cmt@2x.png" />
 						<span>{{list.playlist.commentCount||'评论'}}</span>
 					</router-link>
@@ -56,7 +56,7 @@
 						</span>
 					</div>
 				</div>
-				<songlist :list="list.playlist.tracks" v-on:playindex="playindex" :curplay="music.id" :toplist.sync="istoptype" :trackids="list.playlist.trackIds"></songlist>
+				<songlist :list="list.playlist.tracks" v-on:playindex="playindex" :curplay="music.id" :toplist="istoptype" :trackids="list.playlist.trackIds"></songlist>
 			</div>
 			<loading v-else></loading>
 		</div>

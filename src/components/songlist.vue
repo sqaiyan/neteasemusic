@@ -1,6 +1,6 @@
 <template>
   <div class="songs">
-    <router-link v-for="(re,idx) in list" :key="re.id" :to="{name: 'playing',params:{id:re.id},query:{img:re.al.pic_str||re.al.pic}}"  @click.native="playindex(idx)" :class="'flexlist flex-center '+(re.id===curplay?'cur ':' ')+(toplist==1?'istop':'')" >
+    <router-link v-for="(re,idx) in list" :key="re.id"  :to="{name: 'playing',params:{id:re.id},query:{img:re.al.pic_str||re.al.pic}}"  @click.native="playindex(idx)" :class="'flexlist flex-center '+(re.id===curplay?'cur ':' ')+(toplist==1?'istop':'')" >
       <div class="flexleft flexnum ">
         <div v-if="re.id===curplay">
           <img src="../../static/images/aal.png" alt="">
@@ -28,9 +28,9 @@
           <div class="relistdes">{{re.ar[0].name}}-{{re.al.name}}</div>
         </div>
         <div class="flexact">
-          <div class="fa_list fa_mv" v-if="re.mv!=0">
+        	<router-link :to="{name:'mv',params:{id:re.mv}}" class="fa_list fa_mv" v-if="re.mv!=0">
             <img src="../../static/images/l0.png" />
-          </div>
+          </router-link>
           <div class="fa_list">
             <img src="../../static/images/cm2_list_btn_more@2x.png" />
           </div>
@@ -47,8 +47,8 @@
       list: Array,
       privileges: Array,
       toplist: {
-        type: Number,
-        default: 0
+        type: String,
+        default: ''
       },
       trackids: Array,
       curplay: {
@@ -58,7 +58,7 @@
     },
     methods: {
       playindex(index) {
-      	console.log('mmmmmmmmmmmm',index)
+      	this.$store.commit("setbgmchange",false)
       	this.$emit("playindex",index)
       }
     }

@@ -3,19 +3,20 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-    routes: [{
-            path: '/playing/:id',
-            name: 'playing',
-            component: require("@/pages/playing")
-        },
-        {
-            path: '/fm',
-            name: 'fm'
-        },
+    routes: [
         {
             path: '/search',
             name: 'search',
             component: require("@/pages/search")
+        },
+        {
+            path: '/simi/:id',
+            name: 'simi',
+            component: require("@/pages/simi")
+        },
+        {
+            path: '/user/:id',
+            name: 'user',
         },
         {
             path: '/sortmv',
@@ -29,6 +30,9 @@ export default new Router({
             name: 'album',
             component: require("@/pages/album")
         }, {
+            path: '/mv/:id',
+            name: 'mv'
+        }, {
             path: '/comment/:id',
             name: 'comment',
             component: require("@/pages/comments")
@@ -40,7 +44,21 @@ export default new Router({
             path: '/login',
             name: 'login',
             component: require("@/pages/login")
-        }, {
+        }, 
+        {
+            path: '/play',
+            component: require("@/pages/play/play"),
+            children: [{
+                path: "/playing/:id",
+                name: 'playing',
+                component: require("@/pages/play/playing"),
+                
+            }, {
+                path: 'fm',
+                name: 'fm',
+                component: require("@/pages/play/fm")
+            }]
+        },{
             path: '/home',
             name: 'home',
             component: require("@/pages/home/home"),

@@ -1,8 +1,9 @@
 <template>
   <div>
-    <mt-header fixed title="发现音乐">
-    <router-link slot="right" :to="{name:'search'}">搜索</router-link>
-    </mt-header>
+  	<div class="mint-header is-fixed">
+  		<router-link :to="{name:'search'}" id="header_search">单曲/歌单/电台</router-link>
+  			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
+  	</div>
     <div class="page page_t page_b">
       <div class="page" id="indexwrap">
        <tab :tabs="tabs" :url="taburl" v-on:switchtab="switchtab"></tab>
@@ -11,12 +12,13 @@
       </keep-alive>
       </div>
     </div>
-  
   </div>
 </template>
 
 <script>
+	import { mapGetters, mapMutations } from 'vuex'
   import tab from "@/components/tabs.vue"
+  import playico from "@/components/playico"
   export default {
     name: 'index',
     data() {
@@ -39,8 +41,15 @@
       }
     },
     components: {
-      tab
+      tab,playico
     },
+    computed: {
+			...mapGetters([
+				'playing',
+				'music',
+				"playtype"
+			])
+		},
     methods: {
       switchtab(index) {}
     }
@@ -58,7 +67,7 @@
   .homepl .tl_cnt {
     width: 168.75px;
   }
-  
+  #header_search{flex:1;color: #999;background: #fff;border-radius: 2em;text-align: center;padding: .4em 0;margin: 0 .3em 0 1.5em;}
   #plc_header {
     border: none;
   }

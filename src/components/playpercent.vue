@@ -1,6 +1,6 @@
 <template>
 	<div id="playing-status" :class="{loading:musicloading}">
-		<mt-range :barHeight="barHeight" v-model="v" v-on:change="change" :max="duration">
+		<mt-range :barHeight="barHeight" v-model="playtime" :min="0" :max="duration">
 			<div slot="start">{{playtime|time}}</div>
 			<div slot="end">{{duration|time}}</div>
 		</mt-range>
@@ -12,7 +12,8 @@
 		name: 'playpercent',
 		data(){
 			return{
-				barHeight:2
+				barHeight:2,
+				value:0
 			}
 		},
 		props: {
@@ -34,14 +35,13 @@
 			}
 		},
 		computed:{
-			v:function(){
-				return Math.ceil(this.playtime)
+			value:function(){
+				return this.playtime
 			}
-			
 		},
 		methods:{
 			change(v){
-				console.log(this.v)
+				//拖动进度条
 				this.$emit('change',v)
 			}
 		},

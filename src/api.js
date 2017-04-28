@@ -69,6 +69,7 @@ export default {
         return axios("lyric?id=" + id)
     },
     songtrack(id, t, d) {
+    	console.log(t)
         return axios("song/tracks?id=" + id + '&r=' + (!d ? '' : 'del') + '&op=' + (!t ? 'like' : 'trash'))
     },
     comments(id, offset, type) {
@@ -88,8 +89,8 @@ export default {
         let pl = axios("simi/playlist?id=" + id);
         let song = axios("simi/song?id=" + id);
         let user = axios("simi/user?id=" + id)
-        return axios.all([pl.song.user]).then(axios.spread(function(a, b, c) {
-            return Promise.resolve([a.playlists, b.songs, c.userprofiles])
+        return axios.all([pl,song,user]).then(axios.spread(function(a, b, c) {
+            return Promise.resolve([a.data.playlists, b.data.songs, c.data.userprofiles])
         }))
     },
     user_detail(id) {

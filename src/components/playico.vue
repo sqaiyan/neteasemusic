@@ -1,5 +1,5 @@
 <template>
-	<router-link id="playico" :class="(!playing?'playingico':'') +' cntloading'" :to="{'name':((playtype==1)?'playing':(playtype==2?'fm':'program')),params:{id:music.id},query:{img:music.pic_str||music.pic||''}}">
+	<router-link id="playico" v-if="music.id" :class="(!playing?'playingico':'') +' cntloading'" :to="{'name':((playtype==1)?'playing':(playtype==2?'fm':'program')),params:{id:music.id},query:{img:music.pic_str||music.pic||''}}">
 		<span class="cl1"></span>
 		<span class="cl2"></span>
 		<span class="cl3"></span>

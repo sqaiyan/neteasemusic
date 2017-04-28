@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<audio :src.sync="playurl" @timeupdate="playingtime" @waiting="waiting" @ended="next" @canplay="toplay" @error="audioerror" id="audio"></audio>
+		<audio :src.sync="playurl||music.url" @timeupdate="playingtime" @waiting="waiting" @ended="nextmusic" @canplay="toplay" @error="audioerror" id="audio"></audio>
 	</div>
 </template>
 
@@ -18,14 +18,21 @@
 			playingtime() {
 				this.$store.commit("playtimechange", document.getElementById("audio").currentTime);
 			},
-			audioerror() {},
-			...mapMutations([
-				'next'
-			])
+			nextmusic(){
+				this.$store.commit("setbgmchange",true)
+				if(this.playtype==2){
+					this.$store.dispatch('next_fm');
+				}else{
+					this.$store.dispatch('next_music');
+				}
+			},
+			audioerror() {}
 		},
 		computed: {
 			...mapGetters([
-				'playurl'
+				'playurl',
+				'music',
+				'playtype'
 			])
 		}
 	}

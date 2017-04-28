@@ -131,7 +131,6 @@
       picurlTn(s) {
         var arr = s.split("/");
         arr = arr[arr.length - 1];
-        console.log(arr);
         return arr.split(".")[0]
       }
     }

@@ -5,7 +5,7 @@
 		</div>
 		<mt-header fixed :title="(title||name||list.album.name)">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
-			<mt-button icon="more" slot="right"></mt-button>
+			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
 		</mt-header>
 		<div id="plist-header" ref="main">
 			<div class="blurbg" :style="{'background-image':'url('+cover+')'}"></div>
@@ -59,8 +59,10 @@
 </template>
 
 <script>
+	import { mapGetters, mapMutations } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
+	import playico from "@/components/playico"
 	import loading from "@/components/loading"
 	import songlist from "@/components/songlist";
 	export default {
@@ -87,16 +89,16 @@
 		},
 		components: {
 			songlist,
-			loading
+			loading,
+			playico
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
 				if(parseInt(to.params.id) !== parseInt(vm.id)) {
 					vm.name = "";
-					console.log("null")
 					vm.loaded = false;
 					vm.name = vm.$route.query.name;
-					vm.id=vm.$route.params.id
+					vm.id = vm.$route.params.id
 					vm.cover = vm.$route.query.img ? bs64.id2Url(vm.$route.query.img) : '';
 					vm.list = {
 						album: {
@@ -111,6 +113,8 @@
 		activated() {
 			var st = this.$refs.main;
 			st = st.getBoundingClientRect().height;
+			this.title = window.pageYOffset > 100 ? '' : '专辑';
+			this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
 			window.onscroll = () => {
 				var opa = window.pageYOffset > 100;
 				this.title = opa ? '' : '专辑';
@@ -130,6 +134,13 @@
 					this.loaded = true
 				});
 			}
+		},
+		computed: {
+			...mapGetters([
+				'playing',
+				'music',
+				"playtype"
+			])
 		},
 		filters: {
 			time(date) {

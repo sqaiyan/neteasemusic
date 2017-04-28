@@ -3,7 +3,7 @@
     <div v-if="loaded">
       <div class='listheader'>云音乐官方榜</div>
       <div class='flex-boxlist flex sortlist'>
-        <router-link class=" flexlist " :to="{name: 'playlist',query:{cover:item.coverImgId_str, name: item.name,istop:1},params: { id: item.id}}" v-for="item in re.list" v-if="item.ToplistType" :key="item.id">
+        <router-link class=" flexlist " :to="{name: 'playlist',query:{img:item.coverImgId, name: item.name,istop:'a'},params: { id: item.id}}" v-for="item in re.list" v-if="item.ToplistType" :key="item.id">
           <div class="cover flexleft fl-image">
             <img class="album_cover" :src="item.coverImgUrl+'?param=200y200'" />
             <span>{{item.updateFrequency}}</span>
@@ -27,7 +27,7 @@
       </div>
       <div class='listheader'>全球榜</div>
       <div class='flex-boxlist'>
-       <router-link class=" tl_cnt " :to="{name: 'playlist',query:{cover:item.coverImgId_str, name: item.name,istop:1},params: { id: item.id}}" v-for="item in re.list" v-if="!item.ToplistType" :key="item.id">
+       <router-link class=" tl_cnt " :to="{name: 'playlist',query:{img:item.coverImgId, name: item.name,istop:'a'},params: { id: item.id}}" v-for="item in re.list" v-if="!item.ToplistType" :key="item.id">
           <div class="cover flexleft">
             <img :src="item.coverImgUrl+'?param=200y200'" class="album_cover" />
             <span>{{item.updateFrequency}}</span>

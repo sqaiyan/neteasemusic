@@ -47,6 +47,7 @@ new Vue({
     template: '<App/>',
     components: { App },
     async mounted() {
-    	await this.$store.dispatch('getlike')
+    	this.$store.commit("localuser");
+    	await this.$store.dispatch('getlike');
     }
 })
