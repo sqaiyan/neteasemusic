@@ -31,7 +31,8 @@ export default new Router({
             component: require("@/pages/album")
         }, {
             path: '/mv/:id',
-            name: 'mv'
+            name: 'mv',
+            component: require("@/pages/mv")
         }, {
             path: '/comment/:id',
             name: 'comment',

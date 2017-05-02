@@ -27,7 +27,7 @@
 		<div v-if="songs.length">
 			<div class="sm_title">喜欢这首歌的人你也听</div>
 			<div class="'songs ml ">
-				<router-link :to="{name:'playing',params:{id:re.id},query:{img:re.picId_str||re.picId||re.pic}}" v-for="(re,idx) in songs" :class="'flexlist flex-image '+(re.id==music.id?'cur':'')">
+				<router-link :to="{name:'playing',params:{id:re.id},query:{img:re.picId_str||re.picId||re.pic}}" v-for="(re,idx) in songs" :class="'flexlist flex-image '+(re.id==music.id?'cur':'')" :key="re.id">
 					<div class="flexlist flex-center">
 						<div class="flexleft" v-if="re.id==music.id">
 							<img src="../../static/images/aal.png" alt="" />
@@ -48,7 +48,7 @@
 		<div v-if="simiusr.length">
 			<div class="sm_title">喜欢这首歌的人</div>
 			<div class="userprofiles">
-				<router-link :to="{name:'user',params:{id:re.userId}}" v-for="re in simiusr" class="flexlist flex-image">
+				<router-link :to="{name:'user',params:{id:re.userId}}" v-for="re in simiusr" :key="re.id" class="flexlist flex-image">
 					<div class="flexleft fl-image">
 						<img :src="re.avatarUrl+'?param=100y100'" class="user_avator" />
 					</div>

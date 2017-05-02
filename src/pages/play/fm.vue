@@ -32,7 +32,7 @@
 					<img src="../../../static/images/fm/cm2_fm_btn_next@2x.png" />
 				</div>
 				<div class="commentscount">
-					<router-link :to="{name:'comment',params:{id:music.id},query:{ctype:2}}">
+					<router-link :to="{name:'comment',params:{id:music.id||0},query:{ctype:2}}">
 						<img :src="'../../../static/images/fm/cm2_fm_btn_cmt'+(commentscount?'_number':'')+'@2x.png'" />
 						<span v-if="commentscount">{{commentscount>999?'999+':commentscount}}</span>
 					</router-link>
@@ -49,25 +49,25 @@
 						</div>
 						<div class="cmain">收藏到歌单</div>
 					</div>
-					<router-link replace :to="{name:'simi',params:{id:music.id}}" class="mn_list">
+					<router-link replace :to="{name:'simi',params:{id:music.id||0}}" class="mn_list">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_icn_similar_new@2x.png" alt="" />
 						</div>
 						<div class="cmain">相似推荐</div>
 					</router-link>
-					<router-link replace v-if="music.artists[0].id" :to="{name:'artist',params:{id:music.artists[0].id}}" class="mn_list">
+					<router-link replace v-if="music.artists[0].id" :to="{name:'artist',params:{id:music.artists[0].id||0}}" class="mn_list">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_icn_artist_new@2x.png" alt="" />
 						</div>
 						<div class="cmain">歌手：{{music.artists[0].name}}</div>
 					</router-link>
-					<router-link replace :to="{name:'album',params:{id:music.album.id},query:{img:music.album.pic_str||music.album.pic}}" class="mn_list">
+					<router-link replace :to="{name:'album',params:{id:music.album.id||0},query:{img:music.album.pic_str||music.album.pic}}" class="mn_list">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_order_album_new@2x.png" alt="" />
 						</div>
 						<div class="cmain">专辑：{{music.album.name}}</div>
 					</router-link>
-					<router-link v-if="music.mv" :to="{name:'mv',params:{id:music.mvid}}" class="mn_list">
+					<router-link v-if="music.mv" :to="{name:'mv',params:{id:music.mvid||0}}" class="mn_list">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_icn_mv_new@2x.png" alt="" />
 						</div>

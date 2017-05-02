@@ -71,7 +71,7 @@
 					</div>
 					<div id="simiwrap">
 						<div class="flex-boxlist" :style="{'width':w/4*tab[3].artists.artists.length+'px'}">
-							<router-link replace :style="{'flex':'0 0 '+w*0.21+'px','margin':'.5em '+(w*0.02)+'px 1em'}" redirect :to="{name:'artist',params:{id:item.id}}" class="tl_cnt" v-for="item in tab[3].artists.artists">
+							<router-link replace :style="{'flex':'0 0 '+w*0.21+'px','margin':'.5em '+(w*0.02)+'px 1em'}" redirect :to="{name:'artist',params:{id:item.id}}" :key="item.id" class="tl_cnt" v-for="item in tab[3].artists.artists">
 								<div class="cover">
 									<img :src="item.img1v1Url+'?param=100y100'" class="music_cover" />
 								</div>

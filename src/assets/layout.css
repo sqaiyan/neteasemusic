@@ -579,7 +579,7 @@ a {
 	margin-left: 2%;
 	flex: 1
 }
-
+.rec_list:last-child .rec_main{border-bottom: none;}
 .rec_main .wxEmoji {
 	vertical-align: middle;
 }
@@ -717,6 +717,7 @@ a {
 
 .sm_title {
 	padding: 0 2%;
+	margin: 1% 0;
 	font-size: .8em;
 	display: block;
 	color: #6a6a6a;
@@ -872,7 +873,7 @@ a {
 	position: relative;
 	border-bottom: 1px solid #e1e2e3
 }
-
+.flexlist:last-child  .flexlist{border-bottom: none;}
 .cur,
 .cur .fm_tdes,
 .cur .flexmain div span,
@@ -985,7 +986,8 @@ a {
 	left: 0;
 	top: 0
 }
-
+.mvs .fl-image{width: 32%;}
+.mvs .fl-image .mv_cover{height: auto;}
 .albums .fl-image .albums_cover {
 	position: absolute;
 	height: 100%;
@@ -1018,7 +1020,7 @@ a {
 	position: relative;
 	z-index: 1;
 	height: 3.8em;
-	width: 3.8em
+	width:auto
 }
 
 .img_playcount {

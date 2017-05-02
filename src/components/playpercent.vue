@@ -12,8 +12,7 @@
 		name: 'playpercent',
 		data(){
 			return{
-				barHeight:2,
-				value:0
+				barHeight:2
 			}
 		},
 		props: {
