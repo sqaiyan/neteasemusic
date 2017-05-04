@@ -44,6 +44,15 @@ export default {
         // 类型关键词搜索 type:1单曲；10专辑；100歌手；1000歌单；1004mv；1009电台；1002用户
         return axios("search?keywords=" + name + '&type=' + type + '&limit=' + limit + '&offset=' + offset);
     },
+    search_suggest(s,t){
+    	return axios("search/suggest?keywords="+s)
+    },
+    search_hot(s,t){
+    	return axios("search/hot?type="+t+'&keywords='+s)
+    },
+    search_multimatch(s,t){
+    	return axios("search/multimatch?type="+t+'&keywords='+s)
+    },
     playlist(id, offset, limit) {
         return axios("playlist/detail?id=" + id + '&offset=' + offset + '&limit=' + limit);
     },
@@ -71,6 +80,10 @@ export default {
     songtrack(id, t, d) {
     	console.log(t)
         return axios("song/tracks?id=" + id + '&r=' + (!d ? '' : 'del') + '&op=' + (!t ? 'like' : 'trash'))
+    },
+    tracktpl(sid,pid,add=true){
+    	var op=add?'add':'del'
+    	return axios("playlist/tracks?pid="+pid+"&op="+op+"&tracks="+sid)
     },
     comments(id, offset, type) {
         id = (type == 1 ? '' : (type == 3 ? 'A_DJ_1_' : 'R_SO_4_')) + id

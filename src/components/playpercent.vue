@@ -10,9 +10,9 @@
 <script>
 	export default {
 		name: 'playpercent',
-		data(){
-			return{
-				barHeight:2
+		data() {
+			return {
+				barHeight: 2
 			}
 		},
 		props: {
@@ -28,32 +28,36 @@
 				type: Number,
 				default: 0
 			},
-			musicloading:{
-				type:Boolean,
-				default:true
+			musicloading: {
+				type: Boolean,
+				default: true
 			}
 		},
-		computed:{
-			value:function(){
+		computed: {
+			value: function() {
 				return this.playtime
 			}
 		},
-		methods:{
-			change(v){
+		methods: {
+			change(v) {
 				//拖动进度条
-				this.$emit('change',v)
+				this.$emit('change', v)
 			}
 		},
 		filters: {
 			time(v) {
 				v = new Date(v);
-				return(v.getMinutes() > 9 ? v.getMinutes() : ('0' + v.getMinutes())) + ':' + (v.getSeconds() >9 ? v.getSeconds() : ('0' + v.getSeconds()))
+				return(v.getMinutes() > 9 ? v.getMinutes() : ('0' + v.getMinutes())) + ':' + (v.getSeconds() > 9 ? v.getSeconds() : ('0' + v.getSeconds()))
 			}
 		}
 	}
 </script>
 
 <style>
+	#playing-status {
+		color: #fff;
+	}
+	
 	#playing-status .mt-range {
 		margin: 3% 5%;
 		width: 90%;
@@ -68,7 +72,8 @@
 	.mt-range .mt-range-thumb {
 		width: 1.2em;
 		height: 1.2em;
-		margin-top: -.1em;margin-left: -.6em;
+		margin-top: -.1em;
+		margin-left: -.6em;
 	}
 	
 	.mt-range .mt-range-progress {
@@ -89,7 +94,11 @@
 		transform: none;
 		margin-top: -1px;
 	}
-	.loading .mt-range-thumb:after{border-color: #000;}
+	
+	.loading .mt-range-thumb:after {
+		border-color: #000;
+	}
+	
 	.mt-range-thumb:after {
 		border: 2px solid #d33a31;
 		height: 0;

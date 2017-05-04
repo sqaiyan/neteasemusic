@@ -30,7 +30,6 @@ axios.interceptors.response.use((res) => {
     }
     else if (res.data.code !== 200) {
         console.log('返回数据不正常')
-        return Promise.reject(res)
     }
     return res
 }, (error) => {

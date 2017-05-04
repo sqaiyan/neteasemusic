@@ -22,7 +22,7 @@ const store = new Vuex.Store({
     index_dj:0,
     playtime: 0,
     likeall:"",
-    user:{},
+    user:JSON.parse(localStorage.getItem('user'))||{},
     bgmchange:false,
     uplaylist:[]
   },
@@ -48,8 +48,8 @@ const store = new Vuex.Store({
     musicloading:state=>state.musicloading
   },
   mutations: {
-	 localuser(state){
-		 state.user=localStorage.getItem('user')||{}
+	 localuser(state,user){
+		 state.user=user?user:(JSON.parse(localStorage.getItem('user'))||{})
 	 },
 	  setbgmchange(state,t){
 		 state.bgmchange=t;
@@ -120,8 +120,19 @@ const store = new Vuex.Store({
     playindex(state,i){
     	if(state.playtype==1){
     		state.index_am=i;
+    		state.music=state.list_am[i]
     	}else{
     		state.index_dj=i;
+    		state.music=state.list_dj[i]
+    	}
+    },
+    delplaylist(state,i){
+    	if(i>-1){
+    		state.index_am--;
+    		state.list_am.splice(i,1);
+    	}else{
+    		state.index_am=0
+    		state.list_am=[]
     	}
     },
     next (state) { // 播放下一曲
@@ -161,6 +172,9 @@ const store = new Vuex.Store({
          state.music = res;
     },
     setuplaylist(state,res){
+    	res=res.filter((i)=>{
+    		return i.creator.userId==state.user.userId;
+    	})
     	state.uplaylist=res;
     },
     setlikeall(state,res){
@@ -202,9 +216,10 @@ const store = new Vuex.Store({
     	api.likeall().then(res=>{
     		commit("setlikeall",(res.data.ids||[]).join(","))
     	});
-    	if(!state.user.id)return;
-    	api.user_playlist(state.user.id,0).then(res=>{
-    		commit("setuplaylist",((res.data.playlist||[]).filter((i)=>{i.userId==state.user})))
+    	if(!state.user.userId)return;
+    	await api.user_playlist(state.user.userId,0).then(res=>{
+    		console.log(res.data.playlist)
+    		commit("setuplaylist",res.data.playlist||[])
     	})
     },
     async heart({state,commit,dispatch},opt){
@@ -219,6 +234,8 @@ const store = new Vuex.Store({
 			res.data.lrc = lrc.now_lrc;
 			res.data.scroll = lrc.scroll ? 1 : 0;
 			commit("setlrc", res.data)
+		}).catch(()=>{
+			commit("setlrc",{code:500})
 		})
     }
   }

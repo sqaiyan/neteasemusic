@@ -20,7 +20,7 @@
 				</div>
 				<div id="plh-cnt">
 					<span id="music_h_name">{{name||list.playlist.name}}</span>
-					<div v-if="list.playlist.creator.nickname">
+					<div>
 						<img id="user_ava" class="user_avator" :src="list.playlist.creator.avatarUrl" />
 						<span>{{list.playlist.creator.nickname||" "}} </span>
 						<img src="../../static/images/cm2_list_detail_icn_arr@2x.png" style="height:1.2em;" />

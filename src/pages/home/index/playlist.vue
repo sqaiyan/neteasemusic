@@ -104,7 +104,7 @@
       }
     },filters:{
       playcount(v){
-        return v<10e3?v:((v/10e3).toFixed(0)+'万')
+        return v<1e5?v:((v/1e4).toFixed(0)+'万')
       }
     }
   }

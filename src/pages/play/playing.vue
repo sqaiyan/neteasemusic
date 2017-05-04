@@ -49,7 +49,7 @@
 				<div class="pa-maction" @click="next">
 					<img src="../../../static/images/ajb.png" />
 				</div>
-				<div class="pa-saction" bindtap="togpinfo">
+				<div class="pa-saction" @click="pop3=true">
 					<img src="../../../static/images/cm2_icn_list@2x.png" />
 				</div>
 			</div>
@@ -58,7 +58,7 @@
 			<div class='ppm_header'>{{music.name}}</div>
 			<div class='ppm_content'>
 				<div class="menu">
-					<div class="mn_list">
+					<div class="mn_list" @click="pop2=true;pop1=false">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_icn_fav_new@2x.png" alt="" />
 						</div>
@@ -91,12 +91,60 @@
 				</div>
 			</div>
 		</pop>
+		<pop :show="pop2" v-on:closepop="pop2=!pop2">
+			<div class='ppm_header'>收藏到歌单</div>
+			<div class='ppm_content'>
+				<div class="flexlist flex-image" @click="tracktpl(re.id)" v-for="re in uplaylist" :key="re.id">
+					<div class="flexlist">
+						<div class="flexleft fl-image ml">
+							<img :src="re.coverImgUrl+'?param=100y100'" class="album_cover" />
+						</div>
+						<div class="flexmain">
+							<div>{{re.name}}</div>
+							<div class="relistdes">{{re.trackCount}}首</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</pop>
+
+		<pop :show="pop3" v-on:closepop="pop3=!pop3">
+			<div class='ppm_header'>
+				<div class="pph_cnt">{{(shuffle==1?'列表循环':(shuffle==2?'单曲循环':'随机播放'))}}（{{list_am.length}}）</div>
+				<div class="pph_cnt">
+					<div><img src="../../../static/images/cm2_btmlay_btn_fav_prs@2x.png" alt="" /><span>收藏</span></div>
+					<div @click="delplaylist();pop3=false"><img src="../../../static/images/cm2_btmlay_btn_dlt_prs@2x.png" alt="" /><span>清空</span></div>
+				</div>
+			</div>
+			<div class='ppm_content'>
+				<div class="cntloading" v-show="!list_am.length">列表为空</div>
+				<div :class="'flexlist ml flex-center '+(re.id===music.id?'cur ':' ')" @click="playindex(idx)" v-for="(re,idx) in list_am" :key="re.id">
+					<div class="flexlist">
+						<div class="flexleft " v-if="re.id===music.id">
+							<div>
+								<img src="../../../static/images/aal.png" alt="">
+							</div>
+						</div>
+						<div class="flexmain">
+							<div>{{re.name}} - <span>{{re.ar[0].name}}</span></div>
+						</div>
+						<div class="flexact">
+							<div class="fa_list" @click.stop="delplaylist(idx)">
+								<img src="../../../static/images/cm2_playlist_icn_dlt@2x.png" alt="" /></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</pop>
 	</div>
 </template>
 
 <script>
 	import { mapGetters, mapMutations } from 'vuex'
 	import api from "@/api"
+	import {
+		Toast
+	} from 'mint-ui';
 	import u from "@/utils.js";
 	import bs64 from "@/base64";
 	import lrcTpl from "@/components/lrc";
@@ -111,7 +159,8 @@
 				showlrc: false,
 				cover: "",
 				pop1: false,
-				pop2: false
+				pop2: false,
+				pop3: true
 			}
 		},
 		components: {
@@ -122,8 +171,8 @@
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
 				//当前播放的音乐的id与路由的id不一样
-				console.log(vm.bgmchange ,to.params.id, vm.music.id);
-				if((parseInt(to.params.id) !== parseInt(vm.music.id))&&vm.setplaytype!=2) {
+				console.log(vm.bgmchange, to.params.id, vm.music.id);
+				if((parseInt(to.params.id) !== parseInt(vm.music.id)) && vm.setplaytype != 2) {
 					vm.$store.commit("setplaytype", 1);
 					if(vm.bgmchange && vm.music.id) {
 						vm.$router.replace({
@@ -163,7 +212,6 @@
 				if(!this.music.id || this.playtype != 1) return;
 				this.showlrc && this.loadLrc(v.id);
 				this.$store.commit("resetmusic");
-				console.log("change music");
 				if(!this.playurl) {
 					this.cover = "";
 					this.$store.dispatch('only_murl');
@@ -208,13 +256,32 @@
 					t: this.star
 				})
 			},
+			tracktpl(pid) {
+				//添加歌曲到歌单
+				api.tracktpl(this.music.id, pid).then(res => {
+					if(res.data.code == 200) {
+						Toast({
+							message: '添加成功！',
+							duration: 2000
+						});
+						this.$store.dispatch("getlike")
+					} else {
+						Toast({
+							message: res.data.code == 502 ? '歌曲已存在' : '添加失败！',
+							duration: 2000
+						});
+					}
+				})
+			},
 			change(v) {
 				this.$store.commit("seekmusic", v)
 			},
 			...mapMutations([
 				'next',
 				'prev',
-				'setshuffle'
+				'setshuffle',
+				'playindex',
+				'delplaylist'
 			])
 		},
 		computed: {
@@ -235,7 +302,8 @@
 				'list_am',
 				'playurl',
 				'playtype',
-				'bgmchange'
+				'bgmchange',
+				'uplaylist'
 			])
 		}
 	}
@@ -254,7 +322,6 @@
 		background-position: center center;
 		background-size: auto 100%;
 	}
-	.mn_list {
-		color: #555;
-	}
+	
+	.mn_list {}
 </style>

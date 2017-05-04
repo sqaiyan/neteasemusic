@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="page page_b page_t">
   	<div class="mint-header is-fixed">
   		<router-link :to="{name:'search'}" id="header_search">单曲/歌单/电台</router-link>
   			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
   	</div>
-    <div class="page page_t page_b">
+    <div class="page_tab">
       <div class="page" id="indexwrap">
        <tab :tabs="tabs" :url="taburl" v-on:switchtab="switchtab"></tab>
       <keep-alive>
@@ -58,6 +58,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+.tab{position: fixed;width: 100%;top: 40px;z-index: 10;}
+.page_tab{padding-top: 42px;}
   #lastsearch {
     line-height: 1;
     padding-top: 20px;

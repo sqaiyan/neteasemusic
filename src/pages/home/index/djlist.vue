@@ -10,8 +10,8 @@
     </mt-swipe>
   
     <div class="listheader">{{djrecs.rec_p.name}}</div>
-    <div v-for="re in djrecs.rec_p.programs" class="playlist">
-      <div class="flexlist  flex-image">
+    <div class="playlist">
+      <div class="flexlist flex-image"  v-for="re in djrecs.rec_p.programs">
         <div class="flexleft fl-image">
           <img :src="re.coverUrl+'?param=100y100'" class="album_cover" />
         </div>

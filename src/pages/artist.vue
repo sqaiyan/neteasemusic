@@ -343,7 +343,7 @@
 	}
 	
 	.tab {
-		margin-bottom: .2em
+		margin-bottom: 1%;
 	}
 	
 	#descallbtn {

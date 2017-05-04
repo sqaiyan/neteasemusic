@@ -114,7 +114,7 @@
 					this.rec = res.data;
 					this.offset = res.data.comments.length;
 					this.loaded = true;
-					this.busy = false;
+					this.busy = this.rec.more?false:true;
 				})
 			}
 
