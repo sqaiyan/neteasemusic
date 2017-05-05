@@ -29,7 +29,7 @@
 						<span v-if="commentscount">{{commentscount>999?'999+':commentscount}}</span>
 					</router-link>
 				</div>
-				<div class="pi-act" @click="pop1=!pop1">
+				<div class="pi-act" @click="pop_tg=1">
 					<img src="../../../static/images/cm2_play_icn_more@2x.png" />
 				</div>
 			</div>
@@ -49,16 +49,16 @@
 				<div class="pa-maction" @click="next">
 					<img src="../../../static/images/ajb.png" />
 				</div>
-				<div class="pa-saction" @click="pop3=true">
+				<div class="pa-saction" @click="pop_tg=3">
 					<img src="../../../static/images/cm2_icn_list@2x.png" />
 				</div>
 			</div>
 		</div>
-		<pop :show="pop1" v-on:closepop="pop1=!pop1">
+		<pop :show="pop_tg==1" v-on:closepop="pop_tg=0">
 			<div class='ppm_header'>{{music.name}}</div>
 			<div class='ppm_content'>
 				<div class="menu">
-					<div class="mn_list" @click="pop2=true;pop1=false">
+					<div class="mn_list" @click="pop_tg=2">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_icn_fav_new@2x.png" alt="" />
 						</div>
@@ -91,7 +91,7 @@
 				</div>
 			</div>
 		</pop>
-		<pop :show="pop2" v-on:closepop="pop2=!pop2">
+		<pop :show="pop_tg==2" v-on:closepop="pop_tg=0">
 			<div class='ppm_header'>收藏到歌单</div>
 			<div class='ppm_content'>
 				<div class="flexlist flex-image" @click="tracktpl(re.id)" v-for="re in uplaylist" :key="re.id">
@@ -108,7 +108,7 @@
 			</div>
 		</pop>
 
-		<pop :show="pop3" v-on:closepop="pop3=!pop3">
+		<pop :show="pop_tg==3" v-on:closepop="pop_tg=0">
 			<div class='ppm_header'>
 				<div class="pph_cnt">{{(shuffle==1?'列表循环':(shuffle==2?'单曲循环':'随机播放'))}}（{{list_am.length}}）</div>
 				<div class="pph_cnt">
@@ -158,9 +158,7 @@
 				id: 0,
 				showlrc: false,
 				cover: "",
-				pop1: false,
-				pop2: false,
-				pop3: true
+				pop_tg:0
 			}
 		},
 		components: {
@@ -202,8 +200,7 @@
 			})
 		},
 		beforeRouteLeave(to, from, next) {
-			this.pop1 = false;
-			this.pop2 = false;
+			this.pop_tg = 0;
 			this.showlrc = false;
 			next()
 		},

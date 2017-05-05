@@ -282,29 +282,6 @@
 </script>
 
 <style scoped>
-	#artheader {
-		background-image: linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
-		background-color: transparent;
-	}
-	
-	#headerblur {
-		background: none;
-	}
-	
-	#art_cover {
-		transform: scale(1.25)
-	}
-	
-	#artist_header {
-		position: fixed;
-		height: 0;
-		overflow: hidden;
-		z-index: 2;
-		padding-top: 62%;
-		width: 100%;
-		left: 0;
-		top: 0;
-	}
 	
 	.blurbg {
 		transform: scale(1)
@@ -318,29 +295,7 @@
 		position: fixed;
 	}
 	
-	#ahw_wrap {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		padding: 5em 1em 1em;
-		box-sizing: border-box;
-		text-align: right;
-		background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, .6))
-	}
 	
-	.ahw_btn {
-		display: inline-block;
-		padding: .5em 1em;
-		border: 1px solid #fff;
-		color: #fff;
-		border-radius: 3em;
-		line-height: 1
-	}
-	
-	.ahw_btn img {
-		height: 1em
-	}
 	
 	.tab {
 		margin-bottom: 1%;
@@ -350,12 +305,7 @@
 		color: #999
 	}
 	
-	#artist_header>img {
-		width: 100%;
-		position: absolute;
-		left: 0;
-		top: 0;
-	}
+	
 	
 	.mvs .cover {
 		padding-top: 56.2%

@@ -123,10 +123,16 @@ export default {
         return axios.post((/^0\d{2,3}\d{7,8}$|^1[34578]\d{9}$/.test(name) ? "login/cellphone" : "login"), data)
     },
     mv(id){
-    		let mv =axios.get('mv?id='+id);
+    	let mv =axios.get('mv?id='+id);
         let simi = axios("mv/simi?id=" + id)
         return axios.all([mv,simi]).then(axios.spread(function(a,b) {
-                return Promise.resolve([a.data.data, b.data.mvs])
+                return Promise.resolve([a.data.data, b.data.mvs]);
         }))
+    },
+    dj_detail(id){
+    	return axios("dj/detail?id="+id);
+    },
+    dj_getprogram(id,offset){
+    	return axios("dj/program?id="+id+'&offset='+offset+'&limit='+limit);
     }
 }

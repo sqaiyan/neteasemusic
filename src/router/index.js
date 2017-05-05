@@ -25,7 +25,12 @@ export default new Router({
             path: '/playlist/:id',
             name: 'playlist',
             component: require("@/pages/playlist")
-        }, {
+        }, 
+        {
+            path: '/djlist/:id',
+            name: 'djlist',
+            component: require("@/pages/djlist")
+        },{
             path: '/album/:id',
             name: 'album',
             component: require("@/pages/album")

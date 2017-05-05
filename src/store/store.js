@@ -75,14 +75,12 @@ const store = new Vuex.Store({
     	state.musicloading=true
     },
     setlrc(state,res){
-    	console.log(res)
     	state.lrcObj=res;
     },
     commentscount(state,c){
     	state.commentscount=c;
     },
     resetmusic(state){//初始音乐
-    	console.log("reset")
     	document.getElementById('audio').pause()
     	state.commentscount=0;
     	state.playurl=""

@@ -2,11 +2,11 @@
 	<div id="playingpage" :class="(playing?'playing':'')">
 		<mt-header fixed :title="music.name">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
-			<mt-button icon="more" @click="pop1=!pop1" slot="right"></mt-button>
+			<mt-button icon="more" @click="pop_tg=1" slot="right"></mt-button>
 		</mt-header>
 		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(music.album||{}).picUrl+')'}"></div>
 		<div id="fm-covermain" :class="(showlrc?'playinghidden':'')">
-			<img id="fm-cmpic" :src="(music.album||{}).picUrl+'?param=400y400'" />
+			<img id="fm-cmpic" :src="(music.album||{}).picUrl+'?param=500y500'" />
 		</div>
 		<div id="fm-mdes" :class="(showlrc?'playinghidden':'')">
 			<span id="fm-mname">{{music.name}}</span>
@@ -39,11 +39,11 @@
 				</div>
 			</div>
 		</div>
-		<pop :show="pop1" v-on:closepop="pop1=!pop1">
+		<pop :show="pop_tg==1" v-on:closepop="pop_tg=0">
 			<div class='ppm_header'>{{music.name}}</div>
 			<div class='ppm_content'>
 				<div class="menu">
-					<div class="mn_list">
+					<div class="mn_list" @click="pop_tg=2">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_icn_fav_new@2x.png" alt="" />
 						</div>
@@ -67,7 +67,7 @@
 						</div>
 						<div class="cmain">专辑：{{music.album.name}}</div>
 					</router-link>
-					<router-link v-if="music.mv" :to="{name:'mv',params:{id:music.mvid||0}}" class="mn_list">
+					<router-link v-if="music.mvid" :to="{name:'mv',params:{id:music.mvid||0}}" class="mn_list">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_icn_mv_new@2x.png" alt="" />
 						</div>
@@ -76,6 +76,24 @@
 				</div>
 			</div>
 		</pop>
+
+		<pop :show="pop_tg==2" v-on:closepop="pop_tg=0">
+			<div class='ppm_header'>收藏到歌单</div>
+			<div class='ppm_content'>
+				<div class="flexlist flex-image" @click="tracktpl(re.id)" v-for="re in uplaylist" :key="re.id">
+					<div class="flexlist">
+						<div class="flexleft fl-image ml">
+							<img :src="re.coverImgUrl+'?param=100y100'" class="album_cover" />
+						</div>
+						<div class="flexmain">
+							<div>{{re.name}}</div>
+							<div class="relistdes">{{re.trackCount}}首</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</pop>
+
 	</div>
 </template>
 
@@ -83,6 +101,9 @@
 	import { mapGetters, mapMutations } from 'vuex'
 	import api from "@/api"
 	import u from "@/utils.js";
+	import {
+		Toast
+	} from 'mint-ui';
 	import bs64 from "@/base64";
 	import pop from "@/components/pop"
 	import lrcTpl from "@/components/lrc"
@@ -94,12 +115,13 @@
 				loaded: false,
 				id: 0,
 				showlrc: false,
-				pop1:false
+				pop_tg: 0
 			}
 		},
 		components: {
 			playpercent,
-			lrcTpl,pop
+			lrcTpl,
+			pop
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
@@ -118,8 +140,7 @@
 			})
 		},
 		beforeRouteLeave(to, from, next) {
-			this.pop1 = false;
-			this.pop2 = false;
+			this.pop_tg = 0;
 			this.showlrc = false;
 			next()
 		},
@@ -160,13 +181,30 @@
 					t: this.star
 				})
 			},
-			async del_fm(){
+			async del_fm() {
 				await this.$store.dispatch('heart', {
 					id: this.music.id,
 					t: this.star,
-					del:true
+					del: true
 				});
 				this.get()
+			},
+			tracktpl(pid) {
+				//添加歌曲到歌单
+				api.tracktpl(this.music.id, pid).then(res => {
+					if(res.data.code == 200) {
+						Toast({
+							message: '添加成功！',
+							duration: 2000
+						});
+						this.$store.dispatch("getlike")
+					} else {
+						Toast({
+							message: res.data.code == 502 ? '歌曲已存在' : '添加失败！',
+							duration: 2000
+						});
+					}
+				})
 			},
 			change() {},
 			...mapMutations([
@@ -189,7 +227,8 @@
 				'commentscount',
 				'musicloading',
 				'list_fm',
-				'playurl'
+				'playurl',
+				'uplaylist'
 			])
 		}
 	}
@@ -222,9 +261,11 @@
 		-webkit-background-size: 100% 100%;
 		background-size: 100% 100%;
 	}
+	
 	.mn_list {
 		color: #555;
 	}
+	
 	#coverbg {
 		position: absolute;
 		left: 0;
@@ -247,13 +288,15 @@
 		position: relative;
 		z-index: 2;
 		text-align: center;
-		color: #fff;padding: 0 1em;
+		color: #fff;
+		padding: 0 1em;
 	}
 	
 	#fm-martist {
 		display: block;
 		color: #eee;
-		font-size: .8em;padding-top: .5em;
+		font-size: .8em;
+		padding-top: .5em;
 	}
 	
 	#fm-fixed {
@@ -264,7 +307,7 @@
 	}
 	
 	#fm-action {
-		margin:2% 0 4%;
+		margin: 2% 0 4%;
 		display: flex
 	}
 	

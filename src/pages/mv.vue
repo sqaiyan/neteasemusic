@@ -8,18 +8,19 @@
 			</video>
 		</div>
 		<div id="mvheader" v-show="loaded">
-		<div id="mvinfo">
-			<div id="mvname">{{mv.name}}</div>
-			<div>
-				<router-link :to="{name:'artist',params:{id:mv.artistId}}">歌手：{{mv.artistName}}</router-link>
+			<div id="mvinfo">
+				<div id="mvname">{{mv.name}}</div>
+				<div>
+					<router-link :to="{name:'artist',params:{id:mv.artistId}}">歌手：{{mv.artistName}}</router-link>
+				</div>
+				<div>播放：{{mv.playCount}}</div>
 			</div>
-			<div>播放：{{mv.playCount}}</div>
+			<div id="mvdes">
+				<div class="fc_gray">发行：{{mv.publishTime}}</div>
+				<div>{{mv.briefDesc}}</div>
+				<div>{{mv.desc}}</div>
+			</div>
 		</div>
-		<div id="mvdes">
-			<div class="fc_gray">发行：{{mv.publishTime}}</div>
-			<div>{{mv.briefDesc}}</div>
-			<div>{{mv.desc}}</div>
-		</div></div>
 		<div v-if="simi.length">
 			<div class="sm_title">相似Mv</div>
 			<div class="mvs">
@@ -45,7 +46,6 @@
 			<comments :list="rec.comments"></comments>
 		</div>
 		<loading v-if="!loaded||rec.more"></loading>
-
 	</div>
 </template>
 
@@ -64,7 +64,9 @@
 				rec: {
 					comments: []
 				},
-				mv: {brs:[]},
+				mv: {
+					brs: []
+				},
 				simi: [],
 				id: 0,
 				recid: 0,
@@ -91,7 +93,9 @@
 		methods: {
 			async getmv() {
 				this.loaded = false;
-				this.mv = {brs:[]};
+				this.mv = {
+					brs: []
+				};
 				this.simi = [];
 				this.rec = {
 					comments: []
@@ -114,7 +118,7 @@
 					this.rec = res.data;
 					this.offset = res.data.comments.length;
 					this.loaded = true;
-					this.busy = this.rec.more?false:true;
+					this.busy = this.rec.more ? false : true;
 				})
 			}
 
