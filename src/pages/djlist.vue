@@ -43,9 +43,8 @@
 						{{djradio.desc}}
 					</div>
 				</div>
-				<div class="sm_title">热门评论</div>
+				<div class="sm_title" v-if="djradio.commentDatas.length">热门评论</div>
 				<div class="limg_list rec_list " v-for="(item,index) in djradio.commentDatas">
-
 					<div class="rec_avatar">
 						<img class="user_avator" :src="item.userProfile.avatarUrl+'?param=60y60'" />
 					</div>
@@ -116,7 +115,8 @@
 			return {
 				scrolltop: 0,
 				djradio: {
-					dj: {}
+					dj: {},
+					commentDatas:[]
 				},
 				opa: 0,
 				name: '',
@@ -225,11 +225,20 @@
 			},
 			dateM(v) {
 				v = new Date(v);
-				return v.getFullYear() + '-' + (v.getMonth() + 1) + '-' + v.getDay()
+				var y=v.getFullYear()==new Date().getFullYear()?'':v.getFullYear()+"-";
+				var m=v.getMonth()+1;
+				m=m>9?m:('0'+m);
+				var d=v.getDate();
+				d=d>9?d:('0'+d);
+				return y+m+"-"+d
 			},
 			dateS(v) {
-				v = new Date(v)
-				return v.getMinutes() + ':' + v.getSeconds()
+				v = new Date(v);
+				var m=v.getMinutes();
+				m=m>9?m:('0'+m);
+				var s=v.getSeconds();
+				s=s>9?s:('0'+s);
+				return m+':'+s
 			}
 		}
 	}

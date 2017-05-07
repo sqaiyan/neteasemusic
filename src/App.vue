@@ -5,7 +5,6 @@
 		</keep-alive>
 		<music></music>
 	</div>
-	
 </template>
 
 <script>

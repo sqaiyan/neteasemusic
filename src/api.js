@@ -45,16 +45,16 @@ export default {
         return axios("search?keywords=" + name + '&type=' + type + '&limit=' + limit + '&offset=' + offset);
     },
     search_suggest(s,t){
-    	return axios("search/suggest?keywords="+s)
+    		return axios("search/suggest?keywords="+s)
     },
-    search_hot(s,t){
-    	return axios("search/hot?type="+t+'&keywords='+s)
+    search_hot(s,t){	
+    		return axios("search/hot?type="+t+'&keywords='+s)
     },
     search_multimatch(s,t){
-    	return axios("search/multimatch?type="+t+'&keywords='+s)
+    		return axios("search/multimatch?type="+t+'&keywords='+s)
     },
     playlist(id, offset, limit) {
-        return axios("playlist/detail?id=" + id + '&offset=' + offset + '&limit=' + limit);
+        return axios.get("playlist/detail?id=" + id + '&offset=' + offset + '&limit=' + limit);
     },
     album(id) {
         return axios("album/detail?id=" + id)
@@ -78,12 +78,11 @@ export default {
         return axios("lyric?id=" + id)
     },
     songtrack(id, t, d) {
-    	console.log(t)
-        return axios("song/tracks?id=" + id + '&r=' + (!d ? '' : 'del') + '&op=' + (!t ? 'like' : 'trash'))
+        return axios("song/tracks",{params:{id:id,auth:true,r:(!d ? '' : 'del'),op:(!t ? 'like' : 'trash')}})
     },
     tracktpl(sid,pid,add=true){
-    	var op=add?'add':'del'
-    	return axios("playlist/tracks?pid="+pid+"&op="+op+"&tracks="+sid)
+    		var op=add?'add':'del'
+    		return axios("playlist/tracks?pid="+pid+"&op="+op+"&tracks="+sid)
     },
     comments(id, offset, type) {
         id = (type == 1 ? '' : (type == 3 ? 'A_DJ_1_' : 'R_SO_4_')) + id
@@ -99,7 +98,7 @@ export default {
         return axios("fm")
     },
     simi(id) {
-        let pl = axios("simi/playlist?id=" + id);
+        let pl = axios("simi/playlist",{params:{id:id,auth:true}});
         let song = axios("simi/song?id=" + id);
         let user = axios("simi/user?id=" + id)
         return axios.all([pl,song,user]).then(axios.spread(function(a, b, c) {

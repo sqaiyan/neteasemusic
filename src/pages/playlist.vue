@@ -31,17 +31,17 @@
 				<div>
 					<img src="../../static/images/cm2_list_detail_icn_fav_new@2x.png" v-if="!list.playlist.subscribed" />
 					<img src="../../static/images/cm2_list_detail_icn_faved@2x.png" v-if="list.playlist.subscribed" />
-					<span>{{list.playlist.subscribedCount||'收藏'}}</span>
+					<span>{{list.playlist.subscribedCount|playcount}}</span>
 				</div>
 				<div>
 					<router-link :to="{name:'comment',params:{id:list.playlist.commentThreadId||0}}">
 						<img src="../../static/images/cm2_list_detail_icn_cmt@2x.png" />
-						<span>{{list.playlist.commentCount||'评论'}}</span>
+						<span>{{list.playlist.commentCount|playcount}}</span>
 					</router-link>
 				</div>
 				<div>
 					<img src="../../static/images/cm2_list_detail_icn_share@2x.png" />
-					<span>{{list.playlist.shareCount||'分享'}}</span>
+					<span>{{list.playlist.shareCount|playcount}}</span>
 				</div>
 			</div>
 		</div>
@@ -169,6 +169,7 @@
 		},
 		filters: {
 			playcount(v) {
+				if(!v)return "0";
 				return v < 10e3 ? v : ((v / 10e3).toFixed(0) + '万')
 			}
 		}

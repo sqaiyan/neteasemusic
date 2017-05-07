@@ -200,41 +200,41 @@ const store = new Vuex.Store({
     },
     async getmusic_url({commit, dispatch,state}, id){
     	// 获取歌曲详情和播放地址
-    	await dispatch('getmusic',id) 
-    	api.music_url(state.music.id).then(res=>{
-    		commit('setmusic_url',res.data.data[0].url);
-    	})
+	    	await dispatch('getmusic',id) 
+	    	api.music_url(state.music.id).then(res=>{
+	    		commit('setmusic_url',res.data.data[0].url);
+	    	})
     },
     only_murl({commit,state}){// 获取歌曲播放地址
-    	api.music_url(state.music.id).then(res=>{
-    		commit('setmusic_url',res.data.data[0].url);
-    	})
+	    	api.music_url(state.music.id).then(res=>{
+	    		commit('setmusic_url',res.data.data[0].url);
+	    	})
     },
     async getlike({commit,state}){// 获取红心歌曲
-    	api.likeall().then(res=>{
-    		commit("setlikeall",(res.data.ids||[]).join(","))
-    	});
-    	if(!state.user.userId)return;
-    	await api.user_playlist(state.user.userId,0).then(res=>{
-    		console.log(res.data.playlist)
-    		commit("setuplaylist",res.data.playlist||[])
-    	})
+	    	api.likeall().then(res=>{
+	    		commit("setlikeall",(res.data.ids||[]).join(","))
+	    	});
+	    	if(!state.user.userId)return;
+	    	await api.user_playlist(state.user.userId,0).then(res=>{
+	    		commit("setuplaylist",res.data.playlist||[])
+	    	})
     },
     async heart({state,commit,dispatch},opt){
-    	console.log(opt)
-    	api.songtrack(opt.id,opt.t,opt.del).then(res=>{
-    		dispatch("getlike");
-    	})
+	    	api.songtrack(opt.id,opt.t,opt.del).then(res=>{
+	    		if(res.data.code==200){
+	    			dispatch("getlike");
+	    		}
+	    	})
     },
     getlrc({state,commit},id){
-    	api.lyric(id).then(res => {
-			var lrc = u.parse_lrc(res.data.lrc && res.data.lrc.lyric ? res.data.lrc.lyric : '');
-			res.data.lrc = lrc.now_lrc;
-			res.data.scroll = lrc.scroll ? 1 : 0;
-			commit("setlrc", res.data)
-		}).catch(()=>{
-			commit("setlrc",{code:500})
-		})
+	    	api.lyric(id).then(res => {
+				var lrc = u.parse_lrc(res.data.lrc && res.data.lrc.lyric ? res.data.lrc.lyric : '');
+				res.data.lrc = lrc.now_lrc;
+				res.data.scroll = lrc.scroll ? 1 : 0;
+				commit("setlrc", res.data)
+			}).catch(()=>{
+				commit("setlrc",{code:500})
+			})
     }
   }
 })

@@ -6,7 +6,7 @@
 			</form>
 			<tab :class="(!value||!loaded?'rehide':'')" :tabs="tab" :tabidx="cur" v-on:switchtab="switchtab"></tab>
 		</div>
-		<div id="suggest" v-show="value&&focus">
+		<div id="suggest" v-show="value&&focus&&suggest.orders">
 			<div v-if="suggest['artists']" class="sr_lists flexlist flex-center" @click="searchFkey(suggest['artists'][0].name)">
 				<div class="flexnum"><img src="../../static/images/cm2_list_icn_search@2x.png" alt="" /></div>
 				<div class="flexlist">
@@ -35,9 +35,10 @@
 		<div :class="(!value||!loaded?'rehide':'')">
 			<mt-tab-container v-model="cur" swipeable>
 				<mt-tab-container-item id="0">
+					<div v-if="multimatch">
 					<div class="gray_title">最佳匹配</div>
 					<div v-for="item in multimatch.orders">
-						<router-link :to="{name: item,params:{id:re.id},query:{img:re.picId}}" :class="'flexlist flex-image '+item" v-for="re in multimatch[item]">
+						<router-link :to="{name: item,params:{id:re.id},query:{img:re.picId}}" :class="'flexlist flex-image '+item" v-for="re in multimatch[item]" :key="re.id">
 							<div class="flexlist">
 								<div class="flexleft fl-image">
 									<img :src="(re.picUrl||re.cover)" class="album_cover" />
@@ -51,6 +52,7 @@
 								</div>
 							</div>
 						</router-link>
+					</div>
 					</div>
 					<songlist :list="st[0].relist.songs" :curplay="music.id" nonum="''"></songlist>
 					<div class="cntloading" v-if="st[0].loaded&&!st[0].relist.songs">暂无结果</div>
@@ -258,7 +260,7 @@
 				this.focus = true;
 				if(!this.value) return
 				api.search_suggest(this.value).then(res => {
-					this.suggest = res.data.result;
+					this.suggest = res.data.result||{};
 				})
 			},
 			search(notw = true, more = false) {

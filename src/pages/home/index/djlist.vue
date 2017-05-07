@@ -25,7 +25,7 @@
     </div>
     <div class="listheader">{{djrecs.rec_d.name}}</div>
     <div class='flex-boxlist'>
-      <router-link :to="{name:'djlist',params:{id:item.id}}" class="tl_cnt cateplaylist" v-for="(item,idx) in djrecs.rec_d.djRadios" v-if="idx<6">
+      <router-link :to="{name:'djlist',params:{id:item.id}}" class="tl_cnt cateplaylist" v-for="(item,idx) in djrecs.rec_d.djRadios" v-if="idx<6" :key="item.id">
         <div class="cover">
           <img :src="item.picUrl+'?param=200y200'" class="music_cover" />
         </div>
@@ -34,7 +34,7 @@
     </div>
     <div class="listheader">热门电台</div>
     <div class='flex-boxlist flex-two'>
-      <router-link :to="{name:'djlist',params:{id:item.id}}" class="tl_cnt cateplaylist" v-for="item in djlist">
+      <router-link :to="{name:'djlist',params:{id:item.id}}" class="tl_cnt cateplaylist" v-for="item in djlist" :key="item.id">
         <div class="cover">
           <img :src="item.picUrl+'?param=200y200'" class="music_cover" />
           <div class="img_playcount">
