@@ -67,7 +67,7 @@
 		<div class="tab_cnt" v-show="cur==1">
 			<div class="sm_title">共{{programs.count}}期</div>
 			<div class="songs">
-				<div :class="'flexlist flex-center '+(re.id==music.id?'cur':'')" v-for="(re,idx) in programs.programs">
+				<router-link :to="{name:'program',params:{id:re.id},query:{img:re.mainSong.album.picId_str||re.mainSong.album.picId}}" :class="'flexlist flex-center '+(re.id==music.id?'cur':'')" v-for="(re,idx) in programs.programs" :key="re.id">
 					<div class="flexleft flexnum ">
 						<div v-if="re.id===music.id">
 							<img src="../../static/images/aal.png" alt="" />
@@ -93,7 +93,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</router-link>
 			</div>
 			<loading v-show="!loaded||programs.more"></loading>
 		</div>

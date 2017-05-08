@@ -42,7 +42,7 @@
 		</div>
 		<div class="plist-detail">
 			<div v-if="loaded">
-				<div id="playall" class="flexlist flex-center">
+				<div id="playall" @click="playall" class="flexlist flex-center">
 					<div class="flexleft flexnum ">
 						<img src="../../static/images/pl-playall.png" />
 					</div>
@@ -51,7 +51,7 @@
 						</span>
 					</div>
 				</div>
-				<songlist :list="list.songs" :curplay="curplay"></songlist>
+				<songlist :list="list.songs" v-on:playindex="playindex" :curplay="music.id"></songlist>
 			</div>
 			<loading v-else></loading>
 		</div>
@@ -78,7 +78,6 @@
 				},
 				opacity: 0,
 				name: '',
-				curplay: -1,
 				offset: 0,
 				id: -1,
 				loaded: false,
@@ -133,6 +132,16 @@
 				}).catch(() => {
 					this.loaded = true
 				});
+			},
+			playindex(i){
+				this.$store.commit("setplaytype",1);
+				this.$store.commit("setplaylist",this.list.songs);
+				this.$store.commit("playindex",i);
+			},
+			playall(){
+				this.playindex(0);
+				this.$store.commit("setmusic",this.list.songs[0])
+				this.$store.dispatch("only_murl")
 			}
 		},
 		computed: {
@@ -146,7 +155,11 @@
 			time(date) {
 				if(!date) return '';
 				date = new Date(date);
-				return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+				var m=date.getMonth()+1;
+				m=m>9?m:`0${m}`;
+				var d=date.getDate();
+				d=d>9?d:`0${d}`;
+				return date.getFullYear() + '-' + m + '-' + d
 			}
 		}
 	}

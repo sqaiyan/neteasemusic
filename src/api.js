@@ -133,5 +133,11 @@ export default {
     },
     dj_getprogram(id,offset){
     	return axios("dj/program?id="+id+'&offset='+offset+'&limit='+limit);
+    },
+    program_detail(id){
+    	return axios("program/detail",{params:{id:id}})
+    },
+    program_like(id,t){
+    	return axios("resource/like",{params:{id:id,t:t}})
     }
 }

@@ -1,23 +1,21 @@
 <template>
 	<div id="playingpage" :class="(playing?'playing':'')">
-		<mt-header fixed :title="(music.name||''+' - '+(music.ar||[])[0].name)">
+		<mt-header fixed :title="(music.name)">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
 		</mt-header>
-		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(cover||(music.al||{}).picUrl)+')'}">{{cover}}----</div>
+		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(cover||(music.mainSong.album||{}).picUrl)+')'}">{{cover}}----</div>
 		<div id="playing-zz" v-show="!showlrc" @click="showlrc=!showlrc">
 			<img src="../../../static/images/aag.png" />
 		</div>
 		<div id="playing-main" v-show="!showlrc" @click="showlrc=!showlrc">
 			<img id="playingmainbg" src="../../../static/images/play.png" />
-			<div :style="{'background-image':'url('+(cover||(music.al||{}).picUrl)+'?param=200y200)'}" bindtap="loadlrc" id="pmaincover"></div>
-		</div>
-		<div id="lrclist" @click="showlrc=!showlrc" :playtime="playtime">
-			<lrcTpl :lrc="lrcObj" :showlrc="showlrc" :playtime="playtime" lrcindex="1"></lrcTpl>
+			<div :style="{'background-image':'url('+(cover||(music.mainSong.album||{}).picUrl)+'?param=200y200)'}" bindtap="loadlrc" id="pmaincover"></div>
 		</div>
 		<div id="playing-actwrap">
 			<div id="playing-info" v-show="!showlrc">
-				<div class="pi-act" @click="heart">
-					<img :src="'../../../static/images/cm2_play_icn_'+(star?'loved':'love')+'@2x.png'" />
+				<div class="pi-act commentscount" @click="heart">
+					<img :src="'../../../static/images/cm2_play_icn_'+(!program.liked?'praise':'yizan')+'@2x.png'" />
+					<span>{{program.likedCount}}</span>
 				</div>
 				<div class="pi-act" bindtap="downmusic">
 					<img src="../../../static/images/cm2_list_detail_icn_share@2x.png" />
@@ -29,14 +27,14 @@
 						<span v-if="commentscount">{{commentscount>999?'999+':commentscount}}</span>
 					</router-link>
 				</div>
-				<div class="pi-act" @click="pop_tg=1">
+				<div class="pi-act">
 					<img src="../../../static/images/cm2_play_icn_more@2x.png" />
 				</div>
 			</div>
 			<playpercent :playtime="playtime" v-on:change="change" :musicloading="musicloading" :duration="music.dt"></playpercent>
 			<div id="playingaction">
 				<div class="pa-saction" @click="setshuffle" v-if="shuffle==1">
-					<img :src="'../../../static/images/cm2_icn_'+(shuffle==1?'loop':(shuffle==2?'one':'shuffle'))+'@2x.png'" />
+					<img :src="'../../../static/images/cm2_icn_'+(shuffle==1?'order':(shuffle==2?'one':'shuffle'))+'@2x.png'" />
 				</div>
 
 				<div class="pa-maction" @click="prev" bindtap="playother">
@@ -54,71 +52,18 @@
 				</div>
 			</div>
 		</div>
-		<pop :show="pop_tg==1" v-on:closepop="pop_tg=0">
-			<div class='ppm_header'>{{music.name}}</div>
-			<div class='ppm_content'>
-				<div class="menu">
-					<div class="mn_list" @click="pop_tg=2">
-						<div class="mn_ico">
-							<img src="../../../static/images/cm2_lay_icn_fav_new@2x.png" alt="" />
-						</div>
-						<div class="cmain">收藏到歌单</div>
-					</div>
-					<router-link replace :to="{name:'simi',params:{id:music.id}}" class="mn_list">
-						<div class="mn_ico">
-							<img src="../../../static/images/cm2_lay_icn_similar_new@2x.png" alt="" />
-						</div>
-						<div class="cmain">相似推荐</div>
-					</router-link>
-					<router-link replace v-if="music.ar[0].id" :to="{name:'artist',params:{id:music.ar[0].id}}" class="mn_list">
-						<div class="mn_ico">
-							<img src="../../../static/images/cm2_lay_icn_artist_new@2x.png" alt="" />
-						</div>
-						<div class="cmain">歌手：{{music.ar[0].name}}</div>
-					</router-link>
-					<router-link replace :to="{name:'album',params:{id:music.al.id},query:{img:music.al.pic_str||music.al.pic}}" class="mn_list">
-						<div class="mn_ico">
-							<img src="../../../static/images/cm2_lay_order_album_new@2x.png" alt="" />
-						</div>
-						<div class="cmain">专辑：{{music.al.name}}</div>
-					</router-link>
-					<router-link v-if="music.mv" :to="{name:'mv',params:{id:music.mv}}" class="mn_list">
-						<div class="mn_ico">
-							<img src="../../../static/images/cm2_lay_icn_mv_new@2x.png" alt="" />
-						</div>
-						<div class="cmain">查看Mv</div>
-					</router-link>
-				</div>
-			</div>
-		</pop>
-		<pop :show="pop_tg==2" v-on:closepop="pop_tg=0">
-			<div class='ppm_header'>收藏到歌单</div>
-			<div class='ppm_content'>
-				<div class="flexlist flex-image" @click="tracktpl(re.id)" v-for="re in uplaylist" :key="re.id">
-					<div class="flexlist">
-						<div class="flexleft fl-image ml">
-							<img :src="re.coverImgUrl+'?param=100y100'" class="album_cover" />
-						</div>
-						<div class="flexmain">
-							<div>{{re.name}}</div>
-							<div class="relistdes">{{re.trackCount}}首</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</pop>
 
 		<pop :show="pop_tg==3" v-on:closepop="pop_tg=0">
 			<div class='ppm_header'>
-				<div class="pph_cnt">{{(shuffle==1?'列表循环':(shuffle==2?'单曲循环':'随机播放'))}}（{{list_am.length}}）</div>
+				<div class="pph_cnt">{{(shuffle==1?'列表循环':(shuffle==2?'单曲循环':'随机播放'))}}（{{list_dj.length}}）</div>
 				<div class="pph_cnt">
 					<div><img src="../../../static/images/cm2_btmlay_btn_fav_prs@2x.png" alt="" /><span>收藏</span></div>
 					<div @click="delplaylist();pop3=false"><img src="../../../static/images/cm2_btmlay_btn_dlt_prs@2x.png" alt="" /><span>清空</span></div>
 				</div>
 			</div>
 			<div class='ppm_content'>
-				<div class="cntloading" v-show="!list_am.length">列表为空</div>
-				<div :class="'flexlist ml flex-center '+(re.id===music.id?'cur ':' ')" @click="playindex(idx)" v-for="(re,idx) in list_am" :key="re.id">
+				<div class="cntloading" v-show="!list_dj.length">列表为空</div>
+				<div :class="'flexlist ml flex-center '+(re.id===music.id?'cur ':' ')" @click="playindex(idx)" v-for="(re,idx) in list_dj" :key="re.id">
 					<div class="flexlist">
 						<div class="flexleft " v-if="re.id===music.id">
 							<div>
@@ -126,7 +71,7 @@
 							</div>
 						</div>
 						<div class="flexmain">
-							<div>{{re.name}} - <span>{{re.ar[0].name}}</span></div>
+							<div>{{re.name}} - <span>{{re.artists[0].name}}</span></div>
 						</div>
 						<div class="flexact">
 							<div class="fa_list" @click.stop="delplaylist(idx)">
@@ -151,14 +96,15 @@
 	import pop from "@/components/pop"
 	import playpercent from "@/components/playpercent"
 	export default {
-		name: 'playing',
+		name: 'program',
 		data() {
 			return {
+				showlrc:false,
 				loaded: false,
 				id: 0,
-				showlrc: false,
 				cover: "",
-				pop_tg:0
+				pop_tg: 0,
+				program: {}
 			}
 		},
 		components: {
@@ -171,29 +117,26 @@
 				//当前播放的音乐的id与路由的id不一样
 				console.log(vm.bgmchange, to.params.id, vm.music.id);
 				if((parseInt(to.params.id) !== parseInt(vm.music.id)) && vm.setplaytype != 2) {
-					vm.$store.commit("setplaytype", 1);
+					vm.$store.commit("setplaytype", 3);
 					if(vm.bgmchange && vm.music.id) {
 						vm.$router.replace({
-							name: 'playing',
+							name: 'program',
 							params: {
 								id: vm.music.id
 							},
 							query: {
-								img: vm.music.al.pic
+								img: vm.music.album.picUrl
 							}
 						})
 						return;
 					}
-					console.log("new..........");
 					vm.loaded = false;
 					vm.$store.commit("setmusic", {
-						al: {},
-						ar: [{}],
-						artists: [{}],
-						album: {}
+						mainSong:{
+							album:{}
+						}
 					})
 					vm.$store.commit('resetmusic')
-					vm.showlrc = false;
 					vm.cover = ""
 					vm.get();
 
@@ -210,65 +153,42 @@
 				if(!this.music.id || this.playtype != 1) return;
 				this.showlrc && this.loadLrc(v.id);
 				this.$store.commit("resetmusic");
-				if(!this.playurl) {
-					this.cover = "";
-					this.$store.dispatch('only_murl');
-					this.getcommit()
-				}
-				((this.$router.name == 'playing') && this.bgmchange) && this.$router.replace({
-					name: 'playing',
-					params: {
-						id: this.music.id
-					},
-					query: {
-						img: this.music.al.pic
-					}
-				})
-			},
-			showlrc(v) {
-				if(v && !this.lrcObj.code) {
-					this.loadLrc(this.music.id)
-				}
+				this.cover = "";
+				this.getcommit()
+					((this.$router.name == 'program') && this.bgmchange) && this.$router.replace({
+						name: 'program',
+						params: {
+							id: this.music.id
+						},
+						query: {
+							img: this.music.al.pic
+						}
+					})
 			}
 		},
 		methods: {
-			loadLrc(id) {
-				id && this.$store.dispatch('getlrc', id);
-			},
 			playingtoggle() {
 				this.$store.commit("setplaying", !this.playing);
 			},
 			async get() {
 				var img = this.$route.query.img;
+				this.id = this.$route.params.id;
 				img && (this.cover = bs64.id2Url(img));
-				await this.$store.dispatch('getmusic_url', this.$route.params.id);
+				api.program_detail(this.id).then(res => {
+					this.program = res.data.program;
+					this.$store.commit("setmusic", res.data.program);
+					this.getcommit()
+				})
 			},
 			getcommit() {
-				api.comments(this.music.id, 0, 2).then(res => {
+				api.comments(this.program.commentThreadId, 0, 1).then(res => {
 					this.$store.commit('commentscount', res.data.total);
 				})
 			},
 			heart() {
-				this.music.id && this.$store.dispatch('heart', {
+				this.program.id && this.$store.dispatch('heart', {
 					id: this.music.id,
 					t: this.star
-				})
-			},
-			tracktpl(pid) {
-				//添加歌曲到歌单
-				api.tracktpl(this.music.id, pid).then(res => {
-					if(res.data.code == 200) {
-						Toast({
-							message: '添加成功！',
-							duration: 2000
-						});
-						this.$store.dispatch("getlike")
-					} else {
-						Toast({
-							message: res.data.code == 502 ? '歌曲已存在' : '添加失败！',
-							duration: 2000
-						});
-					}
 				})
 			},
 			change(v) {
@@ -283,25 +203,16 @@
 			])
 		},
 		computed: {
-			star: function() {
-				//歌曲红心状态
-				if(!this.music.id) return 0;
-				return this.likeall.indexOf(this.music.id) + 1
-			},
 			...mapGetters([
 				'playing',
 				'music',
 				'playtime',
 				'shuffle',
-				'likeall',
-				'lrcObj',
 				'commentscount',
 				'musicloading',
-				'list_am',
-				'playurl',
+				'list_dj',
 				'playtype',
-				'bgmchange',
-				'uplaylist'
+				'bgmchange'
 			])
 		}
 	}

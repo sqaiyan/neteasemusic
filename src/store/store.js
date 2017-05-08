@@ -118,10 +118,10 @@ const store = new Vuex.Store({
     playindex(state,i){
     	if(state.playtype==1){
     		state.index_am=i;
-    		state.music=state.list_am[i]
+    		state.music=state.music.id==state.list_am[i].id?state.music:state.list_am[i]
     	}else{
     		state.index_dj=i;
-    		state.music=state.list_dj[i]
+    		state.music=state.music.id==state.list_dj[i].id?state.music:state.list_dj[i]
     	}
     },
     delplaylist(state,i){

@@ -6,7 +6,7 @@
 			</form>
 			<tab :class="(!value||!loaded?'rehide':'')" :tabs="tab" :tabidx="cur" v-on:switchtab="switchtab"></tab>
 		</div>
-		<div id="suggest" v-show="value&&focus&&suggest.orders">
+		<div id="suggest" v-show="value&&focus&&suggest.order">
 			<div v-if="suggest['artists']" class="sr_lists flexlist flex-center" @click="searchFkey(suggest['artists'][0].name)">
 				<div class="flexnum"><img src="../../static/images/cm2_list_icn_search@2x.png" alt="" /></div>
 				<div class="flexlist">

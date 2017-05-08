@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<audio :src="playurl||music.url" @timeupdate="playingtime" @waiting="waiting" @ended="nextmusic" @canplay="toplay" id="audio"></audio>
+		<audio :src="playtype==3?music.mainSong.mp3Url:playurl" @timeupdate="playingtime" @waiting="waiting" @ended="nextmusic" @canplay="toplay" id="audio"></audio>
 	</div>
 </template>
 <script>

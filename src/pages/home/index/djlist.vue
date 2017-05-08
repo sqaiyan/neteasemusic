@@ -11,7 +11,7 @@
   
     <div class="listheader">{{djrecs.rec_p.name}}</div>
     <div class="playlist">
-      <div class="flexlist flex-image"  v-for="re in djrecs.rec_p.programs">
+      <router-link :to="{name:'program',params:{id:re.id},query:{img:re.mainSong.album.picId_str||re.mainSong.album.picId}}" class="flexlist flex-image"  v-for="re in djrecs.rec_p.programs" :key="re.id">
         <div class="flexleft fl-image">
           <img :src="re.coverUrl+'?param=100y100'" class="album_cover" />
         </div>
@@ -21,7 +21,7 @@
             <div class="relistdes">{{re.reason}}</div>
           </div>
         </div>
-      </div>
+      </router-link>
     </div>
     <div class="listheader">{{djrecs.rec_d.name}}</div>
     <div class='flex-boxlist'>

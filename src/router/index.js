@@ -63,6 +63,10 @@ export default new Router({
                 path: 'fm',
                 name: 'fm',
                 component: require("@/pages/play/fm")
+            }, {
+                path: '/program/:id',
+                name: 'program',
+                component: require("@/pages/play/program")
             }]
         },{
             path: '/home',
