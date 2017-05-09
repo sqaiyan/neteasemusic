@@ -3,7 +3,7 @@
 		<mt-header fixed :title="(music.name||''+' - '+(music.ar||[])[0].name)">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
 		</mt-header>
-		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(cover||(music.al||{}).picUrl)+')'}">{{cover}}----</div>
+		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(cover||(music.al||{}).picUrl)+'?param=500y500)'}">{{cover}}----</div>
 		<div id="playing-zz" v-show="!showlrc" @click="showlrc=!showlrc">
 			<img src="../../../static/images/aag.png" />
 		</div>
@@ -170,7 +170,8 @@
 			next(vm => {
 				//当前播放的音乐的id与路由的id不一样
 				console.log(vm.bgmchange, to.params.id, vm.music.id);
-				if((parseInt(to.params.id) !== parseInt(vm.music.id)) && vm.setplaytype != 2) {
+				if((parseInt(to.params.id) !== parseInt(vm.music.id))) {
+					console.log("router enter");
 					vm.$store.commit("setplaytype", 1);
 					if(vm.bgmchange && vm.music.id) {
 						vm.$router.replace({
@@ -184,7 +185,6 @@
 						})
 						return;
 					}
-					console.log("new..........");
 					vm.loaded = false;
 					vm.$store.commit("setmusic", {
 						al: {},
@@ -208,6 +208,7 @@
 		watch: {
 			music(v) {
 				if(!this.music.id || this.playtype != 1) return;
+				console.log("playing music watch");
 				this.showlrc && this.loadLrc(v.id);
 				this.$store.commit("resetmusic");
 				if(!this.playurl) {
@@ -241,7 +242,7 @@
 			async get() {
 				var img = this.$route.query.img;
 				img && (this.cover = bs64.id2Url(img));
-				await this.$store.dispatch('getmusic_url', this.$route.params.id);
+				await this.$store.dispatch('getmusic', this.$route.params.id);
 			},
 			getcommit() {
 				api.comments(this.music.id, 0, 2).then(res => {

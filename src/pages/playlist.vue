@@ -155,10 +155,8 @@
 			},
 			playall(){
 				this.playindex(0);
-				this.$store.commit("setmusic",this.canplay[0])
 				this.$store.dispatch("only_murl")
 			}
-			
 		},
 		computed: {
 			...mapGetters([

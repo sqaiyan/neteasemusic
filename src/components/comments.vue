@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="limg_list rec_list" v-for="(item,index) in list" :key="item.commentId">
+		<div class="limg_list rec_list" v-for="(item,index) in list">
 			<div class="rec_avatar">
 				<img class="user_avator" :src="item.user.avatarUrl+'?param=60y60'" />
 			</div>

@@ -55,8 +55,15 @@
 				}
 			})
 		},
+		activated() {
+		//	this.busy=false
+		},
+		deactivated() {
+			//this.busy=true
+		},
 		methods: {
 			comments(more = true, id) {
+				if(this.$route.name!='comment')return;
 				this.busy = true;
 				this.id = this.$route.params.id;
 				if(more && !this.rec.more) return;

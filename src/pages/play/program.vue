@@ -3,13 +3,66 @@
 		<mt-header fixed :title="(music.name)">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
 		</mt-header>
-		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(cover||(music.mainSong.album||{}).picUrl)+')'}">{{cover}}----</div>
-		<div id="playing-zz" v-show="!showlrc" @click="showlrc=!showlrc">
-			<img src="../../../static/images/aag.png" />
+		<img src="../../../static/images/cm2_play_disc_radio-ip6@2x.png" v-if="!showlrc" id="coverbg" alt="" />
+		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(music.mainSong.album||{}).picUrl+'?param=500y500)'}"></div>
+		<div class="flexlist flex-center" id="program_radio_info" v-show="!showlrc">
+			<div class="flexlist ml">
+				<div class="flexleft flexnum fl-image">
+					<img id="radio_cover" :src="music.radio.picUrl" /></div>
+				<div class="flexmain">
+					<div>{{music.radio.name}}</div>
+					<div class="relistdes">{{music.radio.subCount|playcount}}人订阅</div>
+				</div>
+				<div class="flexact">
+					<div class="fa_list" id="subtn" @click="djradio_sub">
+						<img src="../../../static/images/cm2_list_icn_subscribe@2x.png" v-if="!music.radio.subed" alt="" />
+						<img src="../../../static/images/cm2_pro_btn_icn_subed@2x.png" v-else alt="" />
+						<span v-if="music.radio.subed">已</span>订阅
+					</div>
+				</div>
+			</div>
 		</div>
+
+		<div class="menu" id="p_info_menu" v-if="showlrc" @click="showlrc=!showlrc">
+			<router-link replace :to="{name:'djlist',params:{id:music.radio.id}}" class="mn_list">
+				<div class="mn_ico">
+					<img src="../../../static/images/cm2_rdi_icn_name@2x.png"></image>
+				</div>
+				<div class="cmain">{{music.radio.name}}</div>
+				<div class="rdes">
+					<div class="arrow arrow-white"></div>
+				</div>
+			</router-link>
+			<router-link replace class="mn_list" :to="{name:'user',params:{id:music.dj.userId}}">
+				<div class="mn_ico">
+					<img src="../../../static/images/cm2_rdi_icn_artist@2x.png"></image>
+				</div>
+				<div class="cmain">{{music.dj.nickname}}</div>
+				<div class="rdes">
+					<div class="arrow arrow-white"></div>
+				</div>
+			</router-link>
+			<div class="mn_list" v-if="music.songs">
+				<div class="mn_ico">
+					<img src="../../../static/images/cm2_rdi_icn_list@2x.png"></image>
+				</div>
+				<div class="cmain">包含的歌曲</div>
+				<div class="rdes">
+					<span>{{music.songs.length}}</span>
+					<div class="arrow arrow-white"></div>
+				</div>
+			</div>
+			<div id="p_info">
+				<div>
+					<span class="tags">{{music.radio.category}}</span>{{music.name}}Vol.{{music.serialNum}}</div>
+				<div id="p_info_time">创建 播放：{{music.listenerCount}}次</div>
+				<div>{{music.description}}</div>
+			</div>
+		</div>
+
 		<div id="playing-main" v-show="!showlrc" @click="showlrc=!showlrc">
 			<img id="playingmainbg" src="../../../static/images/play.png" />
-			<div :style="{'background-image':'url('+(cover||(music.mainSong.album||{}).picUrl)+'?param=200y200)'}" bindtap="loadlrc" id="pmaincover"></div>
+			<div :style="{'background-image':'url('+(music.mainSong.album||{}).picUrl+'?param=400y400)'}" bindtap="loadlrc" id="pmaincover"></div>
 		</div>
 		<div id="playing-actwrap">
 			<div id="playing-info" v-show="!showlrc">
@@ -21,7 +74,7 @@
 					<img src="../../../static/images/cm2_list_detail_icn_share@2x.png" />
 				</div>
 				<div class="pi-act commentscount">
-					<router-link :to="{name:'comment',params:{id:music.id},query:{ctype:2}}">
+					<router-link :to="{name:'comment',params:{id:music.commentThreadId},query:{ctype:1}}">
 						<img v-if="!commentscount" src="../../../static/images/cm2_play_icn_cmt@2x.png" />
 						<img v-if="commentscount" src="../../../static/images/cm2_play_icn_cmt_num@2x.png" />
 						<span v-if="commentscount">{{commentscount>999?'999+':commentscount}}</span>
@@ -31,7 +84,7 @@
 					<img src="../../../static/images/cm2_play_icn_more@2x.png" />
 				</div>
 			</div>
-			<playpercent :playtime="playtime" v-on:change="change" :musicloading="musicloading" :duration="music.dt"></playpercent>
+			<playpercent :playtime="playtime" v-on:change="change" :musicloading="musicloading" :duration="music.mainSong.duration"></playpercent>
 			<div id="playingaction">
 				<div class="pa-saction" @click="setshuffle" v-if="shuffle==1">
 					<img :src="'../../../static/images/cm2_icn_'+(shuffle==1?'order':(shuffle==2?'one':'shuffle'))+'@2x.png'" />
@@ -55,9 +108,8 @@
 
 		<pop :show="pop_tg==3" v-on:closepop="pop_tg=0">
 			<div class='ppm_header'>
-				<div class="pph_cnt">{{(shuffle==1?'列表循环':(shuffle==2?'单曲循环':'随机播放'))}}（{{list_dj.length}}）</div>
+				<div class="pph_cnt">{{(shuffle==1?'循序播放':(shuffle==2?'单曲循环':'随机播放'))}}（{{list_dj.length}}）</div>
 				<div class="pph_cnt">
-					<div><img src="../../../static/images/cm2_btmlay_btn_fav_prs@2x.png" alt="" /><span>收藏</span></div>
 					<div @click="delplaylist();pop3=false"><img src="../../../static/images/cm2_btmlay_btn_dlt_prs@2x.png" alt="" /><span>清空</span></div>
 				</div>
 			</div>
@@ -71,7 +123,7 @@
 							</div>
 						</div>
 						<div class="flexmain">
-							<div>{{re.name}} - <span>{{re.artists[0].name}}</span></div>
+							<div>{{re.name}}</div>
 						</div>
 						<div class="flexact">
 							<div class="fa_list" @click.stop="delplaylist(idx)">
@@ -99,12 +151,14 @@
 		name: 'program',
 		data() {
 			return {
-				showlrc:false,
+				showlrc: false,
 				loaded: false,
 				id: 0,
-				cover: "",
 				pop_tg: 0,
-				program: {}
+				program: {
+					radio: {},
+					mainSong: {}
+				}
 			}
 		},
 		components: {
@@ -115,29 +169,26 @@
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
 				//当前播放的音乐的id与路由的id不一样
-				console.log(vm.bgmchange, to.params.id, vm.music.id);
-				if((parseInt(to.params.id) !== parseInt(vm.music.id)) && vm.setplaytype != 2) {
+				if((parseInt(to.params.id) !== parseInt(vm.music.id))) {
 					vm.$store.commit("setplaytype", 3);
 					if(vm.bgmchange && vm.music.id) {
 						vm.$router.replace({
 							name: 'program',
 							params: {
 								id: vm.music.id
-							},
-							query: {
-								img: vm.music.album.picUrl
 							}
 						})
 						return;
 					}
 					vm.loaded = false;
 					vm.$store.commit("setmusic", {
-						mainSong:{
-							album:{}
+						dj: {},
+						radio: {},
+						mainSong: {
+							album: {}
 						}
 					})
 					vm.$store.commit('resetmusic')
-					vm.cover = ""
 					vm.get();
 
 				}
@@ -150,49 +201,50 @@
 		},
 		watch: {
 			music(v) {
-				if(!this.music.id || this.playtype != 1) return;
-				this.showlrc && this.loadLrc(v.id);
+				if((!this.music.id || this.playtype != 3) || this.$route.name != 'program') return;
+				console.log("playing programs watch");
 				this.$store.commit("resetmusic");
-				this.cover = "";
-				this.getcommit()
-					((this.$router.name == 'program') && this.bgmchange) && this.$router.replace({
-						name: 'program',
-						params: {
-							id: this.music.id
-						},
-						query: {
-							img: this.music.al.pic
-						}
-					})
+				this.$store.dispatch('only_murl');
+				this.getcommit();
+				((this.$router.name == 'program') && this.bgmchange) && this.$router.replace({
+					name: 'program',
+					params: {
+						id: this.music.id
+					}
+				})
 			}
 		},
 		methods: {
 			playingtoggle() {
 				this.$store.commit("setplaying", !this.playing);
 			},
-			async get() {
-				var img = this.$route.query.img;
+			get() {
 				this.id = this.$route.params.id;
-				img && (this.cover = bs64.id2Url(img));
 				api.program_detail(this.id).then(res => {
 					this.program = res.data.program;
 					this.$store.commit("setmusic", res.data.program);
-					this.getcommit()
 				})
 			},
 			getcommit() {
-				api.comments(this.program.commentThreadId, 0, 1).then(res => {
+				api.comments(this.music.commentThreadId, 0, 1).then(res => {
 					this.$store.commit('commentscount', res.data.total);
 				})
 			},
 			heart() {
-				this.program.id && this.$store.dispatch('heart', {
-					id: this.music.id,
-					t: this.star
+				this.music.id && api.program_like(this.music.commentThreadId, this.music.liked ? 0 : 1).then(res => {
+					this.music.liked = !this.music.liked;
+					this.music.liked ? this.music.likedCount++ : this.music.likedCount--
 				})
 			},
 			change(v) {
 				this.$store.commit("seekmusic", v)
+			},
+			djradio_sub() {
+				api.dj_sub(this.music.id, this.music.radio.subed ? 0 : 1).then(res => {
+					if(res.data.code == 200) {
+						this.music.radio.subed = !this.music.radio.subed
+					}
+				})
 			},
 			...mapMutations([
 				'next',
@@ -214,6 +266,12 @@
 				'playtype',
 				'bgmchange'
 			])
+		},
+		filters: {
+			playcount(v) {
+				if(!v) return "0";
+				return v < 10e3 ? v : ((v / 10e3).toFixed(0) + '万')
+			}
 		}
 	}
 </script>
@@ -232,5 +290,104 @@
 		background-size: auto 100%;
 	}
 	
-	.mn_list {}
+	#program_radio_info {
+		color: #fff;
+		margin-top: 40px;
+		position: absolute;
+		z-index: 3;
+		width: 100%;
+	}
+	
+	#program_radio_info .flexlist {
+		border-bottom: 1px solid rgba(255, 255, 255, .2);
+		;
+		padding: 2% 2% 2% 0;
+	}
+	
+	#program_radio_info #radio_cover {
+		width: 100%
+	}
+	
+	#subtn img {
+		margin: 0 .2em;
+		height: 1em;
+	}
+	
+	#subtn {
+		border: 1px solid rgba(255, 255, 255, .2);
+		padding: .2em 1em .2em .5em;
+		color: #fff
+	}
+	
+	.flexact {
+		font-size: .8em;
+	}
+	
+	.relistdes {
+		color: #fff
+	}
+	
+	#p_info_menu {
+		position: absolute;
+		top: 40px;
+		z-index: 10;
+		bottom: 10em;
+		width: 100%;
+		color: #fff;
+		overflow: auto;
+	}
+	
+	.menu .mn_ico {
+		flex: 0 0 2em;
+		text-align: center;
+	}
+	
+	.menu .mn_ico,
+	.menu .cmain,
+	.menu .rdes {
+		color: #fff;
+		border-bottom: 1px solid rgba(255, 255, 255, .2);
+	}
+	
+	.mn_list {
+		color: #fff;
+	}
+	
+	#p_info {
+		padding: 1em;
+		line-height: 1.6
+	}
+	
+	#p_info_time {
+		color: #bbb;
+		padding: .5em 0
+	}
+	
+	#playing-main {
+		z-index: 10;
+		margin-top: 43.5%;
+	}
+	
+	#pmaincover {
+		position: absolute;
+		width: auto;
+		height: auto;
+		left: 3px;
+		top: 3px;
+		right: 3px;
+		bottom: 3px;
+		z-index: 3;
+		border-radius: 50%;
+		overflow: hidden;
+	}
+	
+	#coverbg {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: auto;
+		display: block;
+		z-index: 1;
+	}
 </style>

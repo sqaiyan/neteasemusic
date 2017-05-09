@@ -4,7 +4,7 @@
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
 			<mt-button icon="more" @click="pop_tg=1" slot="right"></mt-button>
 		</mt-header>
-		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(music.album||{}).picUrl+')'}"></div>
+		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(music.album||{}).picUrl+'?param=500y500)'}"></div>
 		<div id="fm-covermain" :class="(showlrc?'playinghidden':'')">
 			<img id="fm-cmpic" :src="(music.album||{}).picUrl+'?param=500y500'" />
 		</div>

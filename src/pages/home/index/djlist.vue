@@ -38,7 +38,7 @@
         <div class="cover">
           <img :src="item.picUrl+'?param=200y200'" class="music_cover" />
           <div class="img_playcount">
-            <img src='../../../../static/images/cm2_list_icn_subscribe@2x.png' />{{item.subCount}}订阅</div>
+            <img src='../../../../static/images/cm2_list_icn_subscribe@2x.png' />{{item.subCount|playcount}}订阅</div>
         </div>
         <div class="name">{{item.name}}</div>
       </router-link>
@@ -54,8 +54,8 @@
     name: 'djlist',
     data() {
       return {
-        djcate: [],
-        djrecs: {},
+        djcate: {categories:{}},
+        djrecs: {rec_p:{},rec_d:{}},
         djlist: {},
         offset: 0,
         hasMore: false,
@@ -99,7 +99,13 @@
           this.busy = false;
         })
       }
-    }
+    },
+		filters: {
+			playcount(v) {
+				if(!v)return "0";
+				return v < 10e3 ? v : ((v / 10e3).toFixed(0) + '万')
+			}
+		}
   }
 </script>
 

@@ -12,7 +12,7 @@
 					<div class="ahw_name">{{djradio.name||' '}}
 						<p>{{djradio.subCount|playcount}}人订阅</p>
 					</div>
-					<div class="ahw_btn" bindtap="djradio_sub">
+					<div class="ahw_btn" @click="djradio_sub">
 						<img src="../../static/images/cm2_list_icn_subscribe@2x.png" v-if="!djradio.subed" alt="" />
 						<img src="../../static/images/cm2_pro_btn_icn_subed@2x.png" v-else alt="" /> 订阅</div>
 				</div>
@@ -67,12 +67,12 @@
 		<div class="tab_cnt" v-show="cur==1">
 			<div class="sm_title">共{{programs.count}}期</div>
 			<div class="songs">
-				<router-link :to="{name:'program',params:{id:re.id},query:{img:re.mainSong.album.picId_str||re.mainSong.album.picId}}" :class="'flexlist flex-center '+(re.id==music.id?'cur':'')" v-for="(re,idx) in programs.programs" :key="re.id">
+				<router-link v-for="(re,idx) in programs.programs" :to="{name:'program',params:{id:re.id},query:{img:re.mainSong.album.picId_str||re.mainSong.album.picId}}" :class="'flexlist flex-center '+(re.id==music.id?'cur':'')"  @click.native="indexprog(idx)" :key="re.id">
 					<div class="flexleft flexnum ">
 						<div v-if="re.id===music.id">
 							<img src="../../static/images/aal.png" alt="" />
 						</div>
-						<div wx:else>
+						<div v-else>
 							<span>{{idx+1}}</span>
 						</div>
 					</div>
@@ -116,7 +116,7 @@
 				scrolltop: 0,
 				djradio: {
 					dj: {},
-					commentDatas:[]
+					commentDatas: []
 				},
 				opa: 0,
 				name: '',
@@ -131,10 +131,9 @@
 				offset: 0,
 				id: -1,
 				loaded: false,
-				title: '歌单',
 				scrolltop: 0,
 				programs: {},
-				busy:true
+				busy: true
 			}
 		},
 		components: {
@@ -145,10 +144,14 @@
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
-				if(parseInt(to.params.id) !== parseInt(vm.id)) {
+				if(parseInt(to.params.id) != parseInt(vm.id)) {
 					vm.name = "";
 					vm.loaded = false;
-					vm.djradio = {};
+					vm.djradio = {
+						dj: {},
+						commentDatas: []
+					};
+					vm.programs = {}
 					vm.loadj();
 				}
 			})
@@ -174,42 +177,42 @@
 			switchtab(index) {
 				this.cur = index.toString();
 			},
-			loadj() {
+			async loadj() {
 				this.id = this.$route.params.id;
-				api.dj_detail(this.id).then(res => {
-					this.loaded = true;
+				await api.dj_detail(this.id).then(res => {
 					this.djradio = res.data.djRadio;
-				}).catch(() => {
-					this.loaded = true
-				});
+				}).catch(() => {});
 				this.getprogram(false)
 			},
-			getprogram(more=true){
-				if(this.loaded&&!this.programs.more)return;
+			getprogram(more = true) {
+				if(this.$route.name != 'djlist') return;
+				if(this.loaded && !this.programs.more) return;
 				api.dj_getprogram(this.id, this.offset).then(res => {
-					if(more){
-						res.data.programs=this.programs.programs.concat(res.data.programs);
+					if(more) {
+						res.data.programs = this.programs.programs.concat(res.data.programs);
 					}
 					this.programs = res.data;
-					this.offset=res.data.programs.length
-					this.loaded=true;
-					this.busy=false;
+					this.offset = res.data.programs.length
+					this.loaded = true;
+					this.busy = false;
 				})
 			},
-			playindex(i) {
-				this.$store.commit("setplaytype", 1);
-				this.$store.commit("setplaylist", this.canplay);
-				this.$store.commit("playindex", i);
-			},
-			playall() {
-				this.playindex(0);
-				this.$store.commit("setmusic", this.canplay[0])
-				this.$store.dispatch("only_murl")
+			indexprog(i){
+				this.$store.commit("setplaytype",3);
+				this.$store.commit("setplaylist",this.programs.programs);
+				this.$store.commit("playindex",i);
 			},
 			emoji(str) {
 				return utils.emoji(str)
+			},
+			djradio_sub(){
+				api.dj_sub(this.id,this.djradio.subed?0:1).then(res=>{
+					if(res.data.code==200){
+						this.djradio.subed=!this.djradio.subed
+					}
+				})
 			}
-
+			
 		},
 		computed: {
 			...mapGetters([
@@ -225,20 +228,20 @@
 			},
 			dateM(v) {
 				v = new Date(v);
-				var y=v.getFullYear()==new Date().getFullYear()?'':v.getFullYear()+"-";
-				var m=v.getMonth()+1;
-				m=m>9?m:('0'+m);
-				var d=v.getDate();
-				d=d>9?d:('0'+d);
-				return y+m+"-"+d
+				var y = v.getFullYear() == new Date().getFullYear() ? '' : v.getFullYear() + "-";
+				var m = v.getMonth() + 1;
+				m = m > 9 ? m : ('0' + m);
+				var d = v.getDate();
+				d = d > 9 ? d : ('0' + d);
+				return y + m + "-" + d
 			},
 			dateS(v) {
 				v = new Date(v);
-				var m=v.getMinutes();
-				m=m>9?m:('0'+m);
-				var s=v.getSeconds();
-				s=s>9?s:('0'+s);
-				return m+':'+s
+				var m = v.getMinutes();
+				m = m > 9 ? m : ('0' + m);
+				var s = v.getSeconds();
+				s = s > 9 ? s : ('0' + s);
+				return m + ':' + s
 			}
 		}
 	}

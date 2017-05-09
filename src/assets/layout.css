@@ -397,7 +397,7 @@ a {
 }
 
 .st_title img {
-	height: 1.5em;
+	height: 1.4em;
 	vertical-align: middle;
 	margin-right: .3em;
 }
@@ -1128,7 +1128,7 @@ a {
 
 .menu .arrow {
 	display: inline-block;
-	margin: 0 15px;
+	margin: 0 .5em;
 	vertical-align: middle;
 }
 
@@ -1139,7 +1139,6 @@ a {
 .menu .rdes {
 	text-align: right;
 	border-bottom: 1px solid #e1e2e3;
-	font-size: 28px;
 	color: #999;
 	display: flex;
 	align-items: center;
@@ -1329,7 +1328,7 @@ a {
 
 .arrow-white {
 	width: 12px;
-	height: 22px;
+	height: 1em;
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAWCAMAAADD5o0oAAAAjVBMVEX///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+/pqIrAAAALnRSTlMAAQ8GA7OxCkkMwKnEHBfQzJ6tExXbmdSiydiNG5GHBN6A3YEaiNeO05KayKMFKL6/GAAAAHNJREFUGNNt0EkCgjAMBdCWwSKIQBkURUEZFIR//+OxMumiWeVt8pOI4OAKKh8+S4XQLel4QuSRnBpXQykyScoTVKziggfrfMOd45oST1bc4cV4o//3Q4mRBkz40OgvZsmhi7Ss4/ywepYTVAi9Wc82H7IDtTMIq3eXfrQAAAAASUVORK5CYII=)
 }
 

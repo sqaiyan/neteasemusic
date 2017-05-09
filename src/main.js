@@ -7,8 +7,9 @@ import '@/assets/layout.css'
 import store from '@/store/store'
 import axios from 'axios'
 import api from "@/api"
-axios.defaults.timeout = 5000
+axios.defaults.timeout = 5000;//默认5s超时
 axios.defaults.baseURL = 'http://localhost:3000/v1/';
+axios.defaults.withCredentials=true;//请求带上cookie
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.interceptors.request.use(function(config) { // 这里的config包含每次请求的内容
     var url = config.url;
@@ -18,8 +19,8 @@ axios.interceptors.request.use(function(config) { // 这里的config包含每次
     		router.push({name:'login'})
     		return Promise.reject({"msg":'需先登录'});
     }
-    c = "cookie=" + c
-    url+=(url.indexOf('?') > -1?'&':'?')+c
+   // c = "cookie=" + c
+   // url+=(url.indexOf('?') > -1?'&':'?')+c
     config.url = url;
     return config;
 }, function(err) {
@@ -27,7 +28,7 @@ axios.interceptors.request.use(function(config) { // 这里的config包含每次
 });
 axios.interceptors.response.use((res) => {
     if (res.data.code === 301) {
-    		console.log('未登录')
+    	console.log('未登录')
     }
     else if (res.data.code !== 200) {
         console.log('返回数据不正常')

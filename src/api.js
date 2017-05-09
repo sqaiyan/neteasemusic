@@ -132,7 +132,10 @@ export default {
     	return axios("dj/detail?id="+id);
     },
     dj_getprogram(id,offset){
-    	return axios("dj/program?id="+id+'&offset='+offset+'&limit='+limit);
+    	return axios("dj/program",{params:{id:id,offset:offset,limit:limit}});
+    },
+    dj_sub(id,t){
+    	return axios("dj/sub",{params:{id:id,t:t}});
     },
     program_detail(id){
     	return axios("program/detail",{params:{id:id}})

@@ -17,7 +17,7 @@
 		<tab :tabs="tab" :tabidx="cur" v-on:switchtab="switchtab" class="tab-split"></tab>
 		<div id="art_main">
 			<div class="tab_cnt" v-show="cur==0">
-				<songlist :list="art.hotSongs"></songlist>
+				<songlist :list="art.hotSongs" v-on:playindex="playindex" :curplay="music.id"></songlist>
 				<div v-if="art.more">
 					<div url="" class="cntloading">查看所有曲目></div>
 				</div>
@@ -261,6 +261,11 @@
 				}).catch(() => {
 					this.loaded = true
 				});
+			},
+			playindex(i){
+				this.$store.commit("setplaytype",1);
+				this.$store.commit("setplaylist",this.art.hotSongs);
+				this.$store.commit("playindex",i);
 			}
 		},
 		computed: {

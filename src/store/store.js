@@ -3,6 +3,9 @@ import Vuex from 'vuex';
 import api from '@/api';
 Vue.use(Vuex);
 import u from "@/utils"
+import {
+	Toast
+} from 'mint-ui';
 const store = new Vuex.Store({
   state: {
     music: {al:{},ar:[{}],artists:[{}],album:{}},
@@ -93,6 +96,13 @@ const store = new Vuex.Store({
     	state.playtime=0;
     },
     setmusic_url (state, url) {
+    	if(!url){
+    		Toast({
+				message: '获取歌曲链接失败',
+				duration: 3000
+			});
+    		return;
+    	}
     	state.playurl=url
     },
     list_remove (state, index) {
@@ -126,11 +136,12 @@ const store = new Vuex.Store({
     },
     delplaylist(state,i){
     	if(i>-1){
-    		state.index_am--;
-    		state.list_am.splice(i,1);
+    		state.playtype==1?state.index_am--:state.index_dj--;
+    		state.playtype==1?state.list_am.splice(i,1):state.list_dj.splice(i,1);
     	}else{
-    		state.index_am=0
-    		state.list_am=[]
+    		
+    		state.playtype==1?(state.index_am=0):(state.index_dj=0);
+    		state.playtype==1?(state.list_am=[]):(state.list_dj=[])
     	}
     },
     next (state) { // 播放下一曲
@@ -181,6 +192,7 @@ const store = new Vuex.Store({
   },
   actions: {
 	 next_music({commit,state,dispatch}){
+	   console.log("action next music")
 	   commit("next");
 	   dispatch("only_murl");
 	},
@@ -206,7 +218,8 @@ const store = new Vuex.Store({
 	    	})
     },
     only_murl({commit,state}){// 获取歌曲播放地址
-	    	api.music_url(state.music.id).then(res=>{
+    	if(!state.music.id)return;
+	    	api.music_url(state.playtype!=3?state.music.id:state.music.mainSong.id).then(res=>{
 	    		commit('setmusic_url',res.data.data[0].url);
 	    	})
     },

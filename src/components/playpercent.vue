@@ -97,6 +97,15 @@
 	
 	.loading .mt-range-thumb:after {
 		border-color: #000;
+		background: url(../../static/images/loading.gif) center center no-repeat;
+		-webkit-background-size: 100% 100%;
+		background-size: 100% 100%;
+		width: 80%;	
+		height: 80%;
+		left: 10%;
+		top: 10%;
+		border: none;
+		margin: 0;
 	}
 	
 	.mt-range-thumb:after {

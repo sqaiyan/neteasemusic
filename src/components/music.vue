@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<audio :src="playtype==3?music.mainSong.mp3Url:playurl" @timeupdate="playingtime" @waiting="waiting" @ended="nextmusic" @canplay="toplay" id="audio"></audio>
+		<audio :src="playurl" @timeupdate="playingtime" @error="errormp3" @waiting="waiting" @ended="nextmusic" @canplay="toplay" id="audio"></audio>
 	</div>
 </template>
 <script>
@@ -24,6 +24,11 @@
 				} else {
 					this.$store.dispatch('next_music');
 				}
+			},
+			errormp3(){
+				console.log("music loading error");
+				//出错再重新请求一次
+				//this.$store.dispatch('only_murl');
 			}
 		},
 		computed: {
