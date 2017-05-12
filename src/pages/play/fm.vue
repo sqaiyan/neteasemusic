@@ -10,7 +10,7 @@
 		</div>
 		<div id="fm-mdes" :class="(showlrc?'playinghidden':'')">
 			<span id="fm-mname">{{music.name}}</span>
-			<span id="fm-martist">{{(music.artists||[{}])[0].name}}</span>
+			<span id="fm-martist">{{(music.artists||[{a:1}])[0].name}}</span>
 		</div>
 		<div id="lrclist" @click="showlrc=!showlrc" :playtime="playtime">
 			<lrcTpl :lrc="lrcObj" :showlrc="showlrc" :playtime="playtime" lrcindex="1"></lrcTpl>
@@ -59,7 +59,7 @@
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_icn_artist_new@2x.png" alt="" />
 						</div>
-						<div class="cmain">歌手：{{music.artists[0].name}}</div>
+						<div class="cmain">歌手：{{(music.artists||[{a:1}])[0].name}}</div>
 					</router-link>
 					<router-link replace :to="{name:'album',params:{id:music.album.id||0},query:{img:music.album.pic_str||music.album.pic}}" class="mn_list">
 						<div class="mn_ico">

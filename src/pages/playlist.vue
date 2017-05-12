@@ -22,7 +22,7 @@
 					<span id="music_h_name">{{name||list.playlist.name}}</span>
 					<div>
 						<img id="user_ava" class="user_avator" :src="list.playlist.creator.avatarUrl" />
-						<span>{{list.playlist.creator.nickname||" "}} </span>
+						<router-link :to="{name:'user',params:{id:list.playlist.creator.userId}}">{{list.playlist.creator.nickname||" "}}</router-link>
 						<img src="../../static/images/cm2_list_detail_icn_arr@2x.png" style="height:1.2em;" />
 					</div>
 				</div>
@@ -155,7 +155,10 @@
 			},
 			playall(){
 				this.playindex(0);
-				this.$store.dispatch("only_murl")
+				this.$store.dispatch("only_murl");
+				api.comments(this.music.id, 0, 2).then(res => {
+					this.$store.commit('commentscount', res.data.total);
+				})
 			}
 		},
 		computed: {
@@ -164,18 +167,11 @@
 				'music',
 				"playtype"
 			])
-		},
-		filters: {
-			playcount(v) {
-				if(!v)return "0";
-				return v < 10e3 ? v : ((v / 10e3).toFixed(0) + '万')
-			}
 		}
 	}
 </script>
 
 <style scoped>
-	.flexlist:hover{background-color: transparent;}
 	.mint-header {
 		background: rgba(0, 0, 0, 0)
 	}

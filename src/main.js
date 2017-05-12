@@ -6,7 +6,7 @@ import 'mint-ui/lib/style.css'
 import '@/assets/layout.css'
 import store from '@/store/store'
 import axios from 'axios'
-import api from "@/api"
+import api from "@/api";
 axios.defaults.timeout = 5000;//默认5s超时
 axios.defaults.baseURL = 'http://localhost:3000/v1/';
 axios.defaults.withCredentials=true;//请求带上cookie
@@ -31,7 +31,7 @@ axios.interceptors.response.use((res) => {
     	console.log('未登录')
     }
     else if (res.data.code !== 200) {
-        console.log('返回数据不正常')
+       // console.log('返回数据不正常')
     }
     return res
 }, (error) => {
@@ -51,4 +51,34 @@ new Vue({
     		this.$store.commit("localuser");
     		await this.$store.dispatch('getlike');
     }
+})
+Vue.filter('playcount', function (v) {
+	if(!v)return "";
+	return v < 1e5 ? v : ((v / 1e5).toFixed(0) + '万')
+})
+Vue.filter('dateM', function (v) {
+	v = new Date(v);
+	var y = v.getFullYear() == new Date().getFullYear() ? '' : v.getFullYear() + "-";
+	var m = v.getMonth() + 1;
+	m = m > 9 ? m : ('0' + m);
+	var d = v.getDate();
+	d = d > 9 ? d : ('0' + d);
+	return y + m + "-" + d
+})
+Vue.filter('dateS', function (v) {
+	v = new Date(v);
+	var m = v.getMinutes();
+	m = m > 9 ? m : ('0' + m);
+	var s = v.getSeconds();
+	s = s > 9 ? s : ('0' + s);
+	return m + ':' + s
+})
+Vue.filter('time', function (date) {
+	if(!date) return '';
+	date = new Date(date);
+	var m=date.getMonth()+1;
+	m=m>9?m:`0${m}`;
+	var d=date.getDate();
+	d=d>9?d:`0${d}`;
+	return date.getFullYear() + '-' + m + '-' + d
 })

@@ -146,10 +146,19 @@ const store = new Vuex.Store({
     },
     next (state) { // 播放下一曲
       console.log("next")
-      if(!state.list_am.length)return;
-	  state.index_am++;
-	  state.index_am=state.index_am>=state.list_am.length?0:state.index_am;
-	  state.music=state.list_am[state.index_am];
+      if(state.playtype==1){
+    	  if(!state.list_am.length)return;
+    	  state.index_am++;
+    	  state.index_am=state.index_am>=state.list_am.length?0:state.index_am;
+    	  state.music=state.list_am[state.index_am];
+      }
+      else if(state.playtype==3){
+    	  if(!state.list_dj.length)return;
+    	  state.index_dj++;
+    	  state.index_dj=state.index_dj>=state.list_dj.length?0:state.index_dj;
+    	  state.music=state.list_dj[state.index_dj];
+      }
+      
     },
     prev (state) { // 播放上一曲
     	 console.log("prev")

@@ -1,0 +1,93 @@
+.nm-1px,
+.nm-1px-t,
+.nm-1px-b,
+.nm-1px-tb,
+.nm-1px-l,
+.nm-1px-r {
+  position: relative;
+}
+.nm-1px:before {
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200%;
+  height: 1px;
+  border: 1px solid #C7C7C7;
+  color: #C7C7C7;
+  height: 200%;
+  transform-origin: left top;
+  transform: scale(0.5);
+}
+.nm-1px-t:before {
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 1px;
+  border-top: 1px solid #C7C7C7;
+  color: #C7C7C7;
+  transform-origin: 0 0;
+  transform: scaleY(0.5);
+}
+.nm-1px-b:after {
+  content: " ";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 1px;
+  border-bottom: 1px solid #C7C7C7;
+  color: #C7C7C7;
+  transform-origin: 0 100%;
+  transform: scaleY(0.5);
+}
+.nm-1px-tb:before {
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 1px;
+  border-top: 1px solid #C7C7C7;
+  color: #C7C7C7;
+  transform-origin: 0 0;
+  transform: scaleY(0.5);
+}
+.nm-1px-tb:after {
+  content: " ";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 1px;
+  border-bottom: 1px solid #C7C7C7;
+  color: #C7C7C7;
+  transform-origin: 0 100%;
+  transform: scaleY(0.5);
+}
+.nm-1px-l:before {
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  bottom: 0;
+  border-left: 1px solid #C7C7C7;
+  color: #C7C7C7;
+  transform-origin: 0 0;
+  transform: scaleX(0.5);
+}
+.nm-1px-r:after {
+  content: " ";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 1px;
+  bottom: 0;
+  border-right: 1px solid #C7C7C7;
+  color: #C7C7C7;
+  transform-origin: 100% 0;
+  transform: scaleX(0.5);
+}

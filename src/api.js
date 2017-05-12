@@ -34,6 +34,10 @@ export default {
         // 电台列表
         return axios("djradio/hot?limit=" + limit + '&offset=' + offset);
     },
+    index_hqpl(cat){
+    	//精品歌单
+    	return axios("top/playlist/highquality?type="+cat)
+    },
     likeall() {
         return axios("likelist")
     },
@@ -105,12 +109,6 @@ export default {
             return Promise.resolve([a.data.playlists, b.data.songs, c.data.userprofiles])
         }))
     },
-    user_detail(id) {
-        return axios("user/detail?uid=" + id)
-    },
-    user_playlist(id, offset) {
-        return axios("user/playlist?uid=" + id + '&offset=' + offset + '&limit=' + limit)
-    },
     recsongs() {
         return axios("recommend/songs")
     },
@@ -142,5 +140,14 @@ export default {
     },
     program_like(id,t){
     	return axios("resource/like",{params:{id:id,t:t}})
+    },
+    user_detail(id) {
+        return axios("user/detail?uid=" + id)
+    },
+    user_playlist(id, offset) {
+        return axios("user/playlist?uid=" + id + '&offset=' + offset + '&limit=' + limit)
+    },
+    user_radio(id){
+    	return axios("user/radio",{params:{uid:id}});
     }
 }

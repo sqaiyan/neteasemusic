@@ -1,5 +1,5 @@
 <template>
-	<div id="fixheader">
+	<div id="fixheader" v-infinite-scroll="loadmore" infinite-scroll-disabled="busy">
 		<mt-header id="artheader" fixed :title="(art.artist.name||'歌手')">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
 			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
@@ -9,8 +9,8 @@
 			<img id="art_cover" :src="(cover||art.artist.picUrl)+'?param=640y520'" :style="{'filter':'blur('+opa+'px) brightness(.8)'} " />
 			<div id="ahw_wrap">
 				<div class="ahw_btn" :style="{'visibility':(opa1>.7?'visible':'hidden')}">
-					<img src="../../static/images/cm2_list_icn_subscribe@2x.png" v-if="!art.artist.followed" />
-					<img src="../../static/images/cm2_pro_btn_icn_subed@2x.png" v-else/> {{art.artist.followed?'已':''}}收藏
+					<img src="../../static/images/cm2_vehicle_icn_subscribe@2x.png" v-if="!art.artist.followed" alt="" />
+						<img src="../../static/images/cm2_vehicle_icn_subscribed@2x.png" v-else alt="" /> {{art.artist.followed?'已':''}}收藏
 				</div>
 			</div>
 		</div>
@@ -56,7 +56,7 @@
 						</div>
 					</div>
 				</div>
-				<loading v-if="!tab[2].loaded"></loading>
+				<loading v-if="!tab[2].loaded||tab[2].text>tab[2].mvs.mvs.length"></loading>
 			</div>
 			<div class="tab_cnt" v-show="cur==3">
 				<div v-if="tab[3].loaded">
@@ -151,6 +151,7 @@
 				id: -1,
 				cover: "",
 				popupVisible: false,
+				busy:false,
 				loaded: false,
 				art: {
 					artist: {}
@@ -262,6 +263,15 @@
 					this.loaded = true
 				});
 			},
+			loadmore(){
+				if(this.$route.name!='artist')return;
+				if((this.cur == 1) && this.tab[1].album.more&&!this.tab[2].busy) {
+					this.loadAlbum()
+				}
+				if((this.cur == 2)&&(this.tab[2].text>this.tab[2].mvs.mvs.length)&&!this.tab[2].busy) {
+					this.loadMvs()
+				}
+			},
 			playindex(i){
 				this.$store.commit("setplaytype",1);
 				this.$store.commit("setplaylist",this.art.hotSongs);
@@ -277,11 +287,6 @@
 				'music',
 				"playtype"
 			])
-		},
-		filters: {
-			playcount(v) {
-				return v < 10e3 ? v : ((v / 10e3).toFixed(0) + '万')
-			}
 		}
 	}
 </script>

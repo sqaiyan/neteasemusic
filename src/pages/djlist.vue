@@ -6,15 +6,15 @@
 		</mt-header>
 		<div id="artist_header" ref="main" :style="{top:-scrolltop+'px'}">
 			<img src="../../static/images/cm2_default_act_320@2x.png" alt="" />
-			<img :src="djradio.picUrl+'?param=750y750'" :style="{'filter':'blur('+opa+'px) brightness(.8)'} " /> {{opa1}}
+			<img :src="djradio.picUrl+'?param=750y750'" :style="{'filter':'blur('+opa+'px) brightness(.8)'} " />
 			<div id="ahw_wrap">
 				<div :style="{'visibility':(opa1>.4?'visible':'hidden')}">
 					<div class="ahw_name">{{djradio.name||' '}}
 						<p>{{djradio.subCount|playcount}}人订阅</p>
 					</div>
 					<div class="ahw_btn" @click="djradio_sub">
-						<img src="../../static/images/cm2_list_icn_subscribe@2x.png" v-if="!djradio.subed" alt="" />
-						<img src="../../static/images/cm2_pro_btn_icn_subed@2x.png" v-else alt="" /> 订阅</div>
+						<img src="../../static/images/cm2_vehicle_icn_subscribe@2x.png" v-if="!djradio.subed" alt="" />
+						<img src="../../static/images/cm2_vehicle_icn_subscribed@2x.png" v-else alt="" /> 订阅</div>
 				</div>
 			</div>
 		</div>
@@ -67,7 +67,7 @@
 		<div class="tab_cnt" v-show="cur==1">
 			<div class="sm_title">共{{programs.count}}期</div>
 			<div class="songs">
-				<router-link v-for="(re,idx) in programs.programs" :to="{name:'program',params:{id:re.id},query:{img:re.mainSong.album.picId_str||re.mainSong.album.picId}}" :class="'flexlist flex-center '+(re.id==music.id?'cur':'')"  @click.native="indexprog(idx)" :key="re.id">
+				<router-link v-for="(re,idx) in programs.programs" :to="{name:'program',params:{id:re.id},query:{img:re.mainSong.album.picId_str||re.mainSong.album.picId}}" :class="'flexlist flex-center '+(re.id==music.id?'cur':'')" @click.native="indexprog(idx)" :key="re.id">
 					<div class="flexleft flexnum ">
 						<div v-if="re.id===music.id">
 							<img src="../../static/images/aal.png" alt="" />
@@ -151,6 +151,10 @@
 						dj: {},
 						commentDatas: []
 					};
+					vm.id = -1
+					vm.offset = 0;
+					vm.busy = true;
+					vm.cur = '1'
 					vm.programs = {}
 					vm.loadj();
 				}
@@ -159,7 +163,10 @@
 		activated() {
 			var cw = window.screen.width;
 			var st = window.screen.width * 0.8 - 40;
-			this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
+			this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset;
+			this.opa1 = 1 - window.pageYOffset / cw;
+			this.opa = window.pageYOffset / cw * 10
+			this.scrolltop = pageYOffset
 			window.onscroll = () => {
 				if(window.pageYOffset > st) {
 					this.scrolltop = st;
@@ -185,7 +192,7 @@
 				this.getprogram(false)
 			},
 			getprogram(more = true) {
-				if(this.$route.name != 'djlist') return;
+				if((this.$route.name != 'djlist') || (this.cur == '0')) return;
 				if(this.loaded && !this.programs.more) return;
 				api.dj_getprogram(this.id, this.offset).then(res => {
 					if(more) {
@@ -197,22 +204,22 @@
 					this.busy = false;
 				})
 			},
-			indexprog(i){
-				this.$store.commit("setplaytype",3);
-				this.$store.commit("setplaylist",this.programs.programs);
-				this.$store.commit("playindex",i);
+			indexprog(i) {
+				this.$store.commit("setplaytype", 3);
+				this.$store.commit("setplaylist", this.programs.programs);
+				this.$store.commit("playindex", i);
 			},
 			emoji(str) {
 				return utils.emoji(str)
 			},
-			djradio_sub(){
-				api.dj_sub(this.id,this.djradio.subed?0:1).then(res=>{
-					if(res.data.code==200){
-						this.djradio.subed=!this.djradio.subed
+			djradio_sub() {
+				api.dj_sub(this.id, this.djradio.subed ? 0 : 1).then(res => {
+					if(res.data.code == 200) {
+						this.djradio.subed = !this.djradio.subed
 					}
 				})
 			}
-			
+
 		},
 		computed: {
 			...mapGetters([
@@ -220,29 +227,6 @@
 				'music',
 				"playtype"
 			])
-		},
-		filters: {
-			playcount(v) {
-				if(!v) return "0";
-				return v < 10e3 ? v : ((v / 10e3).toFixed(0) + '万')
-			},
-			dateM(v) {
-				v = new Date(v);
-				var y = v.getFullYear() == new Date().getFullYear() ? '' : v.getFullYear() + "-";
-				var m = v.getMonth() + 1;
-				m = m > 9 ? m : ('0' + m);
-				var d = v.getDate();
-				d = d > 9 ? d : ('0' + d);
-				return y + m + "-" + d
-			},
-			dateS(v) {
-				v = new Date(v);
-				var m = v.getMinutes();
-				m = m > 9 ? m : ('0' + m);
-				var s = v.getSeconds();
-				s = s > 9 ? s : ('0' + s);
-				return m + ':' + s
-			}
 		}
 	}
 </script>
@@ -283,17 +267,5 @@
 	
 	.info_des {
 		color: #999;
-	}
-	
-	.ahw_name {
-		float: left;
-		color: #fff;
-		text-align: left;
-		line-height: 1.2;
-	}
-	
-	.ahw_name p {
-		color: #aaa;
-		font-size: .8em;
 	}
 </style>

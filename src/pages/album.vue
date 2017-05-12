@@ -16,9 +16,10 @@
 				</div>
 				<div id="plh-cnt">
 					<div id="music_h_name">{{name||list.album.name}}</div>
-					<div>歌手：
+					<router-link :to="{name:'artist',params:{id:list.album.artist.id}}">
+						歌手：
 						<span>{{list.album.artist.name||" "}} </span>
-					</div>
+					</router-link>	
 					<div>{{list.album.publishTime|time}}</div>
 				</div>
 			</div>
@@ -150,17 +151,6 @@
 				'music',
 				"playtype"
 			])
-		},
-		filters: {
-			time(date) {
-				if(!date) return '';
-				date = new Date(date);
-				var m=date.getMonth()+1;
-				m=m>9?m:`0${m}`;
-				var d=date.getDate();
-				d=d>9?d:`0${d}`;
-				return date.getFullYear() + '-' + m + '-' + d
-			}
 		}
 	}
 </script>

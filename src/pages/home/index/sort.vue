@@ -32,7 +32,7 @@
             <img :src="item.coverImgUrl+'?param=200y200'" class="album_cover" />
             <span>{{item.updateFrequency}}</span>
           </div>
-          <span>{{item.name}}</span>
+          <div class="name">{{item.name}}</div>
         </router-link>
       </div>
     </div>

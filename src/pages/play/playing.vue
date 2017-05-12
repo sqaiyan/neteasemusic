@@ -3,7 +3,7 @@
 		<mt-header fixed :title="(music.name||''+' - '+(music.ar||[])[0].name)">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
 		</mt-header>
-		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(cover||(music.al||{}).picUrl)+'?param=500y500)'}">{{cover}}----</div>
+		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(cover||(music.al||{}).picUrl)+'?param=500y500)'}"></div>
 		<div id="playing-zz" v-show="!showlrc" @click="showlrc=!showlrc">
 			<img src="../../../static/images/aag.png" />
 		</div>

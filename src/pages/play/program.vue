@@ -15,8 +15,8 @@
 				</div>
 				<div class="flexact">
 					<div class="fa_list" id="subtn" @click="djradio_sub">
-						<img src="../../../static/images/cm2_list_icn_subscribe@2x.png" v-if="!music.radio.subed" alt="" />
-						<img src="../../../static/images/cm2_pro_btn_icn_subed@2x.png" v-else alt="" />
+						<img src="../../../static/images/cm2_vehicle_icn_subscribe@2x.png" v-if="!music.radio.subed" alt="" />
+						<img src="../../../static/images/cm2_vehicle_icn_subscribed@2x.png" v-else alt="" />
 						<span v-if="music.radio.subed">已</span>订阅
 					</div>
 				</div>
@@ -42,16 +42,19 @@
 					<div class="arrow arrow-white"></div>
 				</div>
 			</router-link>
-			<div class="mn_list" v-if="music.songs">
+			<!--
+            	包含歌曲信息需重新请求节目信息才有，从radio中播单中过了都没有此内容
+            	<div class="mn_list" v-if="music.songs">
 				<div class="mn_ico">
 					<img src="../../../static/images/cm2_rdi_icn_list@2x.png"></image>
 				</div>
 				<div class="cmain">包含的歌曲</div>
 				<div class="rdes">
-					<span>{{music.songs.length}}</span>
+					<span>{{music.songs}}{{music.songs.length}}</span>
 					<div class="arrow arrow-white"></div>
 				</div>
 			</div>
+            -->
 			<div id="p_info">
 				<div>
 					<span class="tags">{{music.radio.category}}</span>{{music.name}}Vol.{{music.serialNum}}</div>
@@ -70,17 +73,17 @@
 					<img :src="'../../../static/images/cm2_play_icn_'+(!program.liked?'praise':'yizan')+'@2x.png'" />
 					<span>{{program.likedCount}}</span>
 				</div>
+				<!-- -->
 				<div class="pi-act" bindtap="downmusic">
 					<img src="../../../static/images/cm2_list_detail_icn_share@2x.png" />
-				</div>
-				<div class="pi-act commentscount">
-					<router-link :to="{name:'comment',params:{id:music.commentThreadId},query:{ctype:1}}">
+				</div> 
+					<router-link class="pi-act commentscount" :to="{name:'comment',params:{id:music.commentThreadId},query:{ctype:1}}">
 						<img v-if="!commentscount" src="../../../static/images/cm2_play_icn_cmt@2x.png" />
 						<img v-if="commentscount" src="../../../static/images/cm2_play_icn_cmt_num@2x.png" />
 						<span v-if="commentscount">{{commentscount>999?'999+':commentscount}}</span>
 					</router-link>
-				</div>
-				<div class="pi-act">
+				<!-- -->
+					<div class="pi-act">
 					<img src="../../../static/images/cm2_play_icn_more@2x.png" />
 				</div>
 			</div>
@@ -240,7 +243,7 @@
 				this.$store.commit("seekmusic", v)
 			},
 			djradio_sub() {
-				api.dj_sub(this.music.id, this.music.radio.subed ? 0 : 1).then(res => {
+				api.dj_sub(this.music.radio.id, this.music.radio.subed ? 0 : 1).then(res => {
 					if(res.data.code == 200) {
 						this.music.radio.subed = !this.music.radio.subed
 					}
@@ -309,14 +312,15 @@
 	}
 	
 	#subtn img {
-		margin: 0 .2em;
-		height: 1em;
+		height: 2em;vertical-align: top;
 	}
 	
 	#subtn {
-		border: 1px solid rgba(255, 255, 255, .2);
-		padding: .2em 1em .2em .5em;
-		color: #fff
+		border: 1px solid rgba(255, 255, 255, 1);
+		padding: 0 1.2em 0 .8em;
+		color: #fff;
+		border-radius: 2em;
+		line-height:2;
 	}
 	
 	.flexact {
@@ -359,7 +363,7 @@
 	}
 	
 	#p_info_time {
-		color: #bbb;
+		color: #ddd;
 		padding: .5em 0
 	}
 	

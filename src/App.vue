@@ -8,17 +8,20 @@
 </template>
 
 <script>
-	import music from "@/components/music"
+	import music from "@/components/music";
 	export default {
 		name: 'app',
 		data() {
 			return {
 				bottomNav: 'movies'
 			}
-		},components:{music}
+		},
+		components: {
+			music
+		}
 	}
 </script>
 
 <style>
-
+	@import url("assets/onepx.css");
 </style>

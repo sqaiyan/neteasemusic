@@ -15,7 +15,7 @@
 					私人FM
 				</router-link>
 				<router-link :to="{name:'recsongs'}">
-					<div class="recn_ico"><span>{{thisday}}</span></div>
+					<div class="recn_ico"><img src="../../../../static/images/cm4_disc_topbtn_daily-ip6@2x.png" alt="" /><span>{{thisday}}</span></div>
 					每日歌曲推荐
 				</router-link>
 				<router-link :to="{name:'playlist',params:{id:3778678},query:{name:'云音乐热歌榜'}}">
@@ -25,9 +25,7 @@
 					云音乐热歌榜
 				</router-link>
 			</div>
-			<div class="st_title"><img src="../../../../static/images/cm2_discover_icn_recmd@2x.png" alt="">推荐歌单
-				<router-link :to="{path: 'playlist'}" class="rbtn">更多></router-link>
-			</div>
+			<router-link :to="{path: 'playlist'}" class="listheader"><span>推荐歌单</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
 			<div class="flex-boxlist">
 				<div class="tl_cnt" :key="item.id" v-for="item in rec_pl">
 					<router-link :to="{name: 'playlist',params: { id: item.id},query:{img: item.pic,name:item.name}}">
@@ -40,9 +38,7 @@
 				</div>
 			</div>
 			<!-- -->
-			<div class="st_title"><img src="../../../../static/images/cm2_discover_icn_newest@2x.png" alt="">最新单曲
-				<router-link :to="{path: 'newsonglist'}" class="rbtn">更多></router-link>
-			</div>
+			<router-link :to="{path: 'newsonglist'}" class="listheader"><span>最新单曲</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
 			<div class="flex-boxlist">
 				<div class="tl_cnt" :key="item.id" v-for="(item,index) in rec_ns" v-if="index<6">
 					<router-link :to="{name: 'album',params: { id: item.song.album.id},query:{img:item.song.album.picId_str||item.song.album.picId||item.song.album.pic}}">
@@ -58,9 +54,7 @@
 				</div>
 			</div>
 			<!-- -->
-			<div class="st_title"><img src="../../../../static/images/cm2_discover_icn_mv@2x.png" alt="">推荐Mv
-				<router-link :to="{path: 'mvlist'}" class="rbtn">更多></router-link>
-			</div>
+			<router-link :to="{path: 'mvlist'}" class="listheader"><span>推荐Mv</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
 			<div class="flex-boxlist  mvs flex-two">
 				<div class="tl_cnt" :key="item.id" v-for="item in rec_mv">
 					<router-link :to="{name: 'mv',params: { id: item.id, name: item.name}}">
@@ -75,9 +69,7 @@
 				</div>
 			</div>
 			<!-- -->
-			<div class="st_title"><img src="../../../../static/images/cm2_discover_icn_radio@2x.png" alt="">推荐节目
-				<router-link :to="{path: 'djlist'}" class="rbtn">更多></router-link>
-			</div>
+			<router-link :to="{path: 'djlist'}" class="listheader"><span>推荐节目</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
 			<div class="flex-boxlist">
 				<div class="tl_cnt" :key="item.id" v-for="item in rec_dj">
 					<router-link :to="{name: 'playlist',params: { id: item.id, name: item.name}}">
@@ -160,12 +152,12 @@
 		width: 50%;
 		height: 0;
 		padding-top: 50%;
-		font-size: 2em;
+		font-size: 1.5em;
 		color: #BB2C08;
 		border: 1px solid #BB2C08;
 		border-radius: 50%;
 		margin: 0 auto .2em;
-		font-weight: 300;
+		font-weight: 100;
 		position: relative;
 		line-height: 0;
 		overflow: hidden;
@@ -174,7 +166,7 @@
 	
 	.recn_ico span {
 		position: absolute;
-		top: 50%;
+		top: 55%;
 		transform: translateY(-50%);
 		width: 100%;
 		left: 0

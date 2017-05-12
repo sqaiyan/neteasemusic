@@ -95,23 +95,13 @@
 					<loading v-show="!st[2].loaded||!st[2].none"></loading>
 				</mt-tab-container-item>
 				<mt-tab-container-item id="3" class="playlist ">
-					<router-link :to="{name: 'playlist',params:{id:re.id}}" class="flexlist flex-image" v-for="re in st[3].relist.playlists" :key="re.id">
-						<div class="flexleft fl-image">
-							<img :src="re.coverImgUrl+'?param=100y100'" class="album_cover" />
-						</div>
-						<div class="flexlist">
-							<div class="flexmain">
-								<div>{{re.name}}</div>
-								<div class="relistdes">{{re.trackCount}}首，By{{re.creator.nickname}}，播放{{re.playCount}}次</div>
-							</div>
-						</div>
-					</router-link>
+					<pl :list="st[3].relist.playlists"></pl>
 					<div class="cntloading" v-if="st[3].loaded&&!st[3].relist.playlists">暂无结果</div>
 					<loading v-show="!st[3].loaded||!st[3].none"></loading>
 				</mt-tab-container-item>
 				<mt-tab-container-item id="4">
 					<div class="flex-boxlist mvs flex-two">
-						<router-link :to="{path:'/playlist',param:{id:re.id}}" class="tl_cnt" v-for="re in st[4].relist.mvs" :key="re.id">
+						<router-link :to="{name:'mv',params:{id:re.id}}" class="tl_cnt" v-for="re in st[4].relist.mvs" :key="re.id">
 							<div class="cover">
 								<div class="img_playcount">
 									<img src="../../static/images/video.png" style="height:20rpx;width:28rpx;" />{{re.playCount}}</div>
@@ -128,7 +118,7 @@
 				</mt-tab-container-item>
 				<mt-tab-container-item id="5">
 					<div class="sm_title" v-if="st[5].relist.djRadios">电台</div>
-					<router-link :to="{path:'/playlist',param:{id:re.id}}" class="flexlist flex-image" v-for="re in st[5].relist.djRadios" :key="re.id">
+					<router-link :to="{name:'djlist',params:{id:re.id}}" class="flexlist flex-image" v-for="re in st[5].relist.djRadios" :key="re.id">
 						<div class="flexleft fl-image">
 							<img :src="re.picUrl+'?param=100y100'" class="album_cover" />
 						</div>
@@ -140,7 +130,7 @@
 						</div>
 					</router-link>
 					<div class="sm_title" v-if="st[5].relist.djprograms">节目</div>
-					<router-link :to="{path:'/playlist',param:{id:re.id}}" class="flexlist flex-image" v-for="re in st[5].relist.djprograms" :key="re.id">
+					<router-link :to="{name:'program',params:{id:re.id}}" class="flexlist flex-image" v-for="re in st[5].relist.djprograms" :key="re.id">
 						<div class="flexleft fl-image">
 							<img :src="re.coverUrl+'?param=100y100'" class="album_cover" />
 						</div>
@@ -155,7 +145,7 @@
 					<loading v-show="!st[5].loaded||!st[5].none"></loading>
 				</mt-tab-container-item>
 				<mt-tab-container-item id="6" class="userprofiles">
-					<router-link :to="{path:'/playlist',param:{id:re.userId}}" class="flexlist flex-image" v-for="re in st[6].relist.userprofiles" :key="re.id">
+					<router-link :to="{name:'user',params:{id:re.userId}}" class="flexlist flex-image" v-for="re in st[6].relist.userprofiles" :key="re.id">
 						<div class="flexleft fl-image">
 							<img :src="re.avatarUrl+'?param=100y100'" class="user_avator" />
 						</div>
@@ -181,7 +171,8 @@
 <script>
 	import { mapGetters, mapMutations } from 'vuex'
 	import api from "@/api"
-	import tab from "@/components/tabs"
+	import tab from "@/components/tabs";
+	import pl from "@/components/playlist";
 	import {
 		Toast
 	} from 'mint-ui';
@@ -216,7 +207,7 @@
 		components: {
 			tab,
 			songlist,
-			loading
+			loading,pl
 		},
 		activated() {
 			this.busy = false;
@@ -305,6 +296,12 @@
 					this.st[this.cur] = curt;
 					this.busy = false;
 				});
+			},
+			urltn(str){
+				if(!str)return "";
+				str=str.split("/");
+				str=str[str.length-1];
+				return str.split(".")[0];
 			}
 		},
 		computed: {

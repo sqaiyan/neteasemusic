@@ -8,12 +8,13 @@
 </template>
 
 <script>
+	import { mapGetters } from 'vuex'
 	export default {
 		name: 'playico',
-		props: {
-			music: Object,
-			playtype: Number,
-			playing: Boolean
+		props:{
+			music:Object,
+			playing:Boolean,
+			playtype:Number
 		}
 	}
 </script>
@@ -35,13 +36,22 @@
 		transform: translateY(40%);
 	}
 	
-	.cntloading span.cl2{
+	.cntloading span.cl2 {
 		animation-delay: -.6s !important;
 		transform: translateY(0%);
 	}
-	.cntloading span.cl4{animation-delay: -.3s !important;transform: translateY(20%);}
-	.cntloading span.cl3 {
-		animation-delay: 0s !important;transform: translateY(50%);
+	
+	.cntloading span.cl4 {
+		animation-delay: -.3s !important;
+		transform: translateY(20%);
 	}
-	.playingico span{animation: none;}
+	
+	.cntloading span.cl3 {
+		animation-delay: 0s !important;
+		transform: translateY(50%);
+	}
+	
+	.playingico span {
+		animation: none;
+	}
 </style>

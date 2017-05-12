@@ -15,26 +15,9 @@ export default new Router({
             component: require("@/pages/simi")
         },
         {
-            path: '/user/:id',
-            name: 'user',
-        },
-        {
             path: '/sortmv',
             name: 'sortmv'
-        }, {
-            path: '/playlist/:id',
-            name: 'playlist',
-            component: require("@/pages/playlist")
-        }, 
-        {
-            path: '/djlist/:id',
-            name: 'djlist',
-            component: require("@/pages/djlist")
         },{
-            path: '/album/:id',
-            name: 'album',
-            component: require("@/pages/album")
-        }, {
             path: '/mv/:id',
             name: 'mv',
             component: require("@/pages/mv")
@@ -42,11 +25,7 @@ export default new Router({
             path: '/comment/:id',
             name: 'comment',
             component: require("@/pages/comments")
-        }, {
-            path: '/artist/:id',
-            name: 'artist',
-            component: require("@/pages/artist")
-        }, {
+        },{
             path: '/login',
             name: 'login',
             component: require("@/pages/login")
@@ -89,10 +68,32 @@ export default new Router({
                     path: 'sort',
                     component: require("@/pages/home/index/sort")
                 }]
-            }, {
+            },
+            {
+                path: '/playlist/:id',
+                name: 'playlist',
+                component: require("@/pages/playlist")
+            },{
                 path: 'recsongs',
                 name: 'recsongs'
-            }]
+            }, 
+            {
+                path: '/djlist/:id',
+                name: 'djlist',
+                component: require("@/pages/djlist")
+            },{
+                path: '/album/:id',
+                name: 'album',
+                component: require("@/pages/album")
+            }, {
+                path: '/artist/:id',
+                name: 'artist',
+                component: require("@/pages/artist")
+            },{
+                path: '/user/:id',
+                name: 'user',
+                component: require("@/pages/user")
+            },  ]
         }, {
             path: '*',
             redirect: '/home/index/find'
