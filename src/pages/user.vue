@@ -1,19 +1,19 @@
 <template>
-	<div>
-		<div id="fixheader">
-			<mt-header id="artheader" fixed :title="title">
+	<div v-infinite-scroll="user_events" infinite-scroll-disabled="busy">
+		<div id="fixheader" :class="{'page_t':!st,'stfixed':st}">
+			<mt-header id="artheader" fixed :title="title||user.profile.nickname">
 				<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
 				<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
 			</mt-header>
-			<div id="artist_header" ref="main" :style="{top:-scrolltop+'px'}">
+			<div id="artist_header" ref="main" :style="{top:-st+'px'}">
 				<img id="art_cover" :src="user.profile.backgroundUrl" />
 				<div id="user_hmain">
 					<img id="uh_avatar" class="user_avator" :src="user.profile.avatarUrl+'?param=100y100'" alt="" />
 					<div id="uh_name">{{user.profile.nickname}}<img src="../../static/images/cm2_pro_icn_girl@2x.png" v-if="user.profile.gender==2" /><img src="../../static/images/cm2_pro_icn_boy@2x.png" v-else alt="" /></div>
-					<p>关注{{user.profile.follows|playcount}} | 粉丝{{user.profile.followeds|playcount}}</p>
+					<p>关注{{user.profile.follows}} | 粉丝{{user.profile.followeds}}</p>
 					<div class="ahw_btn">
 						<img src="../../static/images/cm2_vehicle_icn_subscribe@2x.png" v-if="!user.profile.followed" alt="" />
-						<img src="../../static/images/cm2_vehicle_icn_subscribed@2x.png" v-else alt="" />关注
+						<img src="../../static/images/cm2_vehicle_icn_subscribed@2x.png" v-else alt="" /> 关 注
 					</div>
 				</div>
 			</div>
@@ -22,7 +22,7 @@
 		<div class="tab_cnt" v-show="cur==0">
 			<div v-if="radio.length">
 				<div class="sm_title">电台({{radio.length}})</div>
-				<router-link :to="{name: 'playlist',params:{id:re.id}}" class="flexlist flex-image" v-for="re in radio">
+				<router-link :to="{name: 'radio',params:{id:re.id}}" :key="re.id" class="flexlist flex-image" v-for="re in radio">
 					<div class="flexleft fl-image">
 						<img :src="re.picUrl+'?param=100y100'" class="album_cover" />
 					</div>
@@ -35,7 +35,7 @@
 				</router-link>
 			</div>
 			<div v-if="playlist1.length">
-				<div class="sm_title">歌单 ({{user.profile.playlistCount}})<span class="fr">共被收藏({{user.profile.playlistBeSubscribedCount}})次</span></div>
+				<div class="sm_title">歌单 ({{user.profile.playlistCount}})<span class="fr">共被收藏({{user.profile.playlistBeSubscribedCount|playcount}})次</span></div>
 				<router-link :to="{name: 'playlist'}" class="flexlist flex-image">
 					<div class="flexleft fl-image">
 						<img src="../../static/images/cm2_list_cover_rank@2x.png" class="album_cover" />
@@ -54,8 +54,96 @@
 				<pl :list="playlist2"></pl>
 			</div>
 		</div>
-		<div class="tab_cnt" v-show="cur==1"></div>
-		<div class="tab_cnt" v-show="cur==2"></div>
+		<div class="tab_cnt" v-show="cur==1">
+			<div class="limg_list rec_list" v-for="item in events.events">
+				<div class="rec_avatar">
+					<img class="user_avator" :src="item.user.avatarUrl+'?param=60y60'" />
+				</div>
+				<div class="rec_main">
+					<div class="rm_header">
+						<span class="fmh_name"><router-link :to="{name:'user',params:{id:item.user.userId}}">{{item.user.nickname}}</router-link> <span>分享{{sharetype(item.json)}}：</span></span>
+						<span class="fmh_time">{{item.showTime|time}}</span>
+					</div>
+					<div class="rm_cnt">
+						<div class="WxEmojidiv">
+							<span v-for="re in emoji(item.json.msg)" :key="re.id">
+                      			<span v-if="re.node == 'text'">{{re.text}}</span>
+							<span v-if="re.node == 'element'"><img class="wxEmoji" :src="'http://s1.music.126.net/style/web2/emt//emoji_'+re.text+'.png'" /></span>
+							</span> 
+						</div>
+						<div v-for="re in item.pics" class="e_imgs">
+							<img :src="re.originUrl+'?param=640x0'" />
+						</div>
+						<div class="flex-boxlist mvs" v-if="item.json.mv">
+							<router-link :to="{name:'mv',params:{id:item.json.mv.id}}" class="tl_cnt">
+								<div class="cover">
+									<img :src="item.json.mv.imgurl16v9" alt="" class="mv_cover" />
+									<div class="img_creator">
+										{{item.json.mv.name}}
+										<p>{{item.json.mv.artist.name}}</p>
+									</div>
+								</div>
+							</router-link>
+						</div>
+						<router-link :to="{name:'playlist',params:{id:item.json.playlist.id}}" class="flexlist flex-image" v-if="item.json.playlist">
+							<div class="flexleft fl-image">
+								<img :src="item.json.playlist.coverImgUrl+'?param=100y100'" class="music_cover" />
+							</div>
+							<div class="flexlist">
+								<div class="flexmain">
+									<div><span class="tags">歌单</span>{{item.json.playlist.name}}
+									</div>
+									<div class="relistdes">by,{{item.json.playlist.creator.nickname}}
+									</div>
+								</div>
+							</div>
+						</router-link>
+						<router-link :to="{name:'playing',params:{id:item.json.song.id}}" class="flexlist flex-image" v-if="item.json.song">
+							<div class="flexleft fl-image">
+								<img :src="item.json.song.album.picUrl+'?param=100y100'" class="music_cover" />
+							</div>
+							<div class="flexlist">
+								<div class="flexmain">
+									<div>{{item.json.song.name}}
+									</div>
+									<div class="relistdes">{{item.json.song.artists[0].name}}
+									</div>
+								</div>
+							</div>
+						</router-link>
+					</div>
+					<div class="rm_act">
+						<div class="rma_list"><img src="../../static/images/cm2_act_icn_praise@2x.png" v-if="!item.info.liked" alt="" />
+							<img src="../../static/images/cm2_act_icn_praised@2x.png" v-else alt="" />{{item.info.likedCount||'赞'}}</div>
+						<div class="rma_list"><img src="../../static/images/cm2_act_icn_cmt@2x.png" alt="" />{{item.info.commentCount||'评论'}}</div>
+						<div class="rma_list"><img src="../../static/images/cm2_act_icn_share@2x.png" alt="" />{{item.info.shareCount||'分享'}}</div>
+						<div class="rma_list"><img src="../../static/images/cm4_act_icn_more@2x.png" alt="" /></div>
+					</div>
+				</div>
+			</div>
+			<loading v-show="!tab[1].loaded||events.more"></loading>
+		</div>
+		<div class="tab_cnt" v-show="cur==2">
+			<div class="listheader">个人信息：</div>
+			<div class="user_about">
+				<div class="ua_cnt">
+					等级：<span>Lv{{user.level}}</span>
+				</div>
+				<div class="ua_cnt">
+					性别：<span>{{user.profile.gender==1?'男':'女'}}</span>
+				</div>
+				<div class="ua_cnt">
+					年龄：<span>{{user.profile.birthday|btdto}}</span>
+				</div>
+				<div class="ua_cnt">社交账号：<span v-for="re in user.bindings" v-if="re.expired">
+					<a :href="re.url">{{re.type==2?'新浪微博':(re.type==6?'腾讯微博':'')}}，</a>
+				</span></div>
+			</div>
+			<div class="listheader">个人简介：</div>
+			<div class="user_about">
+				{{user.profile.signature}}
+			</div>
+		</div>
 	</div>
 
 </template>
@@ -74,7 +162,8 @@
 		text: 0
 	}, {
 		name: '动态',
-		text: 0
+		text: 0,
+		loaded: false
 	}, {
 		name: '关于TA',
 		text: 6
@@ -90,13 +179,16 @@
 				id: -1,
 				loaded: false,
 				canplay: [],
-				title: '',
-				scrolltop: 0,
 				cur: '0',
 				radio: {},
 				playlist1: [],
 				playlist2: [],
-				tab: utils.clone(tab)
+				tab: utils.clone(tab),
+				events: {
+					events: []
+				},
+				e_offset: 0,
+				busy:true
 			}
 		},
 		components: {
@@ -110,6 +202,15 @@
 				if(parseInt(to.params.id) !== parseInt(vm.id)) {
 					vm.name = "";
 					vm.loaded = false;
+					vm.tab = utils.clone(tab);
+					vm.cur = "0";
+					vm.events = {
+						events: []
+					};
+					vm.radio = 0
+					vm.playlist1 = [];
+					vm.playlist2 = []
+					vm.e_offset = 0
 					vm.user = {
 						profile: {}
 					}
@@ -117,24 +218,11 @@
 				}
 			})
 		},
-		activated() {
-			var st = this.$refs.main;
-			st = window.screen.width * 0.62 - 40;
-			this.title = window.pageYOffset >  window.screen.width * 0.5 ? '' : '';
-			this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
-			window.onscroll = () => {
-				this.title = window.pageYOffset >  window.screen.width * 0.5 ? '' : '';
-				this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
-			}
-		},
-		deactivated() {
-			window.onscroll = null
-		},
 		methods: {
 			switchtab(index) {
 				this.cur = index.toString();
-				if(this.cur == 2 && !this.tab[2].loaded) {
-					this.user_events(false)
+				if(this.cur == 1 && !this.tab[1].loaded) {
+					this.user_events()
 				}
 			},
 			getuser() {
@@ -163,16 +251,51 @@
 				})
 			},
 			user_events() {
-				api.user_radio(this.id).then(res => {
-					this.radio = res.data;
+				if(this.$route.name!='user')return;
+				this.busy=true;
+				api.user_event(this.id, this.e_offset).then(res => {
+					res = res.data;
+					res.events = this.events.events.concat(res.events);
+					for(var i in res.events) {
+						res.events[i].json = this.s2j(res.events[i].json)
+					}
+					this.tab[1].loaded = true;
+					this.events = res;
+					this.e_offset = this.events.events.length;
+					this.busy=res.more?false:true
 				})
+			},
+			s2j(v) {
+				return JSON.parse(v)
+			},
+			emoji(str) {
+				return utils.emoji(str)
+			},
+			sharetype(v) {
+				if(v.playlist) {
+					return "歌单"
+				} else if(v.song) {
+					return "单曲"
+				} else if(v.mv) {
+					return "MV"
+				} else if(v.video) {
+					return "短视频"
+				}
 			}
 		},
 		computed: {
+			st() {
+				var st = window.screen.width * 0.62 - 40;
+				return this.scrolltop > st ? st : 0
+			},
+			title() {
+				return this.scrolltop > window.screen.width * 0.4 ? '' : ' ';
+			},
 			...mapGetters([
 				'playing',
 				'music',
-				"playtype"
+				"playtype",
+				"scrolltop"
 			])
 		}
 	}
@@ -183,8 +306,13 @@
 		background: rgba(0, 0, 0, 0)
 	}
 	
-	#fixheader {
+	.stfixed {
 		padding-top: 62%;
+	}
+	
+	.stfixed #artist_header {
+		position: fixed;
+		margin-top: 0;
 	}
 	
 	#art_cover {
@@ -217,5 +345,34 @@
 		margin-left: .5em;
 		width: 1em;
 	}
-	.ahw_btn{margin-top: 1em;}
+	
+	.ahw_btn {
+		margin-top: 1em;
+	}
+	
+	.user_about {
+		padding: .5em;
+		color: #666;
+	}
+	
+	.user_about span {
+		color: #333;
+	}
+	
+	.fmh_name a {
+		color: blue;
+	}
+	
+	.rm_cnt .flex-image {
+		background-color: #efefef;
+		margin-top: .5em;
+	}
+	
+	.rm_cnt .fl-image {
+		margin: .5em;
+	}
+	
+	.tl_cnt {
+		flex: 1;margin: 0;
+	}
 </style>

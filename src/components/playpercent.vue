@@ -59,7 +59,7 @@
 	}
 	
 	#playing-status .mt-range {
-		margin:1% 3% 3%;
+		margin:1% 3%;
 		width: 94%;
 		height: auto;
 		line-height: 1;

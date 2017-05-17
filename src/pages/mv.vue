@@ -112,6 +112,8 @@
 				this.getcomments(false);
 			},
 			getcomments() {
+				if(this.$route.name!='mv')return;
+				this.busy=true
 				api.comments(this.recid, this.offset, 1).then(res => {
 					res.data.comments = this.rec.comments.concat(res.data.comments);
 					res.data.hotComments = this.rec.hotComments;

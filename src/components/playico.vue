@@ -11,10 +11,10 @@
 	import { mapGetters } from 'vuex'
 	export default {
 		name: 'playico',
-		props:{
-			music:Object,
-			playing:Boolean,
-			playtype:Number
+		props: {
+			music: Object,
+			playing: Boolean,
+			playtype: Number
 		}
 	}
 </script>

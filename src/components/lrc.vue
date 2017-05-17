@@ -27,14 +27,14 @@
 		},
 		props: {
 			playtime: Number,
-			lrc:Object,
+			lrc: Object,
 			showlrc: Boolean
 		},
 		watch: {
 			playtime(v) {
 				if(!this.lrc.lrc) return;
 				v = Math.floor(v / 1e3);
-				this.lrcindex=0;
+				this.lrcindex = 0;
 				for(let i = 0; i < this.lrc.lrc.length; i++) {
 					if(v >= this.lrc.lrc[i].lrc_sec) {
 						this.lrcindex = i

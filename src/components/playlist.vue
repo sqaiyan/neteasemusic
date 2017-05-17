@@ -18,17 +18,17 @@
 	export default {
 		name: 'playlist',
 		props: {
-			list:Array,
+			list: Array,
 			showcreator: {
 				type: Boolean,
 				default: true
 			}
 		},
-		methods:{
-			urltn(str){
-				if(!str)return "";
-				str=str.split("/");
-				str=str[str.length-1];
+		methods: {
+			urltn(str) {
+				if(!str) return "";
+				str = str.split("/");
+				str = str[str.length - 1];
 				return str.split(".")[0];
 			}
 		}

@@ -29,7 +29,28 @@ export default new Router({
             path: '/login',
             name: 'login',
             component: require("@/pages/login")
-        }, 
+        }, {
+            path: '/album/:id',
+            name: 'album',
+            component: require("@/pages/album")
+        }, {
+            path: '/artist/:id',
+            name: 'artist',
+            component: require("@/pages/artist")
+        },{
+            path: '/user/:id',
+            name: 'user',
+            component: require("@/pages/user")
+        },{
+            path: '/radio/:id',
+            name: 'radio',
+            component: require("@/pages/radio")
+        },
+        {
+            path: '/playlist/:id',
+            name: 'playlist',
+            component: require("@/pages/playlist")
+        },
         {
             path: '/play',
             component: require("@/pages/play/play"),
@@ -70,30 +91,10 @@ export default new Router({
                 }]
             },
             {
-                path: '/playlist/:id',
-                name: 'playlist',
-                component: require("@/pages/playlist")
-            },{
                 path: 'recsongs',
                 name: 'recsongs'
             }, 
-            {
-                path: '/djlist/:id',
-                name: 'djlist',
-                component: require("@/pages/djlist")
-            },{
-                path: '/album/:id',
-                name: 'album',
-                component: require("@/pages/album")
-            }, {
-                path: '/artist/:id',
-                name: 'artist',
-                component: require("@/pages/artist")
-            },{
-                path: '/user/:id',
-                name: 'user',
-                component: require("@/pages/user")
-            },  ]
+              ]
         }, {
             path: '*',
             redirect: '/home/index/find'

@@ -1,16 +1,16 @@
 <template>
-	<div id="fixheader" v-infinite-scroll="loadmore" infinite-scroll-disabled="busy">
+	<div id="fixheader" :class="{'page_t':!st,'stfixed':st}" v-infinite-scroll="loadmore" infinite-scroll-disabled="busy">
 		<mt-header id="artheader" fixed :title="(art.artist.name||'歌手')">
-			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
+			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
 			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
 		</mt-header>
-		<div id="artist_header" ref="main" :style="{top:-scrolltop+'px'}">
+		<div id="artist_header" ref="main" :style="{top:-st+'px'}">
 			<img src="../../static/images/cm2_default_artist_banner@2x.jpg" />
 			<img id="art_cover" :src="(cover||art.artist.picUrl)+'?param=640y520'" :style="{'filter':'blur('+opa+'px) brightness(.8)'} " />
 			<div id="ahw_wrap">
 				<div class="ahw_btn" :style="{'visibility':(opa1>.7?'visible':'hidden')}">
 					<img src="../../static/images/cm2_vehicle_icn_subscribe@2x.png" v-if="!art.artist.followed" alt="" />
-						<img src="../../static/images/cm2_vehicle_icn_subscribed@2x.png" v-else alt="" /> {{art.artist.followed?'已':''}}收藏
+					<img src="../../static/images/cm2_vehicle_icn_subscribed@2x.png" v-else alt="" /> {{art.artist.followed?'已':''}}收藏
 				</div>
 			</div>
 		</div>
@@ -24,7 +24,7 @@
 				<loading v-if="!loaded"></loading>
 			</div>
 			<div class="tab_cnt " v-show="cur==1">
-				<router-link :to="{name: 'album',params:{id:re.id}}" v-for="re in tab[1].album.hotAlbums" :key="re.id" class="flexlist flex-image albums">
+				<router-link :to="{name:'album',params:{id:re.id}}" v-for="re in tab[1].album.hotAlbums" :key="re.id" class="flexlist flex-image albums">
 					<div class="flexleft fl-image">
 						<img :src="(re.picUrl||'../../static/images/a6l.png')+'?param=100y100'" class="music_cover" />
 						<img class="albums_cover" src="../../static/images/a6l.png" />
@@ -44,7 +44,7 @@
 			</div>
 			<div class="tab_cnt" v-show="cur==2">
 				<div class="flex-boxlist mvs flex-two">
-					<div v-for="re in tab[2].mvs.mvs" class="tl_cnt">
+					<router-link :to="{name: 'mv',params:{id:re.id}}" :key="re.id" v-for="re in tab[2].mvs.mvs" class="tl_cnt">
 						<div class="cover">
 							<div class="img_playcount">
 								<img src="../../static/images/video.png" />{{re.playCount|playcount}}</div>
@@ -54,7 +54,7 @@
 							<div>{{re.name}}</div>
 							<div class="tli_des">{{re.artistName}}</div>
 						</div>
-					</div>
+					</router-link>
 				</div>
 				<loading v-if="!tab[2].loaded||tab[2].text>tab[2].mvs.mvs.length"></loading>
 			</div>
@@ -70,8 +70,8 @@
 						<span>相似歌手</span>
 					</div>
 					<div id="simiwrap">
-						<div class="flex-boxlist" :style="{'width':w/4*tab[3].artists.artists.length+'px'}">
-							<router-link replace :style="{'flex':'0 0 '+w*0.21+'px','margin':'.5em '+(w*0.02)+'px 1em'}" redirect :to="{name:'artist',params:{id:item.id}}" :key="item.id" class="tl_cnt" v-for="item in tab[3].artists.artists">
+						<div class="flex-boxlist" :style="{'width':cw/4*tab[3].artists.artists.length+'px'}">
+							<router-link replace :style="{'flex':'0 0 '+cw*0.21+'px','margin':'.5em '+(cw*0.02)+'px 1em'}" redirect :to="{name:'artist',params:{id:item.id}}" :key="item.id" class="tl_cnt" v-for="item in tab[3].artists.artists">
 								<div class="cover">
 									<img :src="item.img1v1Url+'?param=100y100'" class="music_cover" />
 								</div>
@@ -91,8 +91,7 @@
 				<div class="listheader" id="pop_hasheader">
 					<span>歌手简介</span>
 				</div>
-				<span class="artist_des">{{tab[3].desc.briefDesc}}
-                                                </span>
+				<span class="artist_des">{{tab[3].desc.briefDesc}}</span>
 				<div v-for="item in tab[3].desc.introduction">
 					<div class="listheader">
 						<span>{{item.ti}}</span>
@@ -112,7 +111,7 @@
 	import playico from "@/components/playico"
 	import songlist from "@/components/songlist";
 	import utils from "@/utils"
-	import { mapGetters, mapMutations } from 'vuex'
+	import { mapGetters } from 'vuex'
 	const tabcnt = [{
 		name: '热门50',
 		loaded: false
@@ -144,19 +143,17 @@
 		name: 'artist',
 		data() {
 			return {
-				scrolltop: 0,
 				cur: '0',
-				opa: 0,
-				opa1: 1,
 				id: -1,
 				cover: "",
 				popupVisible: false,
-				busy:false,
+				busy: false,
 				loaded: false,
 				art: {
 					artist: {}
 				},
-				tab: utils.clone(tabcnt)
+				tab: utils.clone(tabcnt),
+				cw: window.screen.width
 			}
 		},
 		components: {
@@ -167,6 +164,7 @@
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
+				console.log("enter", to.params.id, vm.id);
 				if(parseInt(to.params.id) !== parseInt(vm.id)) {
 					vm.loaded = false;
 					vm.id = vm.$route.params.id;
@@ -183,7 +181,7 @@
 			})
 		},
 		beforeRouteUpdate(to, from, next) {
-			next()
+			next();
 			this.loaded = false;
 			this.id = to.params.id;
 			this.cover = "";
@@ -195,23 +193,6 @@
 			}
 			this.tab = utils.clone(tabcnt);
 			this.load();
-		},
-		activated() {
-			var cw = window.screen.width;
-			var st = window.screen.width * 0.62 - 40;
-			this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
-			window.onscroll = () => {
-				if(window.pageYOffset > st) {
-					this.scrolltop = st;
-				} else {
-					this.opa1 = 1 - window.pageYOffset / cw;
-					this.opa = window.pageYOffset / cw * 10
-					this.scrolltop = pageYOffset
-				}
-			}
-		},
-		deactivated() {
-			window.onscroll = null
 		},
 		methods: {
 			switchtab(index) {
@@ -263,49 +244,55 @@
 					this.loaded = true
 				});
 			},
-			loadmore(){
-				if(this.$route.name!='artist')return;
-				if((this.cur == 1) && this.tab[1].album.more&&!this.tab[2].busy) {
+			loadmore() {
+				if(this.$route.name != 'artist') return;
+				if((this.cur == 1) && this.tab[1].album.more && !this.tab[2].busy) {
 					this.loadAlbum()
 				}
-				if((this.cur == 2)&&(this.tab[2].text>this.tab[2].mvs.mvs.length)&&!this.tab[2].busy) {
+				if((this.cur == 2) && (this.tab[2].text > this.tab[2].mvs.mvs.length) && !this.tab[2].busy) {
 					this.loadMvs()
 				}
 			},
-			playindex(i){
-				this.$store.commit("setplaytype",1);
-				this.$store.commit("setplaylist",this.art.hotSongs);
-				this.$store.commit("playindex",i);
+			playindex(i) {
+				this.$store.commit("setplaytype", 1);
+				this.$store.commit("setplaylist", this.art.hotSongs);
+				this.$store.commit("playindex", i);
 			}
 		},
 		computed: {
-			w: function() {
-				return window.screen.width
+			st() {
+				var t = this.cw * 0.62 - 40;
+				return this.scrolltop > t ? t : 0
+			},
+			opa1() {
+				return 1 - this.scrolltop / this.cw
+			},
+			opa() {
+				return this.scrolltop / this.cw * 10
 			},
 			...mapGetters([
 				'playing',
 				'music',
-				"playtype"
+				"playtype",
+				"scrolltop"
 			])
 		}
 	}
 </script>
 
 <style scoped>
-	
 	.blurbg {
 		transform: scale(1)
 	}
 	
-	#fixheader {
+	.stfixed {
 		padding-top: 62%;
 	}
 	
-	#fixheader #artist_header {
+	.stfixed #artist_header {
 		position: fixed;
+		margin-top: 0;
 	}
-	
-	
 	
 	.tab {
 		margin-bottom: 1%;
@@ -314,8 +301,6 @@
 	#descallbtn {
 		color: #999
 	}
-	
-	
 	
 	.mvs .cover {
 		padding-top: 56.2%

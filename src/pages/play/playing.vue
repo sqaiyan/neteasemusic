@@ -169,8 +169,7 @@
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
 				//当前播放的音乐的id与路由的id不一样
-				console.log(vm.bgmchange, to.params.id, vm.music.id);
-				if((parseInt(to.params.id) !== parseInt(vm.music.id))) {
+				if(parseInt(to.params.id) !== parseInt(vm.music.id)) {
 					console.log("router enter");
 					vm.$store.commit("setplaytype", 1);
 					if(vm.bgmchange && vm.music.id) {
@@ -216,7 +215,7 @@
 					this.$store.dispatch('only_murl');
 					this.getcommit()
 				}
-				((this.$router.name == 'playing') && this.bgmchange) && this.$router.replace({
+				((this.$route.name == 'playing')&& this.bgmchange) && this.$router.replace({
 					name: 'playing',
 					params: {
 						id: this.music.id

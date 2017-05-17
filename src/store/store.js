@@ -16,6 +16,7 @@ const store = new Vuex.Store({
     musicload: false,
     playtype:1,
     shuffle:1,
+    scrolltop:0,
     commentscount:0,
     list_am: [],
     index_am: 0,
@@ -48,9 +49,13 @@ const store = new Vuex.Store({
     playtime: state => state.playtime,
     likeall: state => state.likeall,
     uplaylist:state=>state.uplaylist,
-    musicloading:state=>state.musicloading
+    musicloading:state=>state.musicloading,
+    scrolltop:state=>state.scrolltop
   },
   mutations: {
+	  scroll(state,st){
+		  state.scrolltop=st;
+	  },
 	 localuser(state,user){
 		 state.user=user?user:(JSON.parse(localStorage.getItem('user'))||{})
 	 },

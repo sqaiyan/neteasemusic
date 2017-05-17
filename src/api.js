@@ -149,5 +149,8 @@ export default {
     },
     user_radio(id){
     	return axios("user/radio",{params:{uid:id}});
+    },
+    user_event(id,offset){
+    	return axios("event/get",{params:{id:id,offset:offset,limit:limit}})
     }
 }

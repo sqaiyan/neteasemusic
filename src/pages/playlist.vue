@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div id="headerblur">
-			<div class="blurbg" :style="{'background-image':'url('+cover+')','top':-scrolltop+'px'}"></div>
+			<div class="blurbg" :style="{'background-image':'url('+cover+')','top':-st+'px'}"></div>
 		</div>
 		<mt-header fixed :title="(title||list.playlist.name)">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
@@ -83,12 +83,9 @@
 				istoptype: 0,
 				opacity: 0,
 				name: '',
-				offset: 0,
 				id: -1,
 				loaded: false,
-				canplay: [],
-				title: '歌单',
-				scrolltop: 0
+				canplay: []
 			}
 		},
 		components: {
@@ -112,19 +109,6 @@
 				}
 			})
 		},
-		activated() {
-			var st = this.$refs.main;
-			st = st.getBoundingClientRect().height;
-			this.title = window.pageYOffset > 100 ? '' : '歌单';
-			this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
-			window.onscroll = () => {
-				this.title = window.pageYOffset > 100 ? '' : '歌单';
-				this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
-			}
-		},
-		deactivated() {
-			window.onscroll = null
-		},
 		methods: {
 			loadpl() {
 				var img = this.$route.query.img;
@@ -133,19 +117,14 @@
 				this.id = this.$route.params.id;
 				this.istoptype = this.$route.query.istop;
 				img && (this.cover = bs64.id2Url(img));
-				api.playlist(this.id, this.offset, 1000).then(res => {
+				api.playlist(this.id,0, 1000).then(res => {
 					this.loaded = true;
 					var canplay = res.data.playlist.tracks.map(item => {
-						if(item.st >= 0) {
-							return item;
-						}
+						if(item.st >= 0) return item;
 					});
 					this.canplay = this.canplay.concat(canplay);
 					this.cover = this.cover || (bs64.id2Url(res.data.playlist.coverImgId_str || res.data.playlist.coverImgId))
 					this.list = res.data;
-					this.offset += this.list.playlist.tracks.length
-				}).catch(() => {
-					this.loaded = true
 				});
 			},
 			playindex(i){
@@ -162,10 +141,19 @@
 			}
 		},
 		computed: {
+			title(){
+				return this.scrolltop > 100 ? '' : '歌单';
+			},
+			st(){
+				var main = this.$refs.main;
+				main =main? main.getBoundingClientRect().height:0;
+				return this.scrolltop > main ? main : this.scrolltop
+			},
 			...mapGetters([
 				'playing',
 				'music',
-				"playtype"
+				"playtype",
+				"scrolltop"
 			])
 		}
 	}

@@ -25,10 +25,10 @@
 					this.$store.dispatch('next_music');
 				}
 			},
-			errormp3(e){
+			errormp3(e) {
 				//出错再重新请求一次
-				this.playurl&&this.$store.dispatch('only_murl'),console.log("music loading error",e);
-				
+				this.playurl && this.$store.dispatch('only_murl'), console.log("music loading error", e);
+
 			}
 		},
 		computed: {

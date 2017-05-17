@@ -1,10 +1,10 @@
 <template>
-	<div id="fixheader" v-infinite-scroll="getprogram" infinite-scroll-disabled="busy">
+	<div id="fixheader" :class="{'page_t':!st,'stfixed':st}" v-infinite-scroll="getprogram" infinite-scroll-disabled="busy">
 		<mt-header id="artheader" fixed :title="(djradio.name||'电台')">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
 			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
 		</mt-header>
-		<div id="artist_header" ref="main" :style="{top:-scrolltop+'px'}">
+		<div id="artist_header" ref="main" :style="{top:-st+'px'}">
 			<img src="../../static/images/cm2_default_act_320@2x.png" alt="" />
 			<img :src="djradio.picUrl+'?param=750y750'" :style="{'filter':'blur('+opa+'px) brightness(.8)'} " />
 			<div id="ahw_wrap">
@@ -113,14 +113,11 @@
 		name: 'djlist',
 		data() {
 			return {
-				scrolltop: 0,
 				djradio: {
 					dj: {},
 					commentDatas: []
 				},
-				opa: 0,
 				name: '',
-				opa1: 1,
 				cur: '1',
 				tab: [{
 					name: '详情'
@@ -131,9 +128,9 @@
 				offset: 0,
 				id: -1,
 				loaded: false,
-				scrolltop: 0,
 				programs: {},
-				busy: true
+				busy: true,
+				cw: window.screen.width
 			}
 		},
 		components: {
@@ -160,26 +157,6 @@
 				}
 			})
 		},
-		activated() {
-			var cw = window.screen.width;
-			var st = window.screen.width * 0.8 - 40;
-			this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset;
-			this.opa1 = 1 - window.pageYOffset / cw;
-			this.opa = window.pageYOffset / cw * 10
-			this.scrolltop = pageYOffset
-			window.onscroll = () => {
-				if(window.pageYOffset > st) {
-					this.scrolltop = st;
-				} else {
-					this.opa1 = 1 - window.pageYOffset / cw;
-					this.opa = window.pageYOffset / cw * 10
-					this.scrolltop = pageYOffset
-				}
-			}
-		},
-		deactivated() {
-			window.onscroll = null
-		},
 		methods: {
 			switchtab(index) {
 				this.cur = index.toString();
@@ -192,7 +169,6 @@
 				this.getprogram(false)
 			},
 			getprogram(more = true) {
-				if((this.$route.name != 'djlist') || (this.cur == '0')) return;
 				if(this.loaded && !this.programs.more) return;
 				api.dj_getprogram(this.id, this.offset).then(res => {
 					if(more) {
@@ -222,10 +198,21 @@
 
 		},
 		computed: {
+			st() {
+				var t = this.cw * 0.8 - 40;
+				return this.scrolltop > t ? t : 0
+			},
+			opa1() {
+				return 1 - this.scrolltop / this.cw
+			},
+			opa() {
+				return this.scrolltop / this.cw * 10
+			},
 			...mapGetters([
 				'playing',
 				'music',
-				"playtype"
+				"playtype",
+				"scrolltop"
 			])
 		}
 	}
@@ -236,8 +223,13 @@
 		background: rgba(0, 0, 0, 0)
 	}
 	
-	#fixheader {
+	.stfixed {
 		padding-top: 80%;
+	}
+	
+	.stfixed #artist_header {
+		position: fixed;
+		margin-top: 0;
 	}
 	
 	.blurbg {

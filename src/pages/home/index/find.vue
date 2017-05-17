@@ -69,7 +69,7 @@
 				</div>
 			</div>
 			<!-- -->
-			<router-link :to="{path: 'djlist'}" class="listheader"><span>推荐节目</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
+			<router-link :to="{path: 'radio'}" class="listheader"><span>推荐节目</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
 			<div class="flex-boxlist">
 				<div class="tl_cnt" :key="item.id" v-for="item in rec_dj">
 					<router-link :to="{name: 'playlist',params: { id: item.id, name: item.name}}">

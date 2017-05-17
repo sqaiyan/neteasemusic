@@ -38,13 +38,13 @@
 					<div v-if="multimatch">
 					<div class="gray_title">最佳匹配</div>
 					<div v-for="item in multimatch.orders">
-						<router-link :to="{name: item,params:{id:re.id},query:{img:re.picId}}" :class="'flexlist flex-image '+item" v-for="re in multimatch[item]" :key="re.id">
+						<router-link :to="{name: item,params:{id:re.id},query:{img:re.picId_str||re.picId||re.pic}}" :class="'flexlist flex-image '+item" v-for="re in multimatch[item]" :key="re.id">
 							<div class="flexlist">
 								<div class="flexleft fl-image">
-									<img :src="(re.picUrl||re.cover)" class="album_cover" />
+									<img :src="(re.picUrl||re.cover)+'?param=100y100'" class="album_cover" />
 								</div>
 								<div class="flexmain">
-									<div>{{item=='mv'?'MV':'歌手'}}：{{re.name}} <span class="fm_tdes" v-if="re.trans">({{re.trans}})</span></div>
+									<div>{{item|mo2name}}：{{re.name}} <span class="fm_tdes" v-if="re.trans">({{re.trans}})</span></div>
 									<div class="relistdes" v-if="re.artistName">{{re.artistName}}</div>
 								</div>
 								<div class="flexact">
@@ -118,7 +118,7 @@
 				</mt-tab-container-item>
 				<mt-tab-container-item id="5">
 					<div class="sm_title" v-if="st[5].relist.djRadios">电台</div>
-					<router-link :to="{name:'djlist',params:{id:re.id}}" class="flexlist flex-image" v-for="re in st[5].relist.djRadios" :key="re.id">
+					<router-link :to="{name:'radio',params:{id:re.id}}" class="flexlist flex-image" v-for="re in st[5].relist.djRadios" :key="re.id">
 						<div class="flexleft fl-image">
 							<img :src="re.picUrl+'?param=100y100'" class="album_cover" />
 						</div>
@@ -310,6 +310,20 @@
 				'music',
 				"playtype"
 			])
+		},
+		filters:{
+			mo2name(v){
+				switch(v){
+					case "mv":
+					return 'MV';
+					case 'radio':
+					return "电台";
+					case "album":
+					return "专辑";
+					case "artist":
+					return "歌手";
+				}
+			}
 		}
 	}
 </script>
@@ -320,6 +334,7 @@
 		z-index: 10;
 		width: 100%;
 		top: 0;
+		max-width: 750px;
 	}
 	
 	#searcheader form {

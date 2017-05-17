@@ -24,7 +24,7 @@
 		</div>
 
 		<div class="menu" id="p_info_menu" v-if="showlrc" @click="showlrc=!showlrc">
-			<router-link replace :to="{name:'djlist',params:{id:music.radio.id}}" class="mn_list">
+			<router-link replace :to="{name:'radio',params:{id:music.radio.id}}" class="mn_list">
 				<div class="mn_ico">
 					<img src="../../../static/images/cm2_rdi_icn_name@2x.png"></image>
 				</div>
@@ -76,14 +76,14 @@
 				<!-- -->
 				<div class="pi-act" bindtap="downmusic">
 					<img src="../../../static/images/cm2_list_detail_icn_share@2x.png" />
-				</div> 
-					<router-link class="pi-act commentscount" :to="{name:'comment',params:{id:music.commentThreadId},query:{ctype:1}}">
-						<img v-if="!commentscount" src="../../../static/images/cm2_play_icn_cmt@2x.png" />
-						<img v-if="commentscount" src="../../../static/images/cm2_play_icn_cmt_num@2x.png" />
-						<span v-if="commentscount">{{commentscount>999?'999+':commentscount}}</span>
-					</router-link>
+				</div>
+				<router-link class="pi-act commentscount" :to="{name:'comment',params:{id:music.commentThreadId},query:{ctype:1}}">
+					<img v-if="!commentscount" src="../../../static/images/cm2_play_icn_cmt@2x.png" />
+					<img v-if="commentscount" src="../../../static/images/cm2_play_icn_cmt_num@2x.png" />
+					<span v-if="commentscount">{{commentscount>999?'999+':commentscount}}</span>
+				</router-link>
 				<!-- -->
-					<div class="pi-act">
+				<div class="pi-act">
 					<img src="../../../static/images/cm2_play_icn_more@2x.png" />
 				</div>
 			</div>
@@ -172,7 +172,7 @@
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
 				//当前播放的音乐的id与路由的id不一样
-				if((parseInt(to.params.id) !== parseInt(vm.music.id))) {
+				if(parseInt(to.params.id) !== parseInt(vm.music.id)) {
 					vm.$store.commit("setplaytype", 3);
 					if(vm.bgmchange && vm.music.id) {
 						vm.$router.replace({
@@ -209,7 +209,7 @@
 				this.$store.commit("resetmusic");
 				this.$store.dispatch('only_murl');
 				this.getcommit();
-				((this.$router.name == 'program') && this.bgmchange) && this.$router.replace({
+				((this.$route.name == 'program') && this.bgmchange) && this.$router.replace({
 					name: 'program',
 					params: {
 						id: this.music.id
@@ -235,6 +235,7 @@
 			},
 			heart() {
 				this.music.id && api.program_like(this.music.commentThreadId, this.music.liked ? 0 : 1).then(res => {
+					if(res.data.code != 200) return;
 					this.music.liked = !this.music.liked;
 					this.music.liked ? this.music.likedCount++ : this.music.likedCount--
 				})
@@ -312,7 +313,8 @@
 	}
 	
 	#subtn img {
-		height: 2em;vertical-align: top;
+		height: 2em;
+		vertical-align: top;
 	}
 	
 	#subtn {
@@ -320,7 +322,7 @@
 		padding: 0 1.2em 0 .8em;
 		color: #fff;
 		border-radius: 2em;
-		line-height:2;
+		line-height: 2;
 	}
 	
 	.flexact {
@@ -339,11 +341,6 @@
 		width: 100%;
 		color: #fff;
 		overflow: auto;
-	}
-	
-	.menu .mn_ico {
-		flex: 0 0 2em;
-		text-align: center;
 	}
 	
 	.menu .mn_ico,

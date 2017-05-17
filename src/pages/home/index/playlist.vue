@@ -15,7 +15,7 @@
 				</div>
 			</router-link>
 		</div>
-		<div id="plc_header"><span @click="catelist.isShow=true">{{catelist.checked.name||'--'}} <img src="../../../../static/images/common_icon_arrow@2x.png" height="16px" alt="" /></span>
+		<div id="plc_header"><span @click="catelist.isShow=true">{{catelist.checked.name}} <img src="../../../../static/images/common_icon_arrow@2x.png" height="16px" alt="" /></span>
 		</div>
 		<div v-if="loaded">
 			<div class='flex-boxlist flex-two'>
@@ -263,6 +263,7 @@
 	
 	#hqpl .fl-image img {
 		height: 8em;
+		width: 8em;
 	}
 	
 	#plc_header {

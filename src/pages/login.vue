@@ -12,7 +12,7 @@
 				<input type="password" v-model="pwd" required maxlength="20" />
 			</div>
 			<div>
-				<mt-button type="danger" v-bind:class="{'is-disabled':(!name||!pwd||loading)}" size="large" @click="login">登录</mt-button>
+				<mt-button type="danger" v-bind:class="{'is-disabled':(!name||!pwd||loading)}" size="large">登录</mt-button>
 			</div>
 		</form>
 	</div>
@@ -53,7 +53,7 @@
 					localStorage.setItem("cookie", res.data.c);
 					this.$store.commit("localuser", res.data.i.profile)
 					this.$store.dispatch('getlike')
-					this.$router.back()
+				//	this.$router.back()
 				})
 			}
 		}

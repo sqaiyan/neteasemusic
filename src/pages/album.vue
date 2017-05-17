@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div id="headerblur">
-			<div class="blurbg" :style="{'background-image':'url('+cover+')','top':-scrolltop+'px'}"></div>
+			<img :src="cover" class="blurbg" :style="{'background-image':'url('+cover+')','top':-st+'px'}"/>
 		</div>
 		<mt-header fixed :title="(title||name||list.album.name)">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
@@ -12,7 +12,7 @@
 			<div id="plh-main">
 				<div id="plh-cover">
 					<img src="../../static/images/a82.png" id="plh-cover-album" />
-					<img :src="cover" class="music_cover" />
+					<img :src="cover+'?param=177y177'" class="music_cover" />
 				</div>
 				<div id="plh-cnt">
 					<div id="music_h_name">{{name||list.album.name}}</div>
@@ -82,9 +82,7 @@
 				offset: 0,
 				id: -1,
 				loaded: false,
-				canplay: [],
-				title: '专辑',
-				scrolltop: 0
+				canplay: []
 			}
 		},
 		components: {
@@ -110,20 +108,6 @@
 				}
 			})
 		},
-		activated() {
-			var st = this.$refs.main;
-			st = st.getBoundingClientRect().height;
-			this.title = window.pageYOffset > 100 ? '' : '专辑';
-			this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
-			window.onscroll = () => {
-				var opa = window.pageYOffset > 100;
-				this.title = opa ? '' : '专辑';
-				this.scrolltop = window.pageYOffset > st ? st : window.pageYOffset
-			}
-		},
-		deactivated() {
-			window.onscroll = null
-		},
 		methods: {
 			loadpl() {
 				api.album(this.id, this.offset, 1000).then(res => {
@@ -146,10 +130,19 @@
 			}
 		},
 		computed: {
+			title(){
+				return this.scrolltop>100?'':'专辑'
+			},
+			st(){
+				var main=this.$refs.main;
+				main=main?main.getBoundingClientRect().height:0;
+				return this.scrolltop>main?main:this.scrolltop
+			},
 			...mapGetters([
 				'playing',
 				'music',
-				"playtype"
+				"playtype",
+				"scrolltop"
 			])
 		}
 	}

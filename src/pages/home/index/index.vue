@@ -64,10 +64,11 @@
 		width: 100%;
 		top: 40px;
 		z-index: 10;
+		max-width: 750px;
 	}
 	
 	.page_tab {
-		padding-top: 42px;
+		padding-top: 3em;
 	}
 	
 	#lastsearch {
