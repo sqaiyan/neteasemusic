@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '@/api';
-Vue.use(Vuex);
+
 import u from "@/utils"
 import {
 	Toast
 } from 'mint-ui';
-const store = new Vuex.Store({
+Vue.use(Vuex)
+export default new Vuex.Store({
   state: {
     music: {al:{},ar:[{}],artists:[{}],album:{}},
     playing: false,
@@ -31,6 +32,7 @@ const store = new Vuex.Store({
     uplaylist:[]
   },
   getters: {
+	user:state=>state.user,
 	music: state => state.music,
 	commentscount:state=>state.commentscount,
 	lrcObj:state=>state.lrcObj,
@@ -50,14 +52,16 @@ const store = new Vuex.Store({
     likeall: state => state.likeall,
     uplaylist:state=>state.uplaylist,
     musicloading:state=>state.musicloading,
-    scrolltop:state=>state.scrolltop
+    scrolltop:state=>state.scrolltop,
+    uplaylist:state=>state.uplaylist
   },
   mutations: {
 	  scroll(state,st){
 		  state.scrolltop=st;
 	  },
 	 localuser(state,user){
-		 state.user=user?user:(JSON.parse(localStorage.getItem('user'))||{})
+		  localStorage.setItem("user", JSON.stringify(user));
+		 state.user=user
 	 },
 	  setbgmchange(state,t){
 		 state.bgmchange=t;
@@ -88,7 +92,7 @@ const store = new Vuex.Store({
     commentscount(state,c){
     	state.commentscount=c;
     },
-    resetmusic(state){//初始音乐
+    resetmusic(state){// 初始音乐
     	document.getElementById('audio').pause()
     	state.commentscount=0;
     	state.playurl=""
@@ -176,7 +180,7 @@ const store = new Vuex.Store({
          }
     },
     setshuffle(state,def=false){
-    	//播放模式切换时默认设置为1 ：顺序播放
+    	// 播放模式切换时默认设置为1 ：顺序播放
     	if(def){
     		state.shuffle=1
     	}else{
@@ -196,9 +200,10 @@ const store = new Vuex.Store({
     },
     setuplaylist(state,res){
     	res=res.filter((i)=>{
-    		return i.creator.userId==state.user.userId;
+    		return i.creator.userId==state.user.account.id;
     	})
     	state.uplaylist=res;
+    	console.log("uplaylist",res)
     },
     setlikeall(state,res){
     	state.likeall=res;
@@ -241,8 +246,8 @@ const store = new Vuex.Store({
 	    	api.likeall().then(res=>{
 	    		commit("setlikeall",(res.data.ids||[]).join(","))
 	    	});
-	    	if(!state.user.userId)return;
-	    	await api.user_playlist(state.user.userId,0).then(res=>{
+	    	if(!state.user.account.id)return;
+	    	await api.user_playlist(state.user.account.id,0).then(res=>{
 	    		commit("setuplaylist",res.data.playlist||[])
 	    	})
     },
@@ -262,8 +267,12 @@ const store = new Vuex.Store({
 			}).catch(()=>{
 				commit("setlrc",{code:500})
 			})
+    },
+    async localuser({state,commit}){
+    	await api.mine().then(res=>{
+    		commit("localuser",res.data)
+    	})
     }
   }
 })
-export default store
 

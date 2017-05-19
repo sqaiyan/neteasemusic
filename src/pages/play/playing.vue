@@ -215,7 +215,7 @@
 					this.$store.dispatch('only_murl');
 					this.getcommit()
 				}
-				((this.$route.name == 'playing')&& this.bgmchange) && this.$router.replace({
+				((this.$route.name == 'playing')||this.bgmchange) && this.$router.replace({
 					name: 'playing',
 					params: {
 						id: this.music.id

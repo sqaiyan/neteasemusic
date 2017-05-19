@@ -70,8 +70,8 @@
 		<div id="playing-actwrap">
 			<div id="playing-info" v-show="!showlrc">
 				<div class="pi-act commentscount" @click="heart">
-					<img :src="'../../../static/images/cm2_play_icn_'+(!program.liked?'praise':'yizan')+'@2x.png'" />
-					<span>{{program.likedCount}}</span>
+					<img :src="'../../../static/images/cm2_play_icn_'+(!music.liked?'praise':'yizan')+'@2x.png'" />
+					<span>{{music.likedCount}}</span>
 				</div>
 				<!-- -->
 				<div class="pi-act" bindtap="downmusic">
@@ -157,11 +157,7 @@
 				showlrc: false,
 				loaded: false,
 				id: 0,
-				pop_tg: 0,
-				program: {
-					radio: {},
-					mainSong: {}
-				}
+				pop_tg: 0
 			}
 		},
 		components: {
@@ -209,7 +205,7 @@
 				this.$store.commit("resetmusic");
 				this.$store.dispatch('only_murl');
 				this.getcommit();
-				((this.$route.name == 'program') && this.bgmchange) && this.$router.replace({
+				((this.$route.name == 'program') || this.bgmchange) && this.$router.replace({
 					name: 'program',
 					params: {
 						id: this.music.id
@@ -224,7 +220,7 @@
 			get() {
 				this.id = this.$route.params.id;
 				api.program_detail(this.id).then(res => {
-					this.program = res.data.program;
+					//this.music = res.data.program;
 					this.$store.commit("setmusic", res.data.program);
 				})
 			},

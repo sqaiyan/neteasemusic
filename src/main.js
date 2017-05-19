@@ -9,7 +9,7 @@ import axios from 'axios'
 import api from "@/api";
 axios.defaults.timeout = 5000;// 默认5s超时
 axios.defaults.baseURL = 'http://localhost:3000/v1/';
-axios.defaults.withCredentials=true;// 请求带上cookie
+//axios.defaults.withCredentials=true;// 请求带上cookie
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.interceptors.request.use(function(config) { // 这里的config包含每次请求的内容
     var url = config.url;
@@ -48,7 +48,7 @@ new Vue({
     template: '<App/>',
     components: { App },
     async mounted() {
-    	this.$store.commit("localuser");
+    	await this.$store.dispatch("localuser");
     	await this.$store.dispatch('getlike');
     	window.onscroll = () => {
 			this.$store.commit("scroll",window.pageYOffset)

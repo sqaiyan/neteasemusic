@@ -117,7 +117,7 @@ export default {
     },
     login(name, pwd) {
         var data = { email: name, password: pwd, phone: name }
-        return axios.post((/^0\d{2,3}\d{7,8}$|^1[34578]\d{9}$/.test(name) ? "login/cellphone" : "login"), data)
+        return axios((/^0\d{2,3}\d{7,8}$|^1[34578]\d{9}$/.test(name) ? "login/cellphone" : "login"),{params:data})
     },
     mv(id){
     	let mv =axios.get('mv?id='+id);
@@ -152,5 +152,14 @@ export default {
     },
     user_event(id,offset){
     	return axios("event/get",{params:{id:id,offset:offset,limit:limit}})
+    },
+    user_subcount(id){
+    	return axios("user/subcount",{params:{id:id,auth:true}})
+    },
+    user_cloud(offset){
+    	return axios("user/cloud",{params:{offset:offset,limit:limit,auth:true}});
+    },
+    async mine(){
+    	return await axios("mine")
     }
 }

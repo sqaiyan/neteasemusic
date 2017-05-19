@@ -29,9 +29,7 @@
 			return {
 				name: '',
 				pwd: '',
-				linktype: 3,
-				url: 'home',
-				loading: false
+ 				loading: false
 			}
 		},
 		components: {
@@ -50,10 +48,10 @@
 						return;
 					}
 					localStorage.setItem("user", JSON.stringify(res.data.i.profile));
-					localStorage.setItem("cookie", res.data.c);
+					//localStorage.setItem("cookie", res.data.c);
 					this.$store.commit("localuser", res.data.i.profile)
 					this.$store.dispatch('getlike')
-				//	this.$router.back()
+					this.$router.back()
 				})
 			}
 		}

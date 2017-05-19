@@ -1,11 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
-
 export default new Router({
     routes: [
-        {
-            path: '/search',
+        { path: '/search',
             name: 'search',
             component: require("@/pages/search")
         },
@@ -51,6 +49,13 @@ export default new Router({
             name: 'playlist',
             component: require("@/pages/playlist")
         },
+        {
+        	path:'/me',
+        	name:'me',
+        	component:require("@/pages/my/my")
+        },
+        {path:'/cloud',
+	          name:'cloud',component:require("@/pages/my/cloud")},
         {
             path: '/play',
             component: require("@/pages/play/play"),

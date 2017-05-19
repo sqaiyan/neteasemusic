@@ -1,0 +1,103 @@
+<template>
+	<div class="page_t page_b">
+		<mt-header fixed>
+			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
+		</mt-header>
+		<div class="menu">
+			<div class="mn_list">
+				<div class="mn_ico"><img src="../../../static/images/cm2_list_icn_dld_new@2x.png" alt="" /></div>
+				<div class="cmain">我的下载</div>
+				<div class="rdes"><span class="arrow"></span></div>
+			</div>
+			<div class="mn_list">
+				<div class="mn_ico"><img src="../../../static/images/cm2_list_icn_recent_new@2x.png" alt="" /></div>
+				<div class="cmain">最近播放</div>
+				<div class="rdes"><span class="arrow"></span></div>
+			</div>
+			<router-link :to="{name:'cloud'}" class="mn_list">
+				<div class="mn_ico"><img src="../../../static/images/cm2_lay_icn_cloud@2x.png" alt="" /></div>
+				<div class="cmain">我的云盘</div>
+				<div class="rdes"><span class="arrow"></span></div>
+			</router-link>
+			<div class="mn_list">
+				<div class="mn_ico"><img src="../../../static/images/cm4_my_icn_fav@2x.png" alt="" /></div>
+				<div class="cmain">我的收藏</div>
+				<div class="rdes"><span>{{subcount.artistCount}}</span><span class="arrow"></span></div>
+			</div>
+		</div>
+
+		<div v-if="playlist1.length">
+			<div class="sm_title">歌单<span class="fr">共被收藏次</span></div>
+			<pl :list="playlist1" :showcreator="false"></pl>
+		</div>
+		<div v-if="playlist2.length">
+			<div class="sm_title">收藏的歌单({{playlist2.length}})</div>
+			<pl :list="playlist2"></pl>
+		</div>
+		<loading v-show="!loaded"></loading>
+		<mt-tabbar fixed>
+			<mt-tab-item id="home" href="#/">
+				<img slot="icon" src="../../../static/images/cm2_btm_icn_discovery.png"> 发现音乐
+			</mt-tab-item>
+			<mt-tab-item id="me">
+				<img slot="icon" src="../../../static/images/cm2_btm_icn_account_prs.png">我的音乐
+			</mt-tab-item>
+		</mt-tabbar>
+	</div>
+</template>
+
+<script>
+	import { mapGetters, mapMutations } from 'vuex'
+	import api from '@/api';
+	import bs64 from "@/base64";
+	import loading from "@/components/loading"
+	import playico from "@/components/playico";
+	import utils from "@/utils"
+	import pl from "@/components/playlist";
+	export default {
+		name: 'user',
+		data() {
+			return {
+				playlist1: [],
+				playlist2: [],
+				loaded: false,
+				busy: true,
+				subcount: 0
+			}
+		},
+		components: {
+			loading,
+			playico,
+			pl
+		},
+		created() {
+			api.user_playlist(this.user.account.id, 0).then(res => {
+				this.playlist1 = res.data.playlist.filter(i => {
+					return i.creator.userId == this.user.account.id
+				});
+				this.playlist2 = res.data.playlist.filter(i => {
+					return i.creator.userId != this.user.account.id
+				});
+				this.loaded = true
+			});
+			api.user_subcount(this.user.account.id).then(res => {
+				this.subcount = res.data;
+			})
+		},
+		methods: {
+
+		},
+		computed: {
+			...mapGetters([
+				'playing',
+				'music',
+				"playtype",
+				"user"
+			])
+		}
+	}
+</script>
+
+<style scoped>
+
+</style>
