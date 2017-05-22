@@ -6,21 +6,22 @@
         <router-link class=" flexlist " :to="{name: 'playlist',query:{name: item.name,istop:'1'},params: { id: item.id}}" v-for="item in re.list" v-if="item.ToplistType" :key="item.id">
           <div class="cover flexleft fl-image">
             <img class="album_cover" :src="item.coverImgUrl+'?param=200y200'" />
-            <span>{{item.updateFrequency}}</span>
+            <div class="img_creator">{{item.updateFrequency}}</div>
           </div>
           <div class="flexlist tl_info">
             <div class="sort_fl_list " v-for="(r,idx) in item.tracks">
-              {{idx+1}}．{{r.first}} - {{r.second}}
+              {{idx+1}}. {{r.first}} - {{r.second}}
             </div>
           </div>
          </router-link>
         <router-link class=" flexlist " :to="{path:'artlist'}">
           <div class="cover flexleft">
             <img class="album_cover" :src="re.artistToplist.coverUrl" />
+            <div class="img_creator">{{re.artistToplist.updateFrequency}}</div>
           </div>
           <div class="flexlist tl_info">
             <div class="sort_fl_list " v-for="(r,idx) in re.artistToplist.artists">
-              {{idx+1}}．{{r.first}} - <img src="../../../../static/images/cm2_radio_icn_hot_sml@2x.png" style="width:1em"/><span>{{r.third}}</span>
+              {{idx+1}}. {{r.first}} 　　　<img src="../../../../static/images/cm2_radio_icn_hot_sml@2x.png" style="width:1em"/><span>{{r.third}}</span>
             </div>
           </div>
          </router-link>
@@ -30,7 +31,7 @@
        <router-link class=" tl_cnt " :to="{name: 'playlist',query:{name: item.name,istop:'1'},params: { id: item.id}}" v-for="item in re.list" v-if="!item.ToplistType" :key="item.id">
           <div class="cover flexleft">
             <img :src="item.coverImgUrl+'?param=200y200'" class="album_cover" />
-            <span>{{item.updateFrequency}}</span>
+            <span class="img_creator">{{item.updateFrequency}}</span>
           </div>
           <div class="name">{{item.name}}</div>
         </router-link>
@@ -73,7 +74,7 @@
 <style scoped>
   .flexlist .cover {
     flex: 0 0 32%;
-    margin: 1% 3% 1% 1%;
+    margin: 1% 0 0 0;
     padding-top: 32%;
   }
   
@@ -90,4 +91,7 @@
     flex-flow: wrap;
     align-content: center;
   }
+  .flexlist .flexlist{padding: .3em;}
+  .sort_fl_list  span{color: #999;}
 </style>
+

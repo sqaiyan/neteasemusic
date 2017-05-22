@@ -11,10 +11,3 @@
     </mt-tabbar>
   </div>
 </template>
-
-<script>
-  export default {
-    name: 'home'
-  }
-</script>
-

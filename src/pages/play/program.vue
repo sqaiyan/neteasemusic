@@ -1,7 +1,7 @@
 <template>
 	<div id="playingpage" :class="(playing?'playing':'')">
 		<mt-header fixed :title="(music.name)">
-			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
+			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
 		</mt-header>
 		<img src="../../../static/images/cm2_play_disc_radio-ip6@2x.png" v-if="!showlrc" id="coverbg" alt="" />
 		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(music.mainSong.album||{}).picUrl+'?param=500y500)'}"></div>
@@ -205,7 +205,7 @@
 				this.$store.commit("resetmusic");
 				this.$store.dispatch('only_murl');
 				this.getcommit();
-				((this.$route.name == 'program') || this.bgmchange) && this.$router.replace({
+				((this.$route.name == 'program') && this.bgmchange) && this.$router.replace({
 					name: 'program',
 					params: {
 						id: this.music.id

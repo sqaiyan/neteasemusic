@@ -8,13 +8,15 @@
 </template>
 
 <script>
-	import { mapGetters } from 'vuex'
+	import { mapState } from 'vuex'
 	export default {
 		name: 'playico',
-		props: {
-			music: Object,
-			playing: Boolean,
-			playtype: Number
+		computed: {
+			...mapState([
+				'music',
+				'playtype',
+				'playing'
+			])
 		}
 	}
 </script>

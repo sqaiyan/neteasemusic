@@ -1,5 +1,5 @@
 <template>
-	<div v-infinite-scroll="loadmore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" style="padding-top:82px;margin-top: 1%;">
+	<div v-infinite-scroll="loadmore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" style="padding-top:82px;">
 		<div id="searcheader">
 			<form @submit="search(true,false)">
 				<label><input type="search" v-model="value" required :value="value" autofocus="autofocus" @input="search_sug" placeholder="搜索音乐、电台、歌手"/><span @click="$router.back()">取消</span></label>
@@ -169,7 +169,6 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
 	import api from "@/api"
 	import tab from "@/components/tabs";
 	import pl from "@/components/playlist";
@@ -303,13 +302,6 @@
 				str=str[str.length-1];
 				return str.split(".")[0];
 			}
-		},
-		computed: {
-			...mapGetters([
-				'playing',
-				'music',
-				"playtype"
-			])
 		},
 		filters:{
 			mo2name(v){

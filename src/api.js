@@ -88,6 +88,10 @@ export default {
     		var op=add?'add':'del'
     		return axios("playlist/tracks?pid="+pid+"&op="+op+"&tracks="+sid)
     },
+    dislike(id,type){
+    	//每日推荐歌曲中不感兴趣某首歌
+    	return axios("recommend/dislike",{params:{id:id,type:type}})
+    },
     comments(id, offset, type) {
         id = (type == 1 ? '' : (type == 3 ? 'A_DJ_1_' : 'R_SO_4_')) + id
         return axios("comments?id=" + id + '&offset=' + offset + '&limit=' + limit)
@@ -158,6 +162,9 @@ export default {
     },
     user_cloud(offset){
     	return axios("user/cloud",{params:{offset:offset,limit:limit,auth:true}});
+    },
+    user_recs(){
+    	return axios("recommend/songs")
     },
     async mine(){
     	return await axios("mine")

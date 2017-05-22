@@ -944,7 +944,6 @@ a {
 }
 
 .flexlist:last-child .flexlist {
-	border-bottom: none;
 }
 
 .cur,
@@ -1419,6 +1418,9 @@ a {
 	color: #aaa;
 	font-size: .8em;
 }
+.hqico{background: url(../../static/images/cm2_list_sup_hot@2x.png) no-repeat scroll top left;}
+.cover_ico{position: absolute;z-index: 2;left: 0;top: 0;width: 40px;height: 40px;-webkit-background-size: 100% auto;
+background-size: 100% auto;}
 
 .close {
 	width: 3em;
@@ -1431,7 +1433,7 @@ a {
 
 .arrow {
 	width: 16px;
-	height: 24px;
+	height:18px;
 	background-size: 100% auto;
 	background-position: center center;
 	background-repeat: no-repeat;

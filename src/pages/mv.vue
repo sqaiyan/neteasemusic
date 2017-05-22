@@ -50,7 +50,6 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import loading from "@/components/loading"

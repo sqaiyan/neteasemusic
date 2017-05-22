@@ -1,18 +1,17 @@
 <template>
 	<div class="page_t page_b">
-		<mt-header fixed>
-			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
+		<mt-header fixed title="我的音乐">
+			<span slot="left">我的</span>
+			<playico slot="right"></playico>
 		</mt-header>
 		<div class="menu">
 			<div class="mn_list">
 				<div class="mn_ico"><img src="../../../static/images/cm2_list_icn_dld_new@2x.png" alt="" /></div>
 				<div class="cmain">我的下载</div>
-				<div class="rdes"><span class="arrow"></span></div>
 			</div>
 			<div class="mn_list">
 				<div class="mn_ico"><img src="../../../static/images/cm2_list_icn_recent_new@2x.png" alt="" /></div>
 				<div class="cmain">最近播放</div>
-				<div class="rdes"><span class="arrow"></span></div>
 			</div>
 			<router-link :to="{name:'cloud'}" class="mn_list">
 				<div class="mn_ico"><img src="../../../static/images/cm2_lay_icn_cloud@2x.png" alt="" /></div>
@@ -27,7 +26,7 @@
 		</div>
 
 		<div v-if="playlist1.length">
-			<div class="sm_title">歌单<span class="fr">共被收藏次</span></div>
+			<div class="sm_title">歌单({{playlist1.length}})</div>
 			<pl :list="playlist1" :showcreator="false"></pl>
 		</div>
 		<div v-if="playlist2.length">
@@ -47,7 +46,7 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
+	import {mapState} from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import loading from "@/components/loading"
@@ -88,10 +87,7 @@
 
 		},
 		computed: {
-			...mapGetters([
-				'playing',
-				'music',
-				"playtype",
+			...mapState([
 				"user"
 			])
 		}

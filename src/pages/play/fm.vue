@@ -1,7 +1,7 @@
 <template>
 	<div id="playingpage" :class="(playing?'playing':'')">
 		<mt-header fixed :title="music.name">
-			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
+			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
 			<mt-button icon="more" @click="pop_tg=1" slot="right"></mt-button>
 		</mt-header>
 		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(music.album||{}).picUrl+'?param=500y500)'}"></div>
@@ -98,7 +98,7 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
+	import { mapState, mapMutations } from 'vuex'
 	import api from "@/api"
 	import u from "@/utils.js";
 	import {
@@ -216,7 +216,7 @@
 				if(!this.music.id) return 0;
 				return this.likeall.indexOf(this.music.id) + 1
 			},
-			...mapGetters([
+			...mapState([
 				'playing',
 				'music',
 				'playtime',

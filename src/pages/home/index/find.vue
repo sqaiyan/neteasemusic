@@ -14,7 +14,7 @@
 					</div>
 					私人FM
 				</router-link>
-				<router-link :to="{name:'recsongs'}">
+				<router-link :to="{name:'recsong'}">
 					<div class="recn_ico"><img src="../../../../static/images/cm4_disc_topbtn_daily-ip6@2x.png" alt="" /><span>{{thisday}}</span></div>
 					每日歌曲推荐
 				</router-link>

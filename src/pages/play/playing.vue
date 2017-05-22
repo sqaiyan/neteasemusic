@@ -1,7 +1,7 @@
 <template>
 	<div id="playingpage" :class="(playing?'playing':'')">
 		<mt-header fixed :title="(music.name||''+' - '+(music.ar||[])[0].name)">
-			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
+			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
 		</mt-header>
 		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(cover||(music.al||{}).picUrl)+'?param=500y500)'}"></div>
 		<div id="playing-zz" v-show="!showlrc" @click="showlrc=!showlrc">
@@ -94,7 +94,7 @@
 		<pop :show="pop_tg==2" v-on:closepop="pop_tg=0">
 			<div class='ppm_header'>收藏到歌单</div>
 			<div class='ppm_content'>
-				<div class="flexlist flex-image" @click="tracktpl(re.id)" v-for="re in uplaylist" :key="re.id">
+				<div class="flexlist flex-image" @click="tracktpl(music.id,re.id,false)" v-for="re in uplaylist" :key="re.id">
 					<div class="flexlist">
 						<div class="flexleft fl-image ml">
 							<img :src="re.coverImgUrl+'?param=100y100'" class="album_cover" />
@@ -140,7 +140,7 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
+	import { mapState,mapMutations} from 'vuex'
 	import api from "@/api"
 	import {
 		Toast
@@ -158,7 +158,7 @@
 				id: 0,
 				showlrc: false,
 				cover: "",
-				pop_tg:0
+				pop_tg: 0
 			}
 		},
 		components: {
@@ -215,7 +215,7 @@
 					this.$store.dispatch('only_murl');
 					this.getcommit()
 				}
-				((this.$route.name == 'playing')||this.bgmchange) && this.$router.replace({
+				((this.$route.name == 'playing') && this.bgmchange) && this.$router.replace({
 					name: 'playing',
 					params: {
 						id: this.music.id
@@ -242,6 +242,13 @@
 				var img = this.$route.query.img;
 				img && (this.cover = bs64.id2Url(img));
 				await this.$store.dispatch('getmusic', this.$route.params.id);
+				if(this.list_am.findIndex((v) => {
+						return v.id == this.music.id
+					}) == -1) {
+						//当前播放列表中没有此歌曲则向列表中添加
+					this.list_am.splice(this.index_am + 1, 0, this.music);
+					this.$store.commit("setindex", this.index_am + 1)
+				}
 			},
 			getcommit() {
 				api.comments(this.music.id, 0, 2).then(res => {
@@ -254,22 +261,8 @@
 					t: this.star
 				})
 			},
-			tracktpl(pid) {
-				//添加歌曲到歌单
-				api.tracktpl(this.music.id, pid).then(res => {
-					if(res.data.code == 200) {
-						Toast({
-							message: '添加成功！',
-							duration: 2000
-						});
-						this.$store.dispatch("getlike")
-					} else {
-						Toast({
-							message: res.data.code == 502 ? '歌曲已存在' : '添加失败！',
-							duration: 2000
-						});
-					}
-				})
+			tracktpl(pid){
+				this.$store.dispatch('tracktpl',{id:this.music.id,pid:pid,add:true})
 			},
 			change(v) {
 				this.$store.commit("seekmusic", v)
@@ -279,7 +272,8 @@
 				'prev',
 				'setshuffle',
 				'playindex',
-				'delplaylist'
+				'delplaylist',
+				'tracktpl'
 			])
 		},
 		computed: {
@@ -288,7 +282,7 @@
 				if(!this.music.id) return 0;
 				return this.likeall.indexOf(this.music.id) + 1
 			},
-			...mapGetters([
+			...mapState([
 				'playing',
 				'music',
 				'playtime',
@@ -301,7 +295,8 @@
 				'playurl',
 				'playtype',
 				'bgmchange',
-				'uplaylist'
+				'uplaylist',
+				'index_am'
 			])
 		}
 	}

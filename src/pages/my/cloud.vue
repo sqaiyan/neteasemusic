@@ -2,7 +2,7 @@
 	<div class="page_t" v-infinite-scroll="cloud" infinite-scroll-disabled="busy">
 		<mt-header fixed title="我的云盘">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
-			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
+			<playico slot="right"></playico>
 		</mt-header>
 		<div class="flexlist flex-center">
 			<div class="flexlist">
@@ -43,7 +43,6 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import loading from "@/components/loading"
@@ -78,13 +77,6 @@
 					this.busy=res.data.hasMore?false:true
 				})
 			}
-		},
-		computed: {
-			...mapGetters([
-				'playing',
-				'music',
-				"playtype",
-			])
 		}
 	}
 </script>

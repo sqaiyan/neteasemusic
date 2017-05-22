@@ -3,7 +3,7 @@
 		<div id="fixheader" :class="{'page_t':!st,'stfixed':st}">
 			<mt-header id="artheader" fixed :title="title||user.profile.nickname">
 				<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
-				<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
+				<playico slot="right"></playico>
 			</mt-header>
 			<div id="artist_header" ref="main" :style="{top:-st+'px'}">
 				<img id="art_cover" :src="user.profile.backgroundUrl" />
@@ -149,7 +149,7 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
+	import { mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import tabs from "@/components/tabs";
@@ -291,10 +291,7 @@
 			title() {
 				return this.scrolltop > window.screen.width * 0.4 ? '' : ' ';
 			},
-			...mapGetters([
-				'playing',
-				'music',
-				"playtype",
+			...mapState([
 				"scrolltop"
 			])
 		}

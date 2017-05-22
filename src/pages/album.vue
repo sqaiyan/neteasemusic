@@ -5,7 +5,7 @@
 		</div>
 		<mt-header fixed :title="(title||name||list.album.name)">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
-			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
+			<playico slot="right"></playico>
 		</mt-header>
 		<div id="plist-header" ref="main">
 			<div class="blurbg" :style="{'background-image':'url('+cover+')'}"></div>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
+	import {mapState} from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import playico from "@/components/playico"
@@ -138,10 +138,7 @@
 				main=main?main.getBoundingClientRect().height:0;
 				return this.scrolltop>main?main:this.scrolltop
 			},
-			...mapGetters([
-				'playing',
-				'music',
-				"playtype",
+			...mapState([
 				"scrolltop"
 			])
 		}

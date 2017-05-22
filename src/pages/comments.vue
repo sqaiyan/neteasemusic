@@ -1,7 +1,7 @@
 <template>
-	<div v-infinite-scroll="comments" infinite-scroll-disabled="busy" infinite-scroll-distance="10" style="padding-top:40px">
+	<div v-infinite-scroll="comments" infinite-scroll-disabled="busy" class="page_t">
 		<mt-header fixed :title="'评论('+rec.total+')'">
-			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
+			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
 		</mt-header>
 		<div v-if="rec.hotComments.length">
 			<div class="sm_title">热门评论</div>
@@ -54,12 +54,6 @@
 						vm.comments(false)
 				}
 			})
-		},
-		activated() {
-		//	this.busy=false
-		},
-		deactivated() {
-			//this.busy=true
 		},
 		methods: {
 			comments(more = true, id) {

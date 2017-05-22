@@ -6,7 +6,7 @@
 				<div class="flexleft fl-image">
 					<img :src="hiqulity.coverImgUrl+'?param=200y200'" class="album_cover" />
 				</div>
-				<div class="flexlist">
+				<div class="flexlist" style="border-bottom: none;">
 					<div class="flexmain">
 						<div id="hq_title"><img src="../../../../static/images/cm4_slist_icn_hot@2x.png" alt="" />精品歌单<img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></div>
 						<div>{{hiqulity.name}}</div>
@@ -237,7 +237,7 @@
 	
 	#hqpl {
 		position: relative;
-		padding: 1em;
+		padding: 1em 0;
 		color: #fff;
 		overflow: hidden;
 	}
@@ -250,7 +250,7 @@
 		height: 1.5em;
 		margin-right: .5em;
 	}
-	
+	#hqpl .fl-image{margin:0 1em;}
 	#hq_title img:last-child {
 		height: 1em;
 		margin-left: .5em;

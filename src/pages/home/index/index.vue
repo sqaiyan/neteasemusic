@@ -2,7 +2,7 @@
 	<div class="page page_b page_t">
 		<div class="mint-header is-fixed">
 			<router-link :to="{name:'search'}" id="header_search">单曲/歌单/电台</router-link>
-			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
+			<playico slot="right"></playico>
 		</div>
 		<div class="page_tab">
 			<div class="page" id="indexwrap">
@@ -16,7 +16,6 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
 	import tab from "@/components/tabs.vue"
 	import playico from "@/components/playico"
 	export default {
@@ -43,13 +42,6 @@
 		components: {
 			tab,
 			playico
-		},
-		computed: {
-			...mapGetters([
-				'playing',
-				'music',
-				"playtype"
-			])
 		},
 		methods: {
 			switchtab(index) {}
@@ -87,7 +79,7 @@
 		background: #fff;
 		border-radius: 2em;
 		text-align: center;
-		margin: 0 .3em 0 1.5em;
+		margin: 0 .3em;
 		height: 28px;
 		line-height: 28px;
 	}

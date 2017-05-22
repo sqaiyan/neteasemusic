@@ -2,7 +2,7 @@
 	<div id="fixheader" :class="{'page_t':!st,'stfixed':st}" v-infinite-scroll="getprogram" infinite-scroll-disabled="busy">
 		<mt-header id="artheader" fixed :title="(djradio.name||'电台')">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
-			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
+			<playico slot="right"></playico>
 		</mt-header>
 		<div id="artist_header" ref="main" :style="{top:-st+'px'}">
 			<img src="../../static/images/cm2_default_act_320@2x.png" alt="" />
@@ -101,7 +101,7 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
+	import {mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import tab from "@/components/tabs";
@@ -208,10 +208,7 @@
 			opa() {
 				return this.scrolltop / this.cw * 10
 			},
-			...mapGetters([
-				'playing',
-				'music',
-				"playtype",
+			...mapState([
 				"scrolltop"
 			])
 		}

@@ -4,8 +4,8 @@
 			<div class="blurbg" :style="{'background-image':'url('+cover+')','top':-st+'px'}"></div>
 		</div>
 		<mt-header fixed :title="(title||list.playlist.name)">
-			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
-			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
+			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
+			<playico slot="right"></playico>
 		</mt-header>
 		<div id="plist-header" ref="main">
 			<div class="blurbg" :style="{'background-image':'url('+cover+')'}"></div>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
+	import {mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import loading from "@/components/loading"
@@ -149,10 +149,7 @@
 				main =main? main.getBoundingClientRect().height:0;
 				return this.scrolltop > main ? main : this.scrolltop
 			},
-			...mapGetters([
-				'playing',
-				'music',
-				"playtype",
+			...mapState([
 				"scrolltop"
 			])
 		}

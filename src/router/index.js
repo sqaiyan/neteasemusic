@@ -54,6 +54,16 @@ export default new Router({
         	name:'me',
         	component:require("@/pages/my/my")
         },
+        {
+        	path:'/hqplaylist',
+        	name:'hqplaylist',
+        	component:require("@/pages/hqplaylist")
+        },
+        {
+        	path:'/recsong',
+        	name:'recsong',
+        	component:require("@/pages/recsongs")
+        },
         {path:'/cloud',
 	          name:'cloud',component:require("@/pages/my/cloud")},
         {
@@ -94,11 +104,7 @@ export default new Router({
                     path: 'sort',
                     component: require("@/pages/home/index/sort")
                 }]
-            },
-            {
-                path: 'recsongs',
-                name: 'recsongs'
-            }, 
+            }
               ]
         }, {
             path: '*',

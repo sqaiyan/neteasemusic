@@ -1,8 +1,8 @@
 <template>
 	<div class="hasheader">
 		<mt-header fixed title="相似推荐">
-			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
-			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
+			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
+			<playico slot="right" ></playico>
 		</mt-header>
 		<loading v-if="!loaded"></loading>
 		<div v-if="pl.length">
@@ -66,7 +66,6 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import loading from "@/components/loading"
@@ -110,13 +109,6 @@
 				})
 			}
 
-		},
-		computed: {
-			...mapGetters([
-				'playing',
-				'music',
-				"playtype"
-			])
 		}
 	}
 </script>

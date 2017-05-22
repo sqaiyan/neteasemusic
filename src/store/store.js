@@ -31,30 +31,6 @@ export default new Vuex.Store({
     bgmchange:false,
     uplaylist:[]
   },
-  getters: {
-	user:state=>state.user,
-	music: state => state.music,
-	commentscount:state=>state.commentscount,
-	lrcObj:state=>state.lrcObj,
-	bgmchange:state=>state.bgmchange,
-	playtype:state=>state.playtype,
-	playurl:state=>state.playurl,
-    playing: state => state.playing,
-    musicload: state => state.musicload,
-    shuffle: state => state.shuffle,
-    list_am: state => state.list_am,
-    list_fm: state => state.list_fm,
-    list_dj: state => state.list_dj,
-    index_am: state => state.index_am,
-    index_fm: state => state.index_fm,
-    index_dj: state => state.index_dj,
-    playtime: state => state.playtime,
-    likeall: state => state.likeall,
-    uplaylist:state=>state.uplaylist,
-    musicloading:state=>state.musicloading,
-    scrolltop:state=>state.scrolltop,
-    uplaylist:state=>state.uplaylist
-  },
   mutations: {
 	  scroll(state,st){
 		  state.scrolltop=st;
@@ -134,6 +110,9 @@ export default new Vuex.Store({
     seekmusic(state,v){
     	document.getElementById('audio').currentTime=v
     },
+    setindex(state,i){
+    	state.playtype==1?(state.index_am=i):(state.index_dj=i);
+    },
     playindex(state,i){
     	if(state.playtype==1){
     		state.index_am=i;
@@ -210,10 +189,14 @@ export default new Vuex.Store({
     }
   },
   actions: {
-	 next_music({commit,state,dispatch}){
-	   console.log("action next music")
-	   commit("next");
-	   dispatch("only_murl");
+	 next_music({commit,state,dispatch},opt){
+		 opt&&opt.bgm&&commit("setbgmchange", true);
+		 if(state.playtype==2){
+			 dispatch("next_fm")
+		 }else{
+			 commit("next");
+			 dispatch("only_murl");
+		 }
 	},
 	next_fm({commit,state}){
 		if(state.index_fm>=state.list_fm.length-1){
@@ -272,6 +255,22 @@ export default new Vuex.Store({
     	await api.mine().then(res=>{
     		commit("localuser",res.data)
     	})
+    },
+    tracktpl({state,dispatch},opt){
+    	api.tracktpl(opt.id,opt.pid,opt.add).then(res => {
+			if(res.data.code == 200) {
+				Toast({
+					message: '添加成功！',
+					duration: 2000
+				});
+				dispatch("getlike")
+			} else {
+				Toast({
+					message: res.data.code == 502 ? '歌曲已存在' : '添加失败！',
+					duration: 2000
+				});
+			}
+		})
     }
   }
 })

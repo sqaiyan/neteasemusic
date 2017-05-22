@@ -2,7 +2,7 @@
 	<div id="fixheader" :class="{'page_t':!st,'stfixed':st}" v-infinite-scroll="loadmore" infinite-scroll-disabled="busy">
 		<mt-header id="artheader" fixed :title="(art.artist.name||'歌手')">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
-			<playico :playtype="playtype" slot="right" :playing="playing" :music="music"></playico>
+			<playico slot="right"></playico>
 		</mt-header>
 		<div id="artist_header" ref="main" :style="{top:-st+'px'}">
 			<img src="../../static/images/cm2_default_artist_banner@2x.jpg" />
@@ -111,7 +111,7 @@
 	import playico from "@/components/playico"
 	import songlist from "@/components/songlist";
 	import utils from "@/utils"
-	import { mapGetters } from 'vuex'
+	import { mapState } from 'vuex'
 	const tabcnt = [{
 		name: '热门50',
 		loaded: false
@@ -270,10 +270,7 @@
 			opa() {
 				return this.scrolltop / this.cw * 10
 			},
-			...mapGetters([
-				'playing',
-				'music',
-				"playtype",
+			...mapState([
 				"scrolltop"
 			])
 		}
