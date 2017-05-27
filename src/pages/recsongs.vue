@@ -71,11 +71,27 @@
 				</div>
 			</div>
 		</pop>
+		<pop :show="pop_tg==2" v-on:closepop="pop_tg=0">
+			<div class='ppm_header'>收藏到歌单</div>
+			<div class='ppm_content'>
+				<div class="flexlist flex-image" @click="tracktpl(re.id)" v-for="re in uplaylist" :key="re.id">
+					<div class="flexlist">
+						<div class="flexleft fl-image ml">
+							<img :src="re.coverImgUrl+'?param=100y100'" class="album_cover" />
+						</div>
+						<div class="flexmain">
+							<div>{{re.name}}</div>
+							<div class="relistdes">{{re.trackCount}}首</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</pop>
 	</div>
 </template>
 
 <script>
-	import { mapState } from 'vuex'
+	import { mapState} from 'vuex'
 	import api from '@/api';
 	import loading from "@/components/loading"
 	import playico from "@/components/playico";
@@ -125,21 +141,33 @@
 				})
 			},
 			del_rec() {
-				api.dislike(this.more.id,this.more.rtype).then(res => {
+				//接口不对
+				return;
+				api.dislike(this.more.id, this.more.rtype).then(res => {
 					if(res.data.code == 200) {
-						this.list[this.idx] = res.data.data[1]
+						console.log(this.idx, res.data.data[1]);
+						this.list[this.idx] = res.data.data[1];
+						this.more = {
+							artists: [{}],
+							album: {}
+						};
+						this.pop_tg = 0
 					} else {
 						Toast({
-							message:res.data.message,
+							message: res.data.message,
 							duration: 3000
 						});
 					}
 				})
-			}
+			},
+			tracktpl(pid){
+				this.$store.dispatch('tracktpl',{id:this.more.id,pid:pid,add:true})
+			},
 		},
 		computed: {
 			...mapState([
-				'uplaylist'
+				'uplaylist',
+				'music'
 			])
 		}
 	}

@@ -169,6 +169,7 @@
 </template>
 
 <script>
+	import { mapState} from 'vuex'
 	import api from "@/api"
 	import tab from "@/components/tabs";
 	import pl from "@/components/playlist";
@@ -316,6 +317,11 @@
 					return "歌手";
 				}
 			}
+		},
+		computed: {
+			...mapState([
+				'music'
+			])
 		}
 	}
 </script>

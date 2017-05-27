@@ -72,6 +72,7 @@
 			return {
 				cover: '',
 				list: {
+					songs:[],
 					album: {
 						artist: {},
 						info: {}
@@ -139,7 +140,8 @@
 				return this.scrolltop>main?main:this.scrolltop
 			},
 			...mapState([
-				"scrolltop"
+				"scrolltop",
+				"music"
 			])
 		}
 	}

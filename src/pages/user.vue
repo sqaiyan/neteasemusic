@@ -292,7 +292,8 @@
 				return this.scrolltop > window.screen.width * 0.4 ? '' : ' ';
 			},
 			...mapState([
-				"scrolltop"
+				"scrolltop",
+				"music"
 			])
 		}
 	}

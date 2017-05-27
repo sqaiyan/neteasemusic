@@ -8,6 +8,7 @@
 </template>
 
 <script>
+	import { mapState} from 'vuex'
 	export default {
 		name: 'playpercent',
 		data() {
@@ -27,10 +28,6 @@
 			min: {
 				type: Number,
 				default: 0
-			},
-			musicloading: {
-				type: Boolean,
-				default: true
 			}
 		},
 		computed: {
@@ -49,6 +46,11 @@
 				v = new Date(v);
 				return(v.getMinutes() > 9 ? v.getMinutes() : ('0' + v.getMinutes())) + ':' + (v.getSeconds() > 9 ? v.getSeconds() : ('0' + v.getSeconds()))
 			}
+		},
+		computed: {
+			...mapState([
+				'musicloading'
+			])
 		}
 	}
 </script>

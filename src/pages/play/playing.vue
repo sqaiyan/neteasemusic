@@ -33,7 +33,7 @@
 					<img src="../../../static/images/cm2_play_icn_more@2x.png" />
 				</div>
 			</div>
-			<playpercent :playtime="playtime" v-on:change="change" :musicloading="musicloading" :duration="music.dt"></playpercent>
+			<playpercent :playtime="playtime" v-on:change="change" :duration="music.dt"></playpercent>
 			<div id="playingaction">
 				<div class="pa-saction" @click="setshuffle" v-if="shuffle==1">
 					<img :src="'../../../static/images/cm2_icn_'+(shuffle==1?'loop':(shuffle==2?'one':'shuffle'))+'@2x.png'" />
@@ -94,7 +94,7 @@
 		<pop :show="pop_tg==2" v-on:closepop="pop_tg=0">
 			<div class='ppm_header'>收藏到歌单</div>
 			<div class='ppm_content'>
-				<div class="flexlist flex-image" @click="tracktpl(music.id,re.id,false)" v-for="re in uplaylist" :key="re.id">
+				<div class="flexlist flex-image" @click="tracktpl(re.id)" v-for="re in uplaylist" :key="re.id">
 					<div class="flexlist">
 						<div class="flexleft fl-image ml">
 							<img :src="re.coverImgUrl+'?param=100y100'" class="album_cover" />
@@ -215,7 +215,7 @@
 					this.$store.dispatch('only_murl');
 					this.getcommit()
 				}
-				((this.$route.name == 'playing') && this.bgmchange) && this.$router.replace({
+				(this.$route.name == 'playing') && this.$router.replace({
 					name: 'playing',
 					params: {
 						id: this.music.id
@@ -272,8 +272,7 @@
 				'prev',
 				'setshuffle',
 				'playindex',
-				'delplaylist',
-				'tracktpl'
+				'delplaylist'
 			])
 		},
 		computed: {
@@ -290,7 +289,6 @@
 				'likeall',
 				'lrcObj',
 				'commentscount',
-				'musicloading',
 				'list_am',
 				'playurl',
 				'playtype',

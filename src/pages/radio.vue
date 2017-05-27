@@ -169,7 +169,7 @@
 				this.getprogram(false)
 			},
 			getprogram(more = true) {
-				if(this.loaded && !this.programs.more) return;
+				if(this.$route.name!='radio'||this.cur!='1'||(this.loaded && !this.programs.more)) return;
 				api.dj_getprogram(this.id, this.offset).then(res => {
 					if(more) {
 						res.data.programs = this.programs.programs.concat(res.data.programs);
@@ -209,7 +209,8 @@
 				return this.scrolltop / this.cw * 10
 			},
 			...mapState([
-				"scrolltop"
+				"scrolltop",
+				"music"
 			])
 		}
 	}

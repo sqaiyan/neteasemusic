@@ -140,7 +140,7 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
+	import { mapState, mapMutations } from 'vuex'
 	import api from "@/api"
 	import {
 		Toast
@@ -201,11 +201,10 @@
 		watch: {
 			music(v) {
 				if((!this.music.id || this.playtype != 3) || this.$route.name != 'program') return;
-				console.log("playing programs watch");
 				this.$store.commit("resetmusic");
 				this.$store.dispatch('only_murl');
 				this.getcommit();
-				((this.$route.name == 'program') && this.bgmchange) && this.$router.replace({
+				(this.$route.name == 'program') && this.$router.replace({
 					name: 'program',
 					params: {
 						id: this.music.id
@@ -222,6 +221,13 @@
 				api.program_detail(this.id).then(res => {
 					//this.music = res.data.program;
 					this.$store.commit("setmusic", res.data.program);
+					if(this.list_dj.findIndex((v) => {
+						return v.id == this.music.id
+					}) == -1) {
+						//当前播放列表中没有此歌曲则向列表中添加
+					this.list_dj.splice(this.index_dj + 1, 0, this.music);
+					this.$store.commit("setindex", this.index_dj + 1)
+				}
 				})
 			},
 			getcommit() {
@@ -255,7 +261,7 @@
 			])
 		},
 		computed: {
-			...mapGetters([
+			...mapState([
 				'playing',
 				'music',
 				'playtime',
@@ -264,7 +270,8 @@
 				'musicloading',
 				'list_dj',
 				'playtype',
-				'bgmchange'
+				'bgmchange',
+				'index_dj'
 			])
 		},
 		filters: {

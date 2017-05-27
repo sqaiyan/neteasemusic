@@ -43,6 +43,7 @@
 </template>
 
 <script>
+	import {mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import loading from "@/components/loading"
@@ -68,22 +69,43 @@
 		},
 		methods: {
 			cloud() {
-				if(this.$route.name!='cloud')return;
-				this.busy=true;
+				if(this.$route.name != 'cloud') return;
+				this.busy = true;
 				api.user_cloud(this.list.data.length).then(res => {
-					this.loaded=true;
+					this.loaded = true;
 					res.data.data = this.list.data.concat(res.data.data);
 					this.list = res.data;
-					this.busy=res.data.hasMore?false:true
+					this.busy = res.data.hasMore ? false : true
 				})
 			}
+		},
+		computed: {
+			...mapState([
+				"music"
+			])
 		}
 	}
 </script>
 
 <style scoped>
-
-#cloud_percent{text-align: center;background: #ddd;border-radius: 2em;position: relative;flex: 1;line-height:1;overflow: hidden;color: #999;padding: .1em 0;}
-#cloud_percent div{position: absolute;background: #d33a31;height: 100%;left: 0;top: 0;border-radius: 2em}
-
+	#cloud_percent {
+		text-align: center;
+		background: #ddd;
+		border-radius: 2em;
+		position: relative;
+		flex: 1;
+		line-height: 1;
+		overflow: hidden;
+		color: #999;
+		padding: .1em 0;
+	}
+	
+	#cloud_percent div {
+		position: absolute;
+		background: #d33a31;
+		height: 100%;
+		left: 0;
+		top: 0;
+		border-radius: 2em
+	}
 </style>

@@ -11,6 +11,7 @@
 			<div class="blurbg" :style="{'background-image':'url('+cover+')'}"></div>
 			<div id="plh-main">
 				<div id="plh-cover">
+					<div class="hqico cover_ico" v-if="list.playlist.highQuality"></div>
 					<img class="music_cover" :src="cover" />
 					<div class="img_playcount" v-if="list.playlist.playCount">
 						<img src="../../static/images/p0.png" />{{list.playlist.playCount|playcount}}</div>
@@ -150,7 +151,8 @@
 				return this.scrolltop > main ? main : this.scrolltop
 			},
 			...mapState([
-				"scrolltop"
+				"scrolltop",
+				"music"
 			])
 		}
 	}

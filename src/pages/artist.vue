@@ -271,7 +271,8 @@
 				return this.scrolltop / this.cw * 10
 			},
 			...mapState([
-				"scrolltop"
+				"scrolltop",
+				"music"
 			])
 		}
 	}

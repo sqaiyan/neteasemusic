@@ -34,9 +34,9 @@ export default {
         // 电台列表
         return axios("djradio/hot?limit=" + limit + '&offset=' + offset);
     },
-    index_hqpl(cat){
+    index_hqpl(cat,offset){
     	//精品歌单
-    	return axios("top/playlist/highquality?type="+cat)
+    	return axios("top/playlist/highquality",{params:{type:cat,offset:offset,limit:limit}})
     },
     likeall() {
         return axios("likelist")
@@ -158,7 +158,7 @@ export default {
     	return axios("event/get",{params:{id:id,offset:offset,limit:limit}})
     },
     user_subcount(id){
-    	return axios("user/subcount",{params:{id:id,auth:true}})
+    	return axios("user/subcount",{params:{id:id,auth:true}},{params:{auth:true}})
     },
     user_cloud(offset){
     	return axios("user/cloud",{params:{offset:offset,limit:limit,auth:true}});

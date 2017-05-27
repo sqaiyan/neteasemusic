@@ -13,14 +13,14 @@ axios.defaults.baseURL = 'http://localhost:3000/v1/';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.interceptors.request.use(function(config) { // 这里的config包含每次请求的内容
     var url = config.url;
-    var c = localStorage.getItem("cookie")||'123';
+    var c = store.state.user||'123';
+    c=c.account?c:'123'
     if(config.params&&config.params.auth&&c=='123'){
     		// 需要登录验证的url 需带params.auth=true
-    		router.push({name:'login'})
+    		router.push({name:'login'});
+    		console.error("需先登录")
     		return Promise.reject({"msg":'需先登录'});
     }
-   // c = "cookie=" + c
-   // url+=(url.indexOf('?') > -1?'&':'?')+c
     config.url = url;
     return config;
 }, function(err) {
@@ -31,7 +31,7 @@ axios.interceptors.response.use((res) => {
     	console.log('未登录')
     }
     else if (res.data.code !== 200) {
-       // console.log('返回数据不正常')
+       console.log('返回数据不正常')
     }
     return res
 }, (error) => {

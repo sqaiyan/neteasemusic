@@ -27,59 +27,59 @@
 			</div>
 			<router-link :to="{path: 'playlist'}" class="listheader"><span>推荐歌单</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
 			<div class="flex-boxlist">
-				<div class="tl_cnt" :key="item.id" v-for="item in rec_pl">
-					<router-link :to="{name: 'playlist',params: { id: item.id},query:{img: item.pic,name:item.name}}">
-						<div class="cover">
-							<img :src="item.picUrl+'?param=200y200'" class="music_cover" />
-						</div>
-						<div class="name">{{item.name}}
-						</div>
-					</router-link>
-				</div>
+				<router-link class="tl_cnt" :key="item.id" v-for="item in rec_pl" :to="{name: 'playlist',params: { id: item.id},query:{img: item.pic,name:item.name}}">
+					<div class="cover">
+						<img :src="item.picUrl+'?param=200y200'" class="music_cover" />
+					</div>
+					<div class="name">{{item.name}}
+					</div>
+				</router-link>
 			</div>
 			<!-- -->
-			<router-link :to="{path: 'newsonglist'}" class="listheader"><span>最新单曲</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
+			<router-link :to="{path: 'newsonglist'}" class="listheader"><span>最新音乐</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
 			<div class="flex-boxlist">
-				<div class="tl_cnt" :key="item.id" v-for="(item,index) in rec_ns" v-if="index<6">
-					<router-link :to="{name: 'album',params: { id: item.song.album.id},query:{img:item.song.album.picId_str||item.song.album.picId||item.song.album.pic}}">
-						<div class="cover">
-							<img :src="item.song.album.picUrl+'?param=200y200'" class="music_cover" />
-							<text>{{item.playcount}}</text>
-						</div>
-						<div class="tl_info">
-							<div>{{item.name}}</div>
-							<div class="tli_des">{{item.song.artists[0].name}}</div>
-						</div>
-					</router-link>
-				</div>
+				<router-link class="tl_cnt" :to="{name: 'album'}">
+					<div class="cover">
+						<img src="../../../../static/images/cm4_disc_cover_new@2x.png" class="music_cover" />
+					</div>
+					<div class="tl_info">
+						<div>新歌推荐</div>
+						<div class="tli_des">推荐合口味的新歌</div>
+					</div>
+				</router-link>
+				<router-link class="tl_cnt" :key="item.id" v-for="(item,index) in rec_ns" v-if="index<5" :to="{name: 'album',params: { id: item.song.album.id},query:{img:item.song.album.picId_str||item.song.album.picId||item.song.album.pic}}">
+					<div class="cover">
+						<img :src="item.song.album.picUrl+'?param=200y200'" class="music_cover" />
+					</div>
+					<div class="tl_info">
+						<div>{{item.name}}</div>
+						<div class="tli_des">{{item.song.artists[0].name}}</div>
+					</div>
+				</router-link>
 			</div>
 			<!-- -->
 			<router-link :to="{path: 'mvlist'}" class="listheader"><span>推荐Mv</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
 			<div class="flex-boxlist  mvs flex-two">
-				<div class="tl_cnt" :key="item.id" v-for="item in rec_mv">
-					<router-link :to="{name: 'mv',params: { id: item.id, name: item.name}}">
-						<div class="cover">
-							<img :src="item.picUrl+'?param=320y180'" class="music_cover" />
-						</div>
-						<div class="tl_info">
-							<div>{{item.name}}</div>
-							<div class="tli_des">{{item.artistName}}</div>
-						</div>
-					</router-link>
-				</div>
+				<router-link class="tl_cnt" :key="item.id" v-for="item in rec_mv" :to="{name: 'mv',params: { id: item.id, name: item.name}}">
+					<div class="cover">
+						<img :src="item.picUrl+'?param=320y180'" class="music_cover" />
+					</div>
+					<div class="tl_info">
+						<div>{{item.name}}</div>
+						<div class="tli_des">{{item.artistName}}</div>
+					</div>
+				</router-link>
 			</div>
 			<!-- -->
 			<router-link :to="{path: 'radio'}" class="listheader"><span>推荐节目</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
 			<div class="flex-boxlist">
-				<div class="tl_cnt" :key="item.id" v-for="item in rec_dj">
-					<router-link :to="{name: 'playlist',params: { id: item.id, name: item.name}}">
-						<div class="cover">
-							<img :src="item.picUrl+'?param=200y200'" class="music_cover" />
-						</div>
-						<div class="name">{{item.name}}
-						</div>
-					</router-link>
-				</div>
+				<router-link class="tl_cnt" :key="item.id" v-for="item in rec_dj" :to="{name: 'playlist',params: { id: item.id, name: item.name}}">
+					<div class="cover">
+						<img :src="item.picUrl+'?param=200y200'" class="music_cover" />
+					</div>
+					<div class="name">{{item.name}}
+					</div>
+				</router-link>
 			</div>
 		</div>
 	</div>

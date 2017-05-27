@@ -1,8 +1,8 @@
 <template>
 	<div v-infinite-scroll="getplaylist" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
 		<div id="hqpl" v-show="hiqulity.name">
-			<div class="blurbg" :style="{'background-image':'url('+(hiqulity.coverImgUrl)+'?param=500y500)'}"></div>
-			<router-link :to="{name: 'playlist'}" class="flexlist flex-image">
+			<div class="blurbg album_cover" :style="{'background-image':'url('+(hiqulity.coverImgUrl)+'?param=500y500)'}"></div>
+			<router-link :to="{name: 'hqplaylist'}" class="flexlist flex-image">
 				<div class="flexleft fl-image">
 					<img :src="hiqulity.coverImgUrl+'?param=200y200'" class="album_cover" />
 				</div>
@@ -131,110 +131,6 @@
 		min-height: 500px;
 	}
 	
-	#catewrap {
-		padding: 0 1%;
-		box-sizing: border-box;
-		position: fixed;
-		width: 100%;
-		height: 100%;
-		z-index: 100;
-		left: 0;
-		top: 0;
-		background-color: #fff;
-		overflow: auto;
-	}
-	
-	#closecatelist {
-		margin: .5em auto;
-	}
-	
-	.catelist {
-		margin-bottom: 2%;
-		overflow: hidden;
-		padding-left: 1px;
-		padding-bottom: 2px;
-	}
-	
-	.cl_list {
-		text-align: center;
-		position: relative;
-		z-index: 1;
-		width: 25%;
-		float: left;
-		padding: 1.2em 0;
-		line-height: 1;
-		box-sizing: border-box;
-		cursor: pointer;
-		z-index: 1;
-	}
-	
-	.cl_list:after {
-		content: '';
-		position: absolute;
-		left: -1px;
-		right: 0;
-		top: 0;
-		bottom: -1px;
-		border: 1px solid #eee;
-		event-pointer: none;
-	}
-	
-	.cl_ico {
-		line-height: 1;
-		height: 6.8em;
-		padding-top: 5em;
-		padding-bottom: 0;
-	}
-	
-	.cl_ico img {
-		max-height: 50%;
-		display: block;
-		max-width: 50%;
-		position: absolute;
-		top: 50%;
-		transform: translate(-50%, -60%);
-		left: 50%
-	}
-	
-	#cateall {
-		float: none;
-		width: auto;
-		display: block;
-		margin: 0 3px 1em;
-	}
-	
-	.cl_ico_checked,
-	.cl_ico_hot {
-		content: "";
-		position: absolute;
-	}
-	
-	.cl_ico_hot {
-		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAABTVBMVEXTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjFX1ZKxAAAAbnRSTlMAAQMEBggKCw0ODxATFBUnKSosLi8xP0tNT1JTVFVWV1laW11eX2FiZGVoaWptbnF0dXl6fn+AgYOGh4uMj5CSk5WXnJ2en6ChpKapq6ytr7K3uby9wMHCw8XIy83P0dTj5Obn6err7O7x+fv8/nzHVlgAAAGLSURBVEjH7dVJWxNBEIfxd0YYSEBQFEGWACqKgoIgsig7iixu4EIAFZXNYeb//Y8cmEA4YLrrTJ3q8nu6n6quarg8RnV5vLxyx/OpySUFBk3uHvlti+slv2Vw6SNYs7jHQONffzdA9LGZm3u+/ftMtKGDWzTt+7lE4+uS9pu4fejjnheS02TvBs1H7m4EejL5p5FFZzdKVS29mfw95+zGCNeKtTxMPes5Sbgqfa+hL/VyrwmXJelrRH/q4aYIl06zjYhnqfvcnsMvEU9TV/cp1ivCFUn6FvHE2b0LWmJNEK5Km6XiON3zVwN3Y41x7X0xl7XDcS/9vE77sV5QleNB4rXPtgI6E41At5+LW4HuREOFio6MfJiSFLfR8CbP/USVXQZ3q4NpJR3U/1Axx6wqu9KJC0Ew00XdjqTNztjBlaDmAy5s0UruDGo2YNjDncOyZ+riyuDZRDm5cqhJ7qSu7gLU23/ODr//73/Q0WF1WB1Wh9VhdVgdVofVYXVYHVaH1WF1WB1Wh9VhdScljLevgPOTYwAAAABJRU5ErkJggg==);
-		width: 2em;
-		height: 2em;
-		left: 0;
-		top: 0;
-		background-size: 100% auto;
-	}
-	
-	.cl_ico_checked {
-		background-image: url(../../../../static/images/cm2_discover_slted@2x.png);
-		width: 1.5em;
-		height: 1.5em;
-		right: 0;
-		bottom: 0;
-		background-size: 100% 100%;
-	}
-	
-	.checked {
-		z-index: 2
-	}
-	
-	.checked:after {
-		border-color: #BB2C08;
-	}
-	
 	#hqpl {
 		position: relative;
 		padding: 1em 0;
@@ -242,7 +138,7 @@
 		overflow: hidden;
 	}
 	
-	#hqpl a {
+	#hqpl a ,#hqpl .relistdes{
 		color: #fff;
 	}
 	

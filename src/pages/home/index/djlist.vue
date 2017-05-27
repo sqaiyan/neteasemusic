@@ -56,7 +56,7 @@
       return {
         djcate: {categories:{}},
         djrecs: {rec_p:{},rec_d:{}},
-        djlist: {},
+        djlist: [],
         offset: 0,
         hasMore: false,
         busy: false,
