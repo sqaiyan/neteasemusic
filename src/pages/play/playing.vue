@@ -11,8 +11,8 @@
 			<img id="playingmainbg" src="../../../static/images/play.png" />
 			<div :style="{'background-image':'url('+(cover||(music.al||{}).picUrl)+'?param=200y200)'}" bindtap="loadlrc" id="pmaincover"></div>
 		</div>
-		<div id="lrclist" @click="showlrc=!showlrc" :playtime="playtime">
-			<lrcTpl :lrc="lrcObj" :showlrc="showlrc" :playtime="playtime" lrcindex="1"></lrcTpl>
+		<div id="lrclist" @click="showlrc=!showlrc">
+			<lrcTpl :lrc="lrcObj" :showlrc="showlrc" lrcindex="1"></lrcTpl>
 		</div>
 		<div id="playing-actwrap">
 			<div id="playing-info" v-show="!showlrc">
@@ -33,7 +33,7 @@
 					<img src="../../../static/images/cm2_play_icn_more@2x.png" />
 				</div>
 			</div>
-			<playpercent :playtime="playtime" v-on:change="change" :duration="music.dt"></playpercent>
+			<playpercent  v-on:change="change" :duration="music.dt"></playpercent>
 			<div id="playingaction">
 				<div class="pa-saction" @click="setshuffle" v-if="shuffle==1">
 					<img :src="'../../../static/images/cm2_icn_'+(shuffle==1?'loop':(shuffle==2?'one':'shuffle'))+'@2x.png'" />
@@ -284,7 +284,6 @@
 			...mapState([
 				'playing',
 				'music',
-				'playtime',
 				'shuffle',
 				'likeall',
 				'lrcObj',
@@ -313,6 +312,4 @@
 		background-position: center center;
 		background-size: auto 100%;
 	}
-	
-	.mn_list {}
 </style>

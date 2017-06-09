@@ -85,6 +85,14 @@
 								</div>
 							</router-link>
 						</div>
+						<div class="flex-boxlist mvs" v-if="item.json.video">
+							<div class="tl_cnt">
+								<div>
+									<video width="100%" height="auto" controls="controls" :src="item.json.video.urlInfo.url" :poster="item.json.video.coverUrl">
+									</video>
+								</div>
+							</div>
+						</div>
 						<router-link :to="{name:'playlist',params:{id:item.json.playlist.id}}" class="flexlist flex-image" v-if="item.json.playlist">
 							<div class="flexleft fl-image">
 								<img :src="item.json.playlist.coverImgUrl+'?param=100y100'" class="music_cover" />
@@ -113,11 +121,10 @@
 						</router-link>
 					</div>
 					<div class="rm_act">
-						<div class="rma_list"><img src="../../static/images/cm2_act_icn_praise@2x.png" v-if="!item.info.liked" alt="" />
+						<div class="rma_list" @click="likevents(item)"><img src="../../static/images/cm2_act_icn_praise@2x.png" v-if="!item.info.liked" alt="" />
 							<img src="../../static/images/cm2_act_icn_praised@2x.png" v-else alt="" />{{item.info.likedCount||'赞'}}</div>
-						<div class="rma_list"><img src="../../static/images/cm2_act_icn_cmt@2x.png" alt="" />{{item.info.commentCount||'评论'}}</div>
+						<router-link :to="{name:'comment',params:{id:item.info.commentThread.id}}" class="rma_list"><img src="../../static/images/cm2_act_icn_cmt@2x.png" alt="" />{{item.info.commentCount||'评论'}}</router-link>
 						<div class="rma_list"><img src="../../static/images/cm2_act_icn_share@2x.png" alt="" />{{item.info.shareCount||'分享'}}</div>
-						<div class="rma_list"><img src="../../static/images/cm4_act_icn_more@2x.png" alt="" /></div>
 					</div>
 				</div>
 			</div>
@@ -263,6 +270,13 @@
 					this.events = res;
 					this.e_offset = this.events.events.length;
 					this.busy=res.more?false:true
+				})
+			},
+			likevents(item){
+				api.program_like(item.info.commentThread.id, item.info.liked ? 0 : 1).then(res => {
+					if(res.data.code != 200) return;
+					item.info.liked = !item.info.liked;
+					item.info.liked ? item.info.likedCount++ : item.info.likedCount--
 				})
 			},
 			s2j(v) {

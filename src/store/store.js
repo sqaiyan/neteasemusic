@@ -230,7 +230,7 @@ export default new Vuex.Store({
 	    		commit("setlikeall",(res.data.ids||[]).join(","))
 	    	});
 	    	
-	    	state.user.account.id&&(await api.user_playlist(state.user.account.id,0).then(res=>{
+	    	state.user.account&&(await api.user_playlist(state.user.account.id,0).then(res=>{
 	    		commit("setuplaylist",res.data.playlist||[])
 	    	}))
     },

@@ -46,7 +46,7 @@ body {
 	padding: 0;
 	max-width: 750px;
 	line-height: 1.4;
-	font-size: 14px;
+	font-size: 15px;
 }
 
 a {
@@ -324,7 +324,7 @@ a {
 
 #playing-info {
 	display: flex;
-	margin: 0 10%;
+	margin: 0 5%;
 }
 
 .pi-act {
@@ -334,7 +334,7 @@ a {
 }
 
 .pi-act img {
-	width: 60%;
+	width: 50%;
 	max-width: ;
 }
 
@@ -397,7 +397,7 @@ a {
 .ml {
 	margin-left: 2%;
 }
-
+.flexlist.ml{width: 98%;}
 .pw {
 	padding-left: 2%;
 	padding-right: 2%;
@@ -657,26 +657,20 @@ a {
 }
 
 .rma_list img {
-	width: 1em;
-	;
+	width: 1.3em;
 	flex: 1;
-	margin-right: .2em;
+	margin-right: .5em;vertical-align: middle;
 }
 
 .rma_list:last-child {
 	text-align: right;
-	flex: 0 0 2em;
-}
-
-.rma_list:last-child img {
-	width: 2em;
-	margin-right: 0;
+	flex: 0 0 auto;
 }
 
 .rmc_reply {
 	margin: .5em 0 0;
 	padding: .5em;
-	color: #aaa;
+	color: #666;
 	background-color: #fdfefe;
 	border: 1px solid #e4e4e5
 }
@@ -942,15 +936,16 @@ a {
 
 .flexlist .flexlist {
 	flex: 1;
-	padding: .3em .3em .3em 0;
+	padding: .4em .4em .4em 0;
 	margin: 0;
 	align-items: center;
 	margin-left: 0;
-	box-sizing: border-box;
+	box-sizing:content-box;
 	overflow: hidden;
 	line-height: 1.5;
 	position: relative;
-	border-bottom: 1px solid #dadada
+	border-bottom: 1px solid #dadada;
+	width: auto;
 }
 
 .flexlist:last-child .flexlist {
@@ -1110,7 +1105,7 @@ a {
 
 .fl-image {
 	position: relative;
-	margin: 1% 2%
+	margin:.2em .4em
 }
 
 .flexlist .flexlist .fl-image {
@@ -1154,7 +1149,6 @@ a {
 	position: relative;
 	display: block;
 	line-height: 1.6;
-	font-size: 1.1em;
 }
 
 .listheader img {

@@ -1,6 +1,6 @@
 <template>
 	<div id="playing-status" :class="{loading:musicloading}">
-		<mt-range :barHeight="barHeight" v-model="playtime" :min="0" :max="duration">
+		<mt-range :barHeight="barHeight" :value="playtime" :min="0" :max="duration">
 			<div slot="start">{{playtime|time}}</div>
 			<div slot="end">{{duration|time}}</div>
 		</mt-range>
@@ -17,22 +17,9 @@
 			}
 		},
 		props: {
-			playtime: {
-				type: Number,
-				default: 0
-			},
 			duration: {
 				type: Number,
 				default: 0
-			},
-			min: {
-				type: Number,
-				default: 0
-			}
-		},
-		computed: {
-			value: function() {
-				return this.playtime
 			}
 		},
 		methods: {
@@ -49,7 +36,8 @@
 		},
 		computed: {
 			...mapState([
-				'musicloading'
+				'musicloading',
+				'playtime'
 			])
 		}
 	}
@@ -58,24 +46,25 @@
 <style>
 	#playing-status {
 		color: #fff;
+		font-size: .8em;
+		padding:1% 3%;
+		margin: 2% 0;
 	}
 	
 	#playing-status .mt-range {
-		margin:1% 3%;
-		width: 94%;
+		
 		height: auto;
 		line-height: 1;
 	}
 	
 	.mt-range .mt-range-content {
-		margin: 0 1em;
+		margin: 0 .5em;
 	}
 	
 	.mt-range .mt-range-thumb {
-		width: 1.2em;
-		height: 1.2em;
-		margin-top: -.1em;
-		margin-left: -.6em;
+		width:16px;
+		height:16px;
+		margin-top: -2px;
 	}
 	
 	.mt-range .mt-range-progress {

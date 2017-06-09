@@ -71,9 +71,9 @@
 				</router-link>
 			</div>
 			<!-- -->
-			<router-link :to="{path: 'radio'}" class="listheader"><span>推荐节目</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
+			<router-link :to="{name: 'program'}" class="listheader"><span>推荐节目</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
 			<div class="flex-boxlist">
-				<router-link class="tl_cnt" :key="item.id" v-for="item in rec_dj" :to="{name: 'playlist',params: { id: item.id, name: item.name}}">
+				<router-link class="tl_cnt" :key="item.id" v-for="item in rec_dj" :to="{name: 'program',params: { id: item.id, name: item.name}}">
 					<div class="cover">
 						<img :src="item.picUrl+'?param=200y200'" class="music_cover" />
 					</div>
@@ -152,7 +152,7 @@
 		width: 50%;
 		height: 0;
 		padding-top: 50%;
-		font-size: 1.5em;
+		font-size: 1.3em;
 		color: #BB2C08;
 		border: 1px solid #BB2C08;
 		border-radius: 50%;

@@ -1,15 +1,15 @@
 <template>
-	<div class="hasheader">
+	<div class="page_t">
 		<mt-header fixed title="相似推荐">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
-			<playico slot="right" ></playico>
+			<playico slot="right"></playico>
 		</mt-header>
 		<loading v-if="!loaded"></loading>
 		<div v-if="pl.length">
 			<div class="sm_title">包含这首歌的歌单</div>
 			<div class='flex-boxlist'>
 				<div class="tl_cnt" v-for="re in pl">
-					<router-link :to="{name:'playlist',params:{id:re.id},query:{img:re.coverImgId_str||re.coverImgId}}" class="flexlist flex-image">
+					<router-link :to="{name:'playlist',params:{id:re.id},query:{img:re.coverImgId_str||re.coverImgId}}">
 						<div class="cover">
 							<img :src="re.coverImgUrl+'?param=200y200'" class="music_cover" />
 							<div class="img_playcount">
@@ -17,15 +17,14 @@
 						</div>
 						<div class="tl_info">
 							<div>{{re.name}}</div>
-							<div class="tli_des">
-								<img src="../../static/images/cm2_icn_userhead@2x.png" alt="" /> {{re.creator.nickname}}</div>
+							<div class="tli_des">{{re.creator.nickname}}</div>
 						</div>
 					</router-link>
 				</div>
 			</div>
 		</div>
 		<div v-if="songs.length">
-			<div class="sm_title">喜欢这首歌的人你也听</div>
+			<div class="sm_title">喜欢这首歌的人也喜欢听</div>
 			<div class="'songs ml ">
 				<router-link :to="{name:'playing',params:{id:re.id},query:{img:re.picId_str||re.picId||re.pic}}" v-for="(re,idx) in songs" :class="'flexlist flex-image '+(re.id==music.id?'cur':'')" :key="re.id">
 					<div class="flexlist flex-center">
@@ -37,9 +36,9 @@
 							<div class="relistdes">{{re.artists[0].name}}-{{re.album.name}}</div>
 						</div>
 						<div class="flexact">
-							<div catchtap="mv" v-if="re.mvid" class="fa_list fa_mv">
-								<img src="../../static/images/l0.png" alt="" />
-							</div>
+							<router-link :to="{name:'mv',params:{id:re.mvid}}" class="fa_list fa_mv" v-if="re.mvid!=0">
+								<img src="../../static/images/l0.png" />
+							</router-link>
 						</div>
 					</div>
 				</router-link>
@@ -66,6 +65,7 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import loading from "@/components/loading"
@@ -79,7 +79,7 @@
 				pl: [],
 				songs: [],
 				simiusr: [],
-				id:0
+				id: 0
 			}
 		},
 		components: {
@@ -109,12 +109,11 @@
 				})
 			}
 
+		},
+		computed: {
+			...mapState([
+				"music"
+			])
 		}
 	}
 </script>
-
-<style scoped>
-	.hasheader {
-		padding-top: 40px;
-	}
-</style>

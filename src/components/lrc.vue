@@ -14,6 +14,7 @@
 </template>
 
 <script>
+	import { mapState} from 'vuex'
 	import loading from "@/components/loading"
 	export default {
 		name: 'lrc',
@@ -26,7 +27,6 @@
 			}
 		},
 		props: {
-			playtime: Number,
 			lrc: Object,
 			showlrc: Boolean
 		},
@@ -41,6 +41,12 @@
 					}
 				}
 			}
+		},
+		computed: {
+			...mapState([
+				'musicloading',
+				'playtime'
+			])
 		}
 	}
 </script>

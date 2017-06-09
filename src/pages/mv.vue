@@ -4,7 +4,7 @@
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
 		</mt-header>
 		<div id="videowrap">
-			<video width="100%" height="100%" :src="mv.brs[480]" autoplay="autoplay" controls="controls">
+			<video width="100%" height="auto" :src="mvurl" controls="controls" webkit-playsinline="true" playsinline="true" x-webkit-airplay="allow" x5-video-player-type="h5" x5-video-player-fullscreen="true" x5-video-orientation="portraint" style="object-fit:fill" :poster="mv.cover">
 			</video>
 		</div>
 		<div id="mvheader" v-show="loaded">
@@ -63,14 +63,13 @@
 				rec: {
 					comments: []
 				},
-				mv: {
-					brs: []
-				},
+				mv: {},
 				simi: [],
 				id: 0,
 				recid: 0,
 				offset: 0,
-				busy: true
+				busy: true,
+				mvurl: ''
 			}
 		},
 		components: {
@@ -107,13 +106,17 @@
 					this.simi = res[1];
 					this.recid = res[0].commentThreadId;
 					this.loaded = true;
+					this.getcomments(false);
+					var url = this.mv.brs;
+					url = url[1080] || url[720] || url[480] || url[240]
+					this.mvurl = this.$http.defaults.baseURL + 'mv/url?url=' + url
 				});
-				this.getcomments(false);
 			},
 			getcomments() {
-				if(this.$route.name!='mv')return;
-				this.busy=true
+				if(this.$route.name != 'mv') return;
+				this.busy = true
 				api.comments(this.recid, this.offset, 1).then(res => {
+					if(res.data.code!=200){return}
 					res.data.comments = this.rec.comments.concat(res.data.comments);
 					res.data.hotComments = this.rec.hotComments;
 					this.rec = res.data;
