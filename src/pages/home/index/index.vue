@@ -60,7 +60,7 @@
 	}
 	
 	.page_tab {
-		padding-top: 3em;
+		padding-top:3em;
 	}
 	
 	#lastsearch {

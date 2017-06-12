@@ -52,7 +52,7 @@ export default {
     		return axios("search/suggest?keywords="+s)
     },
     search_hot(s,t){	
-    		return axios("search/hot?type="+t+'&keywords='+s)
+    		return axios("search/hot")
     },
     search_multimatch(s,t){
     		return axios("search/multimatch?type="+t+'&keywords='+s)

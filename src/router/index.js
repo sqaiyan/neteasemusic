@@ -5,12 +5,12 @@ export default new Router({
     routes: [
         { path: '/search',
             name: 'search',
-            component: require("@/pages/search")
+            component:resolve => require(['@/pages/search'], resolve)
         },
         {
             path: '/simi/:id',
             name: 'simi',
-            component: require("@/pages/simi")
+            component:resolve => require(['@/pages/simi'], resolve)
         },
         {
             path: '/sortmv',
@@ -18,91 +18,91 @@ export default new Router({
         },{
             path: '/mv/:id',
             name: 'mv',
-            component: require("@/pages/mv")
+            component:resolve => require(['@/pages/mv'], resolve)
         }, {
             path: '/comment/:id',
             name: 'comment',
-            component: require("@/pages/comments")
+            component:resolve => require(['@/pages/comments'], resolve)
         },{
             path: '/login',
             name: 'login',
-            component: require("@/pages/login")
+            component:resolve => require(['@/pages/login'], resolve)
         }, {
             path: '/album/:id',
             name: 'album',
-            component: require("@/pages/album")
+            component:resolve => require(['@/pages/album'], resolve)
         }, {
             path: '/artist/:id',
             name: 'artist',
-            component: require("@/pages/artist")
+            component:resolve => require(['@/pages/artist'], resolve)
         },{
             path: '/user/:id',
             name: 'user',
-            component: require("@/pages/user")
+            component:resolve => require(['@/pages/user'], resolve)
         },{
             path: '/radio/:id',
             name: 'radio',
-            component: require("@/pages/radio")
+            component:resolve => require(['@/pages/radio'], resolve)
         },
         {
             path: '/playlist/:id',
             name: 'playlist',
-            component: require("@/pages/playlist")
+            component:resolve => require(['@/pages/playlist'], resolve)
         },
         {
         	path:'/me',
         	name:'me',
-        	component:require("@/pages/my/my")
+        	component:resolve => require(['@/pages/my/my'], resolve)
         },
         {
         	path:'/hqplaylist',
         	name:'hqplaylist',
-        	component:require("@/pages/hqplaylist")
+        	component:resolve => require(['@/pages/hqplaylist'], resolve)
         },
         {
         	path:'/recsong',
         	name:'recsong',
-        	component:require("@/pages/recsongs")
+        	component:resolve => require(['@/pages/recsongs'], resolve)
         },
         {path:'/cloud',
-	          name:'cloud',component:require("@/pages/my/cloud")},
+	          name:'cloud',component:resolve => require(['@/pages/my/cloud'], resolve)},
         {
             path: '/play',
-            component: require("@/pages/play/play"),
+            component:resolve => require(['@/pages/play/play'], resolve),
             children: [{
                 path: "/playing/:id",
                 name: 'playing',
-                component: require("@/pages/play/playing"),
+                component:resolve => require(['@/pages/play/playing'], resolve),
                 
             }, {
                 path: 'fm',
                 name: 'fm',
-                component: require("@/pages/play/fm")
+                component:resolve => require(['@/pages/play/fm'], resolve)
             }, {
                 path: '/program/:id',
                 name: 'program',
-                component: require("@/pages/play/program")
+                component:resolve => require(['@/pages/play/program'], resolve)
             }]
         },{
             path: '/home',
             name: 'home',
-            component: require("@/pages/home/home"),
+            component:resolve => require(['@/pages/home/home'], resolve),
             children: [{
                 path: "index",
                 name: 'index',
-                component: require("@/pages/home/index/index"),
+                component:resolve => require(['@/pages/home/index/index'], resolve),
                 children: [{
                     path: 'find',
-                    component: require("@/pages/home/index/find")
+                    component:resolve => require(['@/pages/home/index/find'], resolve)
                 }, {
                     path: 'playlist',
-                    component: require("@/pages/home/index/playlist")
+                    component:resolve => require(['@/pages/home/index/playlist'], resolve)
                 }, {
                     path: 'djlist',
-                    component: require("@/pages/home/index/djlist")
+                    component:resolve => require(['@/pages/home/index/djlist'], resolve)
                 }, {
                     path: 'sort',
-                    component: require("@/pages/home/index/sort")
+                    component:resolve => require(['@/pages/home/index/sort'], resolve)
                 }]
             }
               ]

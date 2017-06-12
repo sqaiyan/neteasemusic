@@ -46,9 +46,9 @@ body {
 	padding: 0;
 	max-width: 750px;
 	line-height: 1.4;
-	font-size: 15px;
+	font-size: 14px;
 }
-
+.mint-header-title{font-size: 1rem;}
 a {
 	color: rgba(0, 0, 0, .87);
 	text-decoration: none;
@@ -1149,6 +1149,7 @@ a {
 	position: relative;
 	display: block;
 	line-height: 1.6;
+	font-size: 16px;
 }
 
 .listheader img {
@@ -1160,6 +1161,7 @@ a {
 .listheader span {
 	display: inline-block;
 	vertical-align: middle;
+	font-size: 16px;
 }
 
 .listheader:before {

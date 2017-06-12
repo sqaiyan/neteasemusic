@@ -20,6 +20,12 @@
 				</div>
 			</div>
 		</div>
+		<div id="hot" v-show="!value||!loaded">
+			<div class="sm_title">热门搜索</div>
+			<div class="hot_list">
+				<span @click="searchFkey(re.first)" v-for="(re,idx) in hot">{{re.first}}</span>
+			</div>
+		</div>
 		<div id="recent" v-show="!value||!loaded">
 			<div class="sm_title">历史搜索 <span class="smt_right" @click="clearecent(1)"><img src="../../static/images/cm2_act_delete@2x.png" alt="" /></span></div>
 			<div class="sr_lists flexlist flex-center ml" @click="searchFkey(re)" v-for="(re,idx) in recent">
@@ -198,6 +204,7 @@
 					}],
 					songs: []
 				},
+				hot:[],
 				busy: true,
 				focus: false,
 				multimatch: {},
@@ -218,7 +225,10 @@
 		created() {
 			var k = this.$route.query.key;
 			this.value = k;
-			k && this.search(k, false, false)
+			k && this.search(k, false, false);
+			api.search_hot().then(res=>{
+				this.hot=res.data.result.hots||[]
+			})
 		},
 		watch: {
 			'cur' (n, o) {
@@ -391,7 +401,15 @@
 	.sr_lists .flexnum img {
 		height: 1.2em
 	}
-	
+	.hot_list{overflow: hidden;padding: 1em;}
+	.hot_list span{display: inline-block;
+    height: 32px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    padding: 0 14px;
+    font-size: 14px;
+    line-height: 32px;
+    color: #333;border: 1px solid #dfdfdf;border-radius: 2em;}
 	#suggest {
 		position: absolute;
 		top: 40px;

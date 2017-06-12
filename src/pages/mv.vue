@@ -1,10 +1,10 @@
 <template>
 	<div id="mvpage" v-infinite-scroll="getcomments" infinite-scroll-disabled="busy">
-		<mt-header fixed>
+		<mt-header fixed :title="mv.name">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
 		</mt-header>
 		<div id="videowrap">
-			<video width="100%" height="auto" :src="mvurl" controls="controls" webkit-playsinline="true" playsinline="true" x-webkit-airplay="allow" x5-video-player-type="h5" x5-video-player-fullscreen="true" x5-video-orientation="portraint" style="object-fit:fill" :poster="mv.cover">
+			<video width="100%" height="auto" :src="mvurl" autoplay="autoplay" controls="controls" webkit-playsinline="true" playsinline="true" x-webkit-airplay="allow" x5-video-player-type="h5" x5-video-player-fullscreen="true" x5-video-orientation="portraint" style="object-fit:fill" :poster="mv.cover">
 			</video>
 		</div>
 		<div id="mvheader" v-show="loaded">

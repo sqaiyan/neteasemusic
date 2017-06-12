@@ -139,7 +139,8 @@
 		display: flex;
 		text-align: center;
 		width: 100%;
-		border-bottom: 1px solid #eee
+		border-bottom: 1px solid #eee;
+		font-size: .667rem;
 	}
 	
 	#rec_nav a {
@@ -156,7 +157,7 @@
 		color: #BB2C08;
 		border: 1px solid #BB2C08;
 		border-radius: 50%;
-		margin: 0 auto .2em;
+		margin: 0 auto .5em;
 		font-weight: 100;
 		position: relative;
 		line-height: 0;
