@@ -1,15 +1,15 @@
 <template>
 	<div id="playingpage" :class="(playing?'playing':'')">
-		<mt-header fixed :title="(music.name||''+' - '+(music.ar||[])[0].name)">
+		<mt-header fixed :title="(music.name||''+' - '+(music.ar||music.artists||[])[0].name)">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
 		</mt-header>
-		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(cover||(music.al||{}).picUrl)+'?param=500y500)'}"></div>
+		<div id="playing-bg" class="blurbg" :style="{'background-image':'url('+(cover||(music.al||music.album||{}).picUrl)+'?param=500y500)'}"></div>
 		<div id="playing-zz" v-show="!showlrc" @click="showlrc=!showlrc">
 			<img src="../../../static/images/aag.png" />
 		</div>
 		<div id="playing-main" v-show="!showlrc" @click="showlrc=!showlrc">
 			<img id="playingmainbg" src="../../../static/images/play.png" />
-			<div :style="{'background-image':'url('+(cover||(music.al||{}).picUrl)+'?param=200y200)'}" bindtap="loadlrc" id="pmaincover"></div>
+			<div :style="{'background-image':'url('+(cover||(music.al||music.album||{}).picUrl)+'?param=200y200)'}" bindtap="loadlrc" id="pmaincover"></div>
 		</div>
 		<div id="lrclist" @click="showlrc=!showlrc">
 			<lrcTpl :lrc="lrcObj" :showlrc="showlrc" lrcindex="1"></lrcTpl>
@@ -35,8 +35,8 @@
 			</div>
 			<playpercent  v-on:change="change" :duration="music.dt"></playpercent>
 			<div id="playingaction">
-				<div class="pa-saction" @click="setshuffle" v-if="shuffle==1">
-					<img :src="'../../../static/images/cm2_icn_'+(shuffle==1?'loop':(shuffle==2?'one':'shuffle'))+'@2x.png'" />
+				<div class="pa-saction" @click="shuffle">
+					<img :src="'../../../static/images/cm2_icn_'+(shuffle_am==0?'loop':(shuffle_am==1?'one':'shuffle'))+'@2x.png'" />
 				</div>
 
 				<div class="pa-maction" @click="prev" bindtap="playother">
@@ -70,17 +70,17 @@
 						</div>
 						<div class="cmain">相似推荐</div>
 					</router-link>
-					<router-link replace v-if="music.ar[0].id" :to="{name:'artist',params:{id:music.ar[0].id}}" class="mn_list">
+					<router-link replace v-if="(music.ar||music.artists)[0].id" :to="{name:'artist',params:{id:(music.ar||music.artists)[0].id}}" class="mn_list">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_icn_artist_new@2x.png" alt="" />
 						</div>
-						<div class="cmain">歌手：{{music.ar[0].name}}</div>
+						<div class="cmain">歌手：{{(music.ar||music.artists)[0].name}}</div>
 					</router-link>
-					<router-link replace :to="{name:'album',params:{id:music.al.id},query:{img:music.al.pic_str||music.al.pic}}" class="mn_list">
+					<router-link replace :to="{name:'album',params:{id:(music.al||music.album).id},query:{img:(music.al||music.album).pic_str||(music.al||music.album).pic}}" class="mn_list">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_order_album_new@2x.png" alt="" />
 						</div>
-						<div class="cmain">专辑：{{music.al.name}}</div>
+						<div class="cmain">专辑：{{(music.al||music.album).name}}</div>
 					</router-link>
 					<router-link v-if="music.mv" :to="{name:'mv',params:{id:music.mv}}" class="mn_list">
 						<div class="mn_ico">
@@ -110,7 +110,7 @@
 
 		<pop :show="pop_tg==3" v-on:closepop="pop_tg=0">
 			<div class='ppm_header'>
-				<div class="pph_cnt">{{(shuffle==1?'列表循环':(shuffle==2?'单曲循环':'随机播放'))}}（{{list_am.length}}）</div>
+				<div class="pph_cnt"  @click="shuffle"><img :src="'../../../static/images/cm2_play_btn_'+(shuffle_am==0?'loop':(shuffle_am==1?'one':'shuffle'))+'@2x.png'" alt="" />{{(shuffle==1?'列表循环':(shuffle==2?'单曲循环':'随机播放'))}}（{{list_am.length}}）</div>
 				<div class="pph_cnt">
 					<div><img src="../../../static/images/cm2_btmlay_btn_fav_prs@2x.png" alt="" /><span>收藏</span></div>
 					<div @click="delplaylist();pop3=false"><img src="../../../static/images/cm2_btmlay_btn_dlt_prs@2x.png" alt="" /><span>清空</span></div>
@@ -126,7 +126,7 @@
 							</div>
 						</div>
 						<div class="flexmain">
-							<div>{{re.name}} - <span>{{re.ar[0].name}}</span></div>
+							<div>{{re.name}} - <span>{{(re.ar||re.artists)[0].name}}</span></div>
 						</div>
 						<div class="flexact">
 							<div class="fa_list" @click.stop="delplaylist(idx)">
@@ -179,7 +179,7 @@
 								id: vm.music.id
 							},
 							query: {
-								img: vm.music.al.pic
+								img: (vm.music.al||vm.music.album).pic
 							}
 						})
 						return;
@@ -193,7 +193,7 @@
 					})
 					vm.$store.commit('resetmusic')
 					vm.showlrc = false;
-					vm.cover = ""
+					//vm.cover = ""
 					vm.get();
 
 				}
@@ -221,7 +221,7 @@
 						id: this.music.id
 					},
 					query: {
-						img: this.music.al.pic
+						img: (this.music.al||this.music.album).pic
 					}
 				})
 			},
@@ -264,18 +264,19 @@
 			tracktpl(pid){
 				this.$store.dispatch('tracktpl',{id:this.music.id,pid:pid,add:true})
 			},
-			change(v) {
-				this.$store.commit("seekmusic", v)
-			},
 			...mapMutations([
 				'next',
 				'prev',
 				'setshuffle',
 				'playindex',
-				'delplaylist'
+				'delplaylist',
+				'shuffle'
 			])
 		},
 		computed: {
+			playlist:function(){
+				
+			},
 			star: function() {
 				//歌曲红心状态
 				if(!this.music.id) return 0;
@@ -284,7 +285,7 @@
 			...mapState([
 				'playing',
 				'music',
-				'shuffle',
+				'shuffle_am',
 				'likeall',
 				'lrcObj',
 				'commentscount',

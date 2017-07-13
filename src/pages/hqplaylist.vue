@@ -23,7 +23,7 @@
 		<loading v-show="!loaded||list.more"></loading>
 		<div style="height:100%" id="catewrap" v-show="cateshow">
 			<div class="close" @click="cateshow=false" id="closecatelist"></div>
-			<div id="cateall" @click="catecheck('全部')" :class="'cl_list '+('全部'==checked?'checked':'')">
+			<div id="cateall" @click="catecheck('全部')" :class="'catelist cl_list '+('全部'==checked?'checked':'')">
 				<span class="cl_ico_checked" v-if="checked=='全部'"></span>全部</div>
 			<div class="catelist">
 				<div :class="'cl_list '+(item==checked?'checked':'')" @click="catecheck(item)" v-for="(item,idx) in cate">

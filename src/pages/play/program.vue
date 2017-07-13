@@ -89,8 +89,8 @@
 			</div>
 			<playpercent :playtime="playtime" v-on:change="change" :musicloading="musicloading" :duration="music.mainSong.duration"></playpercent>
 			<div id="playingaction">
-				<div class="pa-saction" @click="setshuffle" v-if="shuffle==1">
-					<img :src="'../../../static/images/cm2_icn_'+(shuffle==1?'order':(shuffle==2?'one':'shuffle'))+'@2x.png'" />
+				<div class="pa-saction" @click="shuffle">
+					<img :src="'../../../static/images/cm2_icn_'+(shuffle_dj==0?'order':(shuffle_dj==1?'one':'shuffle'))+'@2x.png'" />
 				</div>
 
 				<div class="pa-maction" @click="prev" bindtap="playother">
@@ -111,7 +111,7 @@
 
 		<pop :show="pop_tg==3" v-on:closepop="pop_tg=0">
 			<div class='ppm_header'>
-				<div class="pph_cnt">{{(shuffle==1?'循序播放':(shuffle==2?'单曲循环':'随机播放'))}}（{{list_dj.length}}）</div>
+				<div class="pph_cnt" @click="shuffle"><img :src="'../../../static/images/cm2_play_btn_'+(shuffle_dj==0?'order':(shuffle_dj==1?'one':'shuffle'))+'@2x.png'" alt="" />{{(shuffle==1?'循序播放':(shuffle==2?'单曲循环':'随机播放'))}}（{{list_dj.length}}）</div>
 				<div class="pph_cnt">
 					<div @click="delplaylist();pop3=false"><img src="../../../static/images/cm2_btmlay_btn_dlt_prs@2x.png" alt="" /><span>清空</span></div>
 				</div>
@@ -255,7 +255,7 @@
 			...mapMutations([
 				'next',
 				'prev',
-				'setshuffle',
+				'shuffle',
 				'playindex',
 				'delplaylist'
 			])
@@ -265,7 +265,7 @@
 				'playing',
 				'music',
 				'playtime',
-				'shuffle',
+				'shuffle_dj',
 				'commentscount',
 				'musicloading',
 				'list_dj',

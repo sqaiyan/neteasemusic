@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import Router from 'vue-router';
 Vue.use(Router)
-export default new Router({
+var router= new Router({
     routes: [
         { path: '/search',
             name: 'search',
@@ -18,14 +18,23 @@ export default new Router({
         },{
             path: '/mv/:id',
             name: 'mv',
+            meta:{
+            	isKeepAlive:false
+            },
             component:resolve => require(['@/pages/mv'], resolve)
         }, {
             path: '/comment/:id',
             name: 'comment',
+            meta:{
+            	isKeepAlive:false
+            },
             component:resolve => require(['@/pages/comments'], resolve)
         },{
             path: '/login',
             name: 'login',
+            meta:{
+            	isKeepAlive:false
+            },
             component:resolve => require(['@/pages/login'], resolve)
         }, {
             path: '/album/:id',
@@ -52,7 +61,20 @@ export default new Router({
         {
         	path:'/me',
         	name:'me',
+        	meta:{
+        		'auth': true
+        	},
         	component:resolve => require(['@/pages/my/my'], resolve)
+        },
+        {
+        	path:'/favradio',
+        	name:'favradio',
+        	component:resolve => require(['@/pages/my/favradio'], resolve)
+        },
+        {
+        	path:'/sublist',
+        	name:'sublist',
+        	component:resolve => require(['@/pages/sublist'], resolve)
         },
         {
         	path:'/hqplaylist',
@@ -62,10 +84,15 @@ export default new Router({
         {
         	path:'/recsong',
         	name:'recsong',
+        	meta:{
+        		'auth': true
+        	},
         	component:resolve => require(['@/pages/recsongs'], resolve)
         },
-        {path:'/cloud',
-	          name:'cloud',component:resolve => require(['@/pages/my/cloud'], resolve)},
+        {
+        	path:'/cloud',
+	        name:'cloud',
+	        component:resolve => require(['@/pages/my/cloud'], resolve)},
         {
             path: '/play',
             component:resolve => require(['@/pages/play/play'], resolve),
@@ -111,4 +138,17 @@ export default new Router({
             redirect: '/home/index/find'
         }
     ]
-})
+});
+
+router.beforeEach((to, from, next)=>{
+	if(to.meta.auth&&!logined){
+		console.error("需先登录")
+		next(false);
+		router.push({name:'login'});
+	}
+    else{
+    	 next();
+    }
+   
+});
+export default router;

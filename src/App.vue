@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<keep-alive>
+		<keep-alive exclude="comment">
 			<router-view></router-view>
 		</keep-alive>
 		<music></music>
@@ -11,17 +11,8 @@
 	import music from "@/components/music";
 	export default {
 		name: 'app',
-		data() {
-			return {
-				bottomNav: 'movies'
-			}
-		},
 		components: {
 			music
 		}
 	}
 </script>
-
-<style>
-	@import url("assets/onepx.css");
-</style>

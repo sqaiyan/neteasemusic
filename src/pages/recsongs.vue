@@ -8,8 +8,17 @@
 			<div id="date"><span>{{day}}</span><img src="../../static/images/cm2_daily_cal_bg@2x.png" alt="" /></div>
 		</div>
 		<div class="plist-detail ml">
+			<div id="playall" @click="playall" class="flexlist flex-center">
+				<div class="flexlist">
+					<div class="flexleft ">
+						<img src="../../static/images/pl-playall.png" />
+					</div>
+					<span id="pa-count">播放全部 <span> (共{{list.length}}首)</span>
+					</span>
+				</div>
+			</div>
 			<div class="songs">
-				<router-link @click.native="playindex" :key="re.id" :to="{name:'playing',params:{id:re.id}}" :class="'flexlist flex-center '+(re.id==music.id?'cur':'')" v-for="(re,idx) in list">
+				<router-link @click.native="playindex(idx)" :key="re.id" :to="{name:'playing',params:{id:re.id}}" :class="'flexlist flex-center '+(re.id==music.id?'cur':'')" v-for="(re,idx) in list">
 					<div class="flexlist">
 						<div class="flexleft" v-if="re.id==music.id"><img src="../../static/images/aal.png" alt="" /></div>
 						<div class="flexmain">
@@ -91,7 +100,7 @@
 </template>
 
 <script>
-	import { mapState} from 'vuex'
+	import { mapState } from 'vuex'
 	import api from '@/api';
 	import loading from "@/components/loading"
 	import playico from "@/components/playico";
@@ -128,8 +137,18 @@
 			})
 		},
 		methods: {
-			playindex() {
-				this.$store.commit("setbgmchange", false)
+			
+			playindex(i){
+				this.$store.commit("setplaytype",1);
+				this.$store.commit("setplaylist",this.list);
+				this.$store.commit("playindex",i);
+			},
+			playall(){
+				this.playindex(0);
+				this.$store.dispatch("only_murl");
+				api.comments(this.music.id, 0, 2).then(res => {
+					this.$store.commit('commentscount', res.data.total);
+				})
 			},
 			moreact(music, idx) {
 				this.comments = 0;
@@ -160,8 +179,12 @@
 					}
 				})
 			},
-			tracktpl(pid){
-				this.$store.dispatch('tracktpl',{id:this.more.id,pid:pid,add:true})
+			tracktpl(pid) {
+				this.$store.dispatch('tracktpl', {
+					id: this.more.id,
+					pid: pid,
+					add: true
+				})
 			},
 		},
 		computed: {

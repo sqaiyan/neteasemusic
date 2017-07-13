@@ -66,7 +66,7 @@
 					<span class="artist_des">{{tab[3].desc.briefDesc}}</span>
 					<div class="cntloading" id="descallbtn" @click="popupVisible=true">查看完整介绍>
 					</div>
-					<div class="listheader" v-if="tab[3].artists.artists">
+					<div class="listheader" v-if="tab[3].artists.artists.length">
 						<span>相似歌手</span>
 					</div>
 					<div id="simiwrap">
@@ -208,7 +208,7 @@
 						this.tab[3].loaded = true;
 						this.tab[3].desc = res.data;
 						api.artist_simi(this.id).then(res => {
-							this.tab[3].artists = res.data
+							res.data.code==200&&(this.tab[3].artists = res.data)
 						})
 					})
 				}

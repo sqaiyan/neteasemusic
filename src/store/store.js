@@ -1,12 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '@/api';
-
 import u from "@/utils"
-import {
-	Toast
-} from 'mint-ui';
 Vue.use(Vuex)
+import {Toast} from 'mint-ui';
 export default new Vuex.Store({
   state: {
     music: {al:{},ar:[{}],artists:[{}],album:{}},
@@ -16,7 +13,6 @@ export default new Vuex.Store({
     playurl:'',
     musicload: false,
     playtype:1,
-    shuffle:1,
     scrolltop:0,
     commentscount:0,
     list_am: [],
@@ -29,15 +25,18 @@ export default new Vuex.Store({
     likeall:"",
     user:JSON.parse(localStorage.getItem('user'))||{},
     bgmchange:false,
-    uplaylist:[]
+    uplaylist:[],
+    shuffle_am:0,
+    shuffle_dj:0
   },
   mutations: {
 	  scroll(state,st){
 		  state.scrolltop=st;
 	  },
 	 localuser(state,user){
-		  localStorage.setItem("user", JSON.stringify(user));
+		 localStorage.setItem("user", JSON.stringify(user));
 		 state.user=user
+		 logined=user.account?true:false;
 	 },
 	  setbgmchange(state,t){
 		 state.bgmchange=t;
@@ -47,9 +46,9 @@ export default new Vuex.Store({
       if(t){
     	  state.musicload=true;
     	  state.musicloading=false;
-    	  document.getElementById('audio').play()
+    	  audio.play()
       }else{
-    	  document.getElementById('audio').pause()
+    	  audio.pause()
       }
     },
     setmusic (state,res) {
@@ -72,7 +71,6 @@ export default new Vuex.Store({
     	document.getElementById('audio').pause()
     	state.commentscount=0;
     	state.playurl=""
-    	state.playtime=0;
     	state.playing=false;
     	state.lrcObj = {
 				lrc: [{}]
@@ -98,17 +96,11 @@ export default new Vuex.Store({
     setplaytype(state,type){
     	state.playtype=type
     },
-    shuffle (state, type) {
-      state.shuffle = type
-    },
     setmusicload (state,type) {
       state.musicload = type
     },
     setplaylist(state,arr){
     	state.playtype==1?(state.list_am=arr):(state.list_dj=arr);
-    },
-    seekmusic(state,v){
-    	document.getElementById('audio').currentTime=v
     },
     setindex(state,i){
     	state.playtype==1?(state.index_am=i):(state.index_dj=i);
@@ -132,11 +124,23 @@ export default new Vuex.Store({
     		state.playtype==1?(state.list_am=[]):(state.list_dj=[])
     	}
     },
-    next (state) { // 播放下一曲
-      console.log("next")
+    shuffle(state,i){
+    	if(state.playtype==1){
+    		state.shuffle_am=state.shuffle_am==2?0:(state.shuffle_am+1)
+    	}else{
+    		state.shuffle_dj=state.shuffle_dj==2?0:(state.shuffle_dj+1)
+    	}
+    },
+    next (state,musicend=false) { // 播放下一曲,单曲循环时手动点击下一曲(musicend=false)是仍播放下一曲
       if(state.playtype==1){
     	  if(!state.list_am.length)return;
     	  state.index_am++;
+    	  if(state.shuffle_am==2){
+    		  let rang=Math.floor(state.list_am.length*Math.random());
+    		  state.index_am=state.index_am==rang?rang+1:rang
+    	  }else{
+    		  !musicend&&state.index_am++;
+    	  }
     	  state.index_am=state.index_am>=state.list_am.length?0:state.index_am;
     	  state.music=state.list_am[state.index_am];
       }
@@ -154,18 +158,14 @@ export default new Vuex.Store({
        	  if(!state.list_am.length)return;
        	  state.index_am--;
        	  state.index_am=state.index_am<0?state.list_am.length-1:state.index_am;
-       	  console.log(state.index_am,state.list_am[state.index_am])
        	  state.music=state.list_am[state.index_am];
          }
-    },
-    setshuffle(state,def=false){
-    	// 播放模式切换时默认设置为1 ：顺序播放
-    	if(def){
-    		state.shuffle=1
-    	}else{
-    		state.shuffle++;
-    		state.shuffle=state.shuffle>3?1:state.shuffle;
-    	}
+         else if(state.playtype==3){
+    	  if(!state.list_dj.length)return;
+    	  state.index_dj--;
+    	  state.index_dj=state.index_dj<0?index_dj-1:state.index_dj;
+    	  state.music=state.list_dj[state.index_dj];
+      }
     },
     setfm(state,fm){
     	state.index_fm=fm.index+1;
@@ -190,11 +190,12 @@ export default new Vuex.Store({
   },
   actions: {
 	 next_music({commit,state,dispatch},opt){
-		 opt&&opt.bgm&&commit("setbgmchange", true);
+		 console.log("end")
+		 commit("setbgmchange", true);
 		 if(state.playtype==2){
 			 dispatch("next_fm")
 		 }else{
-			 commit("next");
+			 commit("next",true);//音乐播放完毕下一曲，播放完毕状态为musicend=true
 			 dispatch("only_murl");
 		 }
 	},
@@ -225,16 +226,16 @@ export default new Vuex.Store({
 	    		commit('setmusic_url',res.data.data[0].url);
 	    	})
     },
-    async getlike({commit,state}){// 获取红心歌曲
+    async getlike({commit,state}){// 获取红心歌曲，用户创建的歌单列表
 	    	api.likeall().then(res=>{
 	    		commit("setlikeall",(res.data.ids||[]).join(","))
 	    	});
-	    	
 	    	state.user.account&&(await api.user_playlist(state.user.account.id,0).then(res=>{
 	    		commit("setuplaylist",res.data.playlist||[])
 	    	}))
     },
     async heart({state,commit,dispatch},opt){
+    	if(!state.music.id)return;
 	    	api.songtrack(opt.id,opt.t,opt.del).then(res=>{
 	    		if(res.data.code==200){
 	    			dispatch("getlike");

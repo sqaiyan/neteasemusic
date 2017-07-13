@@ -1,7 +1,7 @@
 <template>
-	<div v-infinite-scroll="loadmore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" style="padding-top:82px;">
+	<div v-infinite-scroll="loadmore" infinite-scroll-disabled="busy"  style="padding-top:82px;">
 		<div id="searcheader">
-			<form @submit="search(true,false)">
+			<form @submit.prevent="search(true,false)">
 				<label><input type="search" v-model="value" required :value="value" autofocus="autofocus" @input="search_sug" placeholder="搜索音乐、电台、歌手"/><span @click="$router.back()">取消</span></label>
 			</form>
 			<tab :class="(!value||!loaded?'rehide':'')" :tabs="tab" :tabidx="cur" v-on:switchtab="switchtab"></tab>
@@ -44,13 +44,13 @@
 					<div v-if="multimatch">
 					<div class="gray_title">最佳匹配</div>
 					<div v-for="item in multimatch.orders">
-						<router-link :to="{name: item,params:{id:re.id},query:{img:re.picId_str||re.picId||re.pic}}" :class="'flexlist flex-image '+item" v-for="re in multimatch[item]" :key="re.id">
+						<router-link :to="{name:item,params:{id:re.id},query:{img:re.picId_str||re.picId||re.pic}}" :class="'flexlist flex-image '+item" v-for="re in multimatch[item]" :key="re.id">
 							<div class="flexlist">
 								<div class="flexleft fl-image">
-									<img :src="(re.picUrl||re.cover)+'?param=100y100'" class="album_cover" />
+									<img :src="(re.picUrl||re.cover||re.avatarUrl)+'?param=100y100'" class="album_cover" />
 								</div>
 								<div class="flexmain">
-									<div>{{item|mo2name}}：{{re.name}} <span class="fm_tdes" v-if="re.trans">({{re.trans}})</span></div>
+									<div>{{item|mo2name}}：{{re.name||re.nickname}} <span class="fm_tdes" v-if="re.trans">({{re.trans}})</span></div>
 									<div class="relistdes" v-if="re.artistName">{{re.artistName}}</div>
 								</div>
 								<div class="flexact">
@@ -89,10 +89,10 @@
 						<div class="flexlist">
 							<div class="flexmain">
 								<div>{{re.name}}
-									<span class="fm_tdes" v-if="re.alias[0]">({{re.alias[0]}})</span>
+									<span class="fm_tdes" v-if="re.alias.length">({{...re.alias}})</span>
 								</div>
 								<div class="relistdes">{{re.artist.name}}
-									<span v-if="re.artist.alias[re.artist.alias.length-1]">({{re.artist.alias[re.artist.alias.length-1]}})</span>
+									<span v-if="re.artist.alias.length">({{...re.artist.alias}})</span>
 								</div>
 							</div>
 						</div>
@@ -240,6 +240,7 @@
 		},
 		methods: {
 			loadmore() {
+				if(this.$route.name != 'search') return;
 				this.search(false, true)
 			},
 			switchtab(index) {
@@ -283,7 +284,7 @@
 					size = size ? size : 0;
 					curt.offset += rarry.length;
 					curt.loaded = true
-					curt.none = curt.offset >= size ? true : false;
+					curt.none = ((curt.offset >= size)||rarry.length<20) ? true : false;
 					if(more) {
 						this.cur == 0 && (curt.relist.songs = curt.relist.songs.concat(res.songs))
 						this.cur == 1 && (curt.relist.artists = curt.relist.artists.concat(res.artists))
@@ -325,6 +326,8 @@
 					return "专辑";
 					case "artist":
 					return "歌手";
+					case "user":
+					return "用户"
 				}
 			}
 		},

@@ -29,8 +29,8 @@
 					</div>
 				</div>
 				<div class="flexmain">
-					<div>{{re.name}}<span v-if="re.alia.length">（{{re.alia[0]}}）</span></div>
-					<div class="relistdes">{{re.ar[0].name}}-{{re.al.name}}</div>
+					<div>{{re.name}}<span v-if="re.alia.length">（{{...re.alia}}）</span></div>
+					<div class="relistdes">{{re.ar[0].name}} - {{re.al.name}}</div>
 				</div>
 				<div class="flexact">
 					<router-link :to="{name:'mv',params:{id:re.mv}}" class="fa_list fa_mv" v-if="re.mv!=0">

@@ -113,9 +113,6 @@ export default {
             return Promise.resolve([a.data.playlists, b.data.songs, c.data.userprofiles])
         }))
     },
-    recsongs() {
-        return axios("recommend/songs")
-    },
     record(t = 0) {
         return axios("record?type=" + t)
     },
@@ -164,7 +161,13 @@ export default {
     	return axios("user/cloud",{params:{offset:offset,limit:limit,auth:true}});
     },
     user_recs(){
-    	return axios("recommend/songs")
+    	return axios("recommend/songs",{params:{auth:true}})
+    },
+    user_sublist(t,offset){
+    	return axios("sublist/"+t,{params:{auth:true,offset:offset,limit:limit}});
+    },
+    event_list(offset){
+    	return axios("event/list",{params:{auth:true,offset:offset,limit:limit}})
     },
     async mine(){
     	return await axios("mine")

@@ -20,7 +20,7 @@
 						歌手：
 						<span>{{list.album.artist.name||" "}} </span>
 					</router-link>	
-					<div>{{list.album.publishTime|time}}</div>
+					<div>发行时间：{{list.album.publishTime|time}}</div>
 				</div>
 			</div>
 			<div id="plh_action">

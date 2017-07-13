@@ -18,19 +18,24 @@
 				<div class="cmain">我的云盘</div>
 				<div class="rdes"><span class="arrow"></span></div>
 			</router-link>
-			<div class="mn_list">
+			<router-link :to="{name:'favradio'}" class="mn_list">
+				<div class="mn_ico"><img src="../../../static/images/cm2_list_icn_rdi_new@2x.png" alt="" /></div>
+				<div class="cmain">我的电台</div>
+				<div class="rdes"><span>{{subcount.djRadioCount}}</span><span class="arrow"></span></div>
+			</router-link>
+			<router-link :to="{name:'sublist'}" class="mn_list">
 				<div class="mn_ico"><img src="../../../static/images/cm4_my_icn_fav@2x.png" alt="" /></div>
 				<div class="cmain">我的收藏</div>
-				<div class="rdes"><span>{{subcount.artistCount}}</span><span class="arrow"></span></div>
-			</div>
+				<div class="rdes"><span>{{subcount.artistCount+subcount.mvCount+subcount.djRadioCount}}</span><span class="arrow"></span></div>
+			</router-link>
 		</div>
 
 		<div v-if="playlist1.length">
-			<div class="sm_title">歌单({{playlist1.length}})</div>
+			<div class="sm_title">歌单({{subcount.createdPlaylistCount}})</div>
 			<pl :list="playlist1" :showcreator="false"></pl>
 		</div>
 		<div v-if="playlist2.length">
-			<div class="sm_title">收藏的歌单({{playlist2.length}})</div>
+			<div class="sm_title">收藏的歌单({{subcount.subPlaylistCount}})</div>
 			<pl :list="playlist2"></pl>
 		</div>
 		<loading v-show="!loaded"></loading>
@@ -69,7 +74,8 @@
 			playico,
 			pl
 		},
-		created() {
+		mounted() {
+			console.log(".........................created my page",this.user);
 			api.user_playlist(this.user.account.id, 0).then(res => {
 				this.playlist1 = res.data.playlist.filter(i => {
 					return i.creator.userId == this.user.account.id

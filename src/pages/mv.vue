@@ -11,9 +11,8 @@
 			<div id="mvinfo">
 				<div id="mvname">{{mv.name}}</div>
 				<div>
-					<router-link :to="{name:'artist',params:{id:mv.artistId}}">歌手：{{mv.artistName}}</router-link>
+					<router-link :to="{name:'artist',params:{id:mv.artistId}}">歌手：{{mv.artistName}}</router-link>　|　播放：{{mv.playCount|playcount}}
 				</div>
-				<div>播放：{{mv.playCount}}</div>
 			</div>
 			<div id="mvdes">
 				<div class="fc_gray">发行：{{mv.publishTime}}</div>

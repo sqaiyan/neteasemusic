@@ -1,7 +1,7 @@
 <template>
 	<div v-infinite-scroll="getplaylist" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
 		<div id="hqpl" v-show="hiqulity.name">
-			<div class="blurbg album_cover" :style="{'background-image':'url('+(hiqulity.coverImgUrl)+'?param=500y500)'}"></div>
+			<div class="blurbg album_cover" :style="{'background-image':'url('+(hiqulity.coverImgUrl)+'?param=500y500)','background-color':'#eee'}"></div>
 			<router-link :to="{name: 'hqplaylist'}" class="flexlist flex-image">
 				<div class="flexleft fl-image">
 					<img :src="hiqulity.coverImgUrl+'?param=200y200'" class="album_cover" />
@@ -36,12 +36,11 @@
 
 		<div style="height:100%" id="catewrap" v-show="catelist.isShow">
 			<div class="close" @click="catelist.isShow=false" id="closecatelist"></div>
-			<div id="cateall" @click="catecheck(-1)" :class="'cl_list ' +(catelist.checked.name==catelist.res.all.name?'checked':'')">
+			<div id="cateall" @click="catecheck(-1)" :class="'cl_list catelist ' +(catelist.checked.name==catelist.res.all.name?'checked':'')">
 				<span class="cl_ico_checked" v-if="catelist.checked.name==catelist.res.all.name"></span>{{catelist.res.all.name}}</div>
 			<div class="catelist" v-for="(item,idx) in catelist.res.categories">
 				<div class="cl_list cl_ico">
-					<img :src="'../../../../static/images/cm2_discover_icn_'+idx+'@2x.png'">
-					<span>{{item}}</span>
+					<span><img :src="'../../../../static/images/cm2_discover_icn_'+idx+'@2x.png'">{{item}}</span>
 				</div>
 				<div :class="'cl_list '+(catelist.checked.name==re.name?'checked':'')" @click="catecheck(i)" v-if="re.category==idx" v-for="(re,i) in catelist.res.sub">
 					<span class="cl_ico_hot" v-if="re.hot"></span>

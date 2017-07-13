@@ -2,7 +2,7 @@
 	<div class="form-common">
 		<mt-header fixed title="登录">
 		</mt-header>
-		<form @submit="login">
+		<form @submit.prevent="login">
 			<div class="formc-cnt">
 				<span>账号：</span>
 				<input auto-focus placeholder="手机/邮箱" type="text" required v-model="name" maxlength="20" />
@@ -37,7 +37,7 @@
 		},
 		methods: {
 			login() {
-				this.loading = true
+				this.loading = true;
 				api.login(this.name, this.pwd).then(res => {
 					this.loading = false;
 					if(res.data.code != 200) {
@@ -47,10 +47,12 @@
 						});
 						return;
 					}
-					localStorage.setItem("user", JSON.stringify(res.data.i.profile));
+					logined=true;
+					localStorage.setItem("user", JSON.stringify(res.data.i));
 					//localStorage.setItem("cookie", res.data.c);
-					this.$store.commit("localuser", res.data.i.profile)
-					this.$store.dispatch('getlike')
+					this.$store.commit("localuser", res.data.i)
+					this.$store.dispatch('getlike');
+					console.log(this.$store.user);
 					this.$router.back()
 				})
 			}

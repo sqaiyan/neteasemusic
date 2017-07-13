@@ -10,10 +10,10 @@
 		</div>
 		<div id="fm-mdes" :class="(showlrc?'playinghidden':'')">
 			<span id="fm-mname">{{music.name}}</span>
-			<span id="fm-martist">{{(music.artists||[{a:1}])[0].name}}</span>
+			<span id="fm-martist">{{(music.artists||[1])[0].name}}</span>
 		</div>
-		<div id="lrclist" @click="showlrc=!showlrc" :playtime="playtime">
-			<lrcTpl :lrc="lrcObj" :showlrc="showlrc" :playtime="playtime" lrcindex="1"></lrcTpl>
+		<div id="lrclist" @click="showlrc=!showlrc" >
+			<lrcTpl :lrc="lrcObj" :showlrc="showlrc"></lrcTpl>
 		</div>
 		<div id="playing-actwrap">
 			<playpercent :playtime="playtime" v-on:change="change" :musicloading="musicloading" :duration="music.duration"></playpercent>
@@ -55,17 +55,17 @@
 						</div>
 						<div class="cmain">相似推荐</div>
 					</router-link>
-					<router-link replace v-if="music.artists[0].id" :to="{name:'artist',params:{id:music.artists[0].id||0}}" class="mn_list">
+					<router-link replace v-if="(music.artists||[{id:0}])[0].id" :to="{name:'artist',params:{id:(music.artists||[{id:0}])[0].id}}" class="mn_list">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_icn_artist_new@2x.png" alt="" />
 						</div>
 						<div class="cmain">歌手：{{(music.artists||[{a:1}])[0].name}}</div>
 					</router-link>
-					<router-link replace :to="{name:'album',params:{id:music.album.id||0},query:{img:music.album.pic_str||music.album.pic}}" class="mn_list">
+					<router-link replace :to="{name:'album',params:{id:(music.album||{id:0}).id},query:{img:(music.album||{pic_str:''}).pic_str||(music.album||{pic_str:''}).pic}}" class="mn_list">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_order_album_new@2x.png" alt="" />
 						</div>
-						<div class="cmain">专辑：{{music.album.name}}</div>
+						<div class="cmain">专辑：{{(music.album||{name:''}).name}}</div>
 					</router-link>
 					<router-link v-if="music.mvid" :to="{name:'mv',params:{id:music.mvid||0}}" class="mn_list">
 						<div class="mn_ico">
@@ -190,26 +190,8 @@
 				this.get()
 			},
 			tracktpl(pid) {
-				//添加歌曲到歌单
-				api.tracktpl(this.music.id, pid).then(res => {
-					if(res.data.code == 200) {
-						Toast({
-							message: '添加成功！',
-							duration: 2000
-						});
-						this.$store.dispatch("getlike")
-					} else {
-						Toast({
-							message: res.data.code == 502 ? '歌曲已存在' : '添加失败！',
-							duration: 2000
-						});
-					}
-				})
-			},
-			change() {},
-			...mapMutations([
-				'next'
-			])
+				this.$store.dispatch('tracktpl',{id:this.music.id,pid:pid,add:true})
+			}
 		},
 		computed: {
 			star: function() { //歌曲红心状态
