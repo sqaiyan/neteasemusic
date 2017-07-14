@@ -1,8 +1,7 @@
 # Vue全家桶高仿网易云音乐
+功能最多，按照ios客户端高仿，还有小程序版嘞
 
 >网易忠粉，去年小程序刚出来时候开始用小程序写过一版高仿ios版网易云音乐。一直在踩坑，基本完成后开始考虑用vue实现(其实是懒，想脱坑)。vue之前仅限于活动页使用，全家桶没用过，所以这次也是边学边做，很多东西来回重写了好多次。
-
-
 
 ## 技术栈
 1. Vue全家桶(vue,vue-router,vuex)
@@ -11,11 +10,18 @@
 4. node(接口服务)，[地址在这里](https://github.com/sqaiyan/netmusic-node)
 5. 图片资源来自ios端解压缩文件
 
+## 项目地址, 欢迎 star，issue
+因为带登录功能vps的ip已经被封
+1. [Vue版](https://github.com/sqaiyan/neteasemusic) ：https://github.com/sqaiyan/neteasemusic
+2. [小程序版](https://github.com/sqaiyan/netmusic-app) ：https://github.com/sqaiyan/netmusic-app
+3. [node后端](https://github.com/sqaiyan/netmusic-node) ：https://github.com/sqaiyan/netmusic-node
+
+
 ## 部署
 
 ### 后端项目
 
-```
+``` bash
 # 克隆node后端代码到本地
 git clone git@github.com:sqaiyan/netmusic-node.git
 
@@ -86,10 +92,6 @@ npm run build --report
 
 4. 手机真机性能不咋地吧，可能功能多js太大了，有的页面逻辑不好影响的吧。整体keepalive了，这。。。有时间研究下怎么搞
 
-## 项目地址, 欢迎 star，issue
 
-1. [Vue版](https://github.com/sqaiyan/neteasemusic) ：https://github.com/sqaiyan/neteasemusic
-2. [小程序版](https://github.com/sqaiyan/netmusic-app) ：https://github.com/sqaiyan/netmusic-app
-3. [node后端](https://github.com/sqaiyan/netmusic-node) ：https://github.com/sqaiyan/netmusic-node
 
 
