@@ -43,7 +43,7 @@
 </template>
 
 <script>
-	import {mapState } from 'vuex'
+	import { mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
 	import songlist from "@/components/songlist";
