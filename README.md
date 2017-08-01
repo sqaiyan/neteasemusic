@@ -11,7 +11,7 @@
 5. 图片资源来自ios端解压缩文件
 
 ## 项目地址, 欢迎 star，issue
- [在线地址](https://sqaiyan.github.io/music/dist/);估计不久ip就会被封，然后就是一坨了。
+ vps ip已经被封 无法在线预览
 1. [Vue版](https://github.com/sqaiyan/neteasemusic) ：https://github.com/sqaiyan/neteasemusic
 2. [小程序版](https://github.com/sqaiyan/netmusic-app) ：https://github.com/sqaiyan/netmusic-app
 3. [node后端](https://github.com/sqaiyan/netmusic-node) ：https://github.com/sqaiyan/netmusic-node
