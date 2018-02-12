@@ -14,7 +14,8 @@ if('addEventListener' in document) {
 	document.addEventListener('DOMContentLoaded', function() {
 		FastClick.attach(document.body);
 	}, false);
-}
+};
+Vue.config.devtools = true
 axios.defaults.timeout = 5000; // 默认5s超时
 axios.defaults.baseURL = 'http://192.168.48.53:3000/v1/';
 //axios.defaults.withCredentials=true;// 请求带上cookie

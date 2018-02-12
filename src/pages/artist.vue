@@ -153,7 +153,7 @@
 					artist: {}
 				},
 				tab: utils.clone(tabcnt),
-				cw: window.screen.width
+				cw:document.body.clientWidth 
 			}
 		},
 		components: {
@@ -164,7 +164,6 @@
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
-				console.log("enter", to.params.id, vm.id);
 				if(parseInt(to.params.id) !== parseInt(vm.id)) {
 					vm.loaded = false;
 					vm.id = vm.$route.params.id;

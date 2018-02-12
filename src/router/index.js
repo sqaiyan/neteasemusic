@@ -59,6 +59,11 @@ var router = new Router({
 			component: resolve => require(['@/pages/playlist'], resolve)
 		},
 		{
+			path: '/video/:id',
+			name: 'video',
+			component: resolve => require(['@/pages/video'], resolve)
+		},
+		{
 			path: '/me',
 			name: 'me',
 			meta: {
@@ -93,6 +98,11 @@ var router = new Router({
 			path: '/cloud',
 			name: 'cloud',
 			component: resolve => require(['@/pages/my/cloud'], resolve)
+		},
+		{
+			path: '/record/:uid',
+			name: 'record',
+			component: resolve => require(['@/pages/record'], resolve)
 		},
 		{
 			path: '/play',

@@ -136,8 +136,8 @@ export default {
 			return Promise.resolve([a.data.playlists, b.data.songs, c.data.userprofiles])
 		}))
 	},
-	record(t = 0) {
-		return axios("record?type=" + t)
+	record(uid,t = 0) {
+		return axios("record",{params:{uid:uid,type:t}})
 	},
 	login(name, pwd) {
 		var data = {
@@ -256,6 +256,42 @@ export default {
 				auth: true,
 				offset: offset,
 				limit: limit
+			}
+		})
+	},
+	video_detail(id){
+		return axios("video/detail",{
+			params:{
+				id:id
+			}
+		})
+	},
+	video_playurl(id,br){
+		return axios("video/playurl",{
+			params:{
+				id:id,
+				br:br
+			}
+		})
+	},
+	video_rcmd(id){
+		return axios("video/rcmd",{
+			params:{
+				id:id
+			}
+		})
+	},
+	video_statistic(id){
+		return axios("video/statistic",{
+			params:{
+				id:id
+			}
+		})
+	},
+	video_info(id){
+		return axios("video/info",{
+			params:{
+				id:id
 			}
 		})
 	},

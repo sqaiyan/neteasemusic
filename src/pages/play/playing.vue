@@ -76,7 +76,7 @@
 						</div>
 						<div class="cmain">歌手：{{(music.ar||music.artists)[0].name}}</div>
 					</router-link>
-					<router-link replace :to="{name:'album',params:{id:(music.al||music.album).id},query:{img:(music.al||music.album).pic_str||(music.al||music.album).pic}}" class="mn_list">
+					<router-link replace v-if="(music.al||music.album).id" :to="{name:'album',params:{id:(music.al||music.album).id},query:{img:(music.al||music.album).pic_str||(music.al||music.album).pic}}" class="mn_list">
 						<div class="mn_ico">
 							<img src="../../../static/images/cm2_lay_order_album_new@2x.png" alt="" />
 						</div>
@@ -169,8 +169,8 @@
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
 				//当前播放的音乐的id与路由的id不一样
-				if(parseInt(to.params.id) !== parseInt(vm.music.id)) {
-					console.log("router enter");
+				console.log('playing',to.params.id,vm.music.id)
+				if(parseInt(to.params.id) !== parseInt(vm.music.id)||vm.playtype != 1) {
 					vm.$store.commit("setplaytype", 1);
 					if(vm.bgmchange && vm.music.id) {
 						vm.$router.replace({
@@ -207,7 +207,6 @@
 		watch: {
 			music(v) {
 				if(!this.music.id || this.playtype != 1) return;
-				console.log("playing music watch");
 				this.showlrc && this.loadLrc(v.id);
 				this.$store.commit("resetmusic");
 				if(!this.playurl) {

@@ -11,7 +11,7 @@
 5. 图片资源来自ios端解压缩文件
 
 ## 项目地址, 欢迎 star，issue
-因为带登录功能vps的ip已经被封
+ vps ip已经被封 无法在线预览
 1. [Vue版](https://github.com/sqaiyan/neteasemusic) ：https://github.com/sqaiyan/neteasemusic
 2. [小程序版](https://github.com/sqaiyan/netmusic-app) ：https://github.com/sqaiyan/netmusic-app
 3. [node后端](https://github.com/sqaiyan/netmusic-node) ：https://github.com/sqaiyan/netmusic-node
@@ -91,6 +91,9 @@ npm run build --report
 3. mint-ui库就用到几个功能，准备单独扣出来或自己写，去掉对这个库的引用。
 
 4. 手机真机性能不咋地吧，可能功能多js太大了，有的页面逻辑不好影响的吧。整体keepalive了，这。。。有时间研究下怎么搞
+5.预览地址中webpack无法获取动态图片地址，这个问题稍后研究下。
+6.手机端无法自动播放歌曲，稍后解决
+7.手机端无法播放MV
 
 
 

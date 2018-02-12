@@ -1,5 +1,5 @@
 <template>
-	<div :class="(!showlrc?'playinghidden':'')" >
+	<div id="lrcontent" :class="{'playinghidden':!showlrc,'noscroll':(lrc.scroll&&!lrc.nolyric&&!lrc.uncollected)}" >
 		<div id="lrcwrap" v-show="lrc" :style="{'transform':'translateY('+(-lrcindex*100/(lrc.lrc.length+6))+'%)'}">
 			<div v-if="lrc.nolyric" class="notext">纯音乐，无歌词</div>
 			<div v-if="lrc.scroll&&!lrc.nolyric&&!lrc.uncollected" class="notext">*歌词不支持滚动*</div>

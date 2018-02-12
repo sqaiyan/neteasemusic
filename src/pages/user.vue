@@ -36,7 +36,7 @@
 			</div>
 			<div v-if="playlist1.length">
 				<div class="sm_title">歌单 ({{user.profile.playlistCount}})<span class="fr">共被收藏({{user.profile.playlistBeSubscribedCount|playcount}})次</span></div>
-				<router-link :to="{name: 'playlist'}" class="flexlist flex-image">
+				<router-link :to="{name: 'record',params:{uid:id}}" class="flexlist flex-image">
 					<div class="flexleft fl-image">
 						<img src="../../static/images/cm2_list_cover_rank@2x.png" class="album_cover" />
 					</div>
@@ -86,12 +86,23 @@
 							</router-link>
 						</div>
 						<div class="flex-boxlist mvs" v-if="item.json.video">
+							
+							<router-link :to="{name:'video',params:{id:item.json.video.videoId}}" class="tl_cnt">
+								<div class="cover">
+									<img :src="item.json.video.coverUrl" alt="" class="mv_cover" />
+									<div class="img_creator">
+										{{item.json.video.title}}
+										<p>{{item.json.video.creator.nickname}}</p>
+									</div>
+								</div>
+							</router-link>
+							<!-- 
 							<div class="tl_cnt">
 								<div>
-									<video width="100%" height="auto" controls="controls" :src="item.json.video.urlInfo.url" :poster="item.json.video.coverUrl">
+									<video width="100%" height="auto" controls="controls" :src="item.json.video.playurl" :poster="item.json.video.coverUrl">
 									</video>
 								</div>
-							</div>
+							</div> -->
 						</div>
 						<router-link :to="{name:'playlist',params:{id:item.json.playlist.id}}" class="flexlist flex-image" v-if="item.json.playlist">
 							<div class="flexleft fl-image">

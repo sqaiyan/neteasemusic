@@ -129,12 +129,13 @@
 				});
 			},
 			playindex(i){
-				this.$store.commit("setplaytype",1);
+				//this.$store.commit("setplaytype",1);
 				this.$store.commit("setplaylist",this.canplay);
 				this.$store.commit("playindex",i);
 			},
 			playall(){
 				this.playindex(0);
+				this.$store.commit("setplaytype",1);
 				this.$store.dispatch("only_murl");
 				api.comments(this.music.id, 0, 2).then(res => {
 					this.$store.commit('commentscount', res.data.total);

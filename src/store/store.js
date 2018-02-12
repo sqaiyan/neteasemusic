@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '@/api';
 import u from "@/utils"
-Vue.use(Vuex)
 import { Toast } from 'mint-ui';
 export default new Vuex.Store({
 	state: {
@@ -213,10 +212,18 @@ export default new Vuex.Store({
 		}) {
 			if(state.index_fm >= state.list_fm.length - 1) {
 				api.fm().then(res => {
-					commit("setfm", {
-						list: res.data.data,
-						index: -1
-					});
+					if(res.data.code==200){
+						commit("setfm", {
+							list: res.data.data,
+							index: -1
+						});
+					}else{
+						Toast({
+							message:res.data.msg,
+							duration: 3000
+						});
+					}
+					
 				})
 			} else {
 				commit('setfm', {

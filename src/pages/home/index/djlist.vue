@@ -101,6 +101,8 @@
 					this.djlist = res.data.djRadios;
 					this.hasMore = res.data.hasMore;
 					this.busy = false;
+				}).catch(res=>{
+					console.log(res);
 				})
 			}
 		},

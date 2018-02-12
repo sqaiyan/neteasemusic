@@ -2,7 +2,7 @@
 	<div v-infinite-scroll="loadmore" infinite-scroll-disabled="busy"  style="padding-top:82px;">
 		<div id="searcheader">
 			<form @submit.prevent="search(true,false)">
-				<label><input type="search" v-model="value" required :value="value" autofocus="autofocus" @input="search_sug" placeholder="搜索音乐、电台、歌手"/><span @click="$router.back()">取消</span></label>
+				<label><input type="search" v-model="value" required autofocus="autofocus" @input="search_sug" placeholder="搜索音乐、电台、歌手"/><span @click="$router.back()">取消</span></label>
 			</form>
 			<tab :class="(!value||!loaded?'rehide':'')" :tabs="tab" :tabidx="cur" v-on:switchtab="switchtab"></tab>
 		</div>
