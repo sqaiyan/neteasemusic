@@ -24,12 +24,25 @@ img {
 	max-width: 100%;
 }
 
+svg {
+	fill: currentColor;
+	font: inherit;
+	vertical-align: top;
+}
+
 .is-fixed {
 	z-index: 10 !important
 }
 
 input:focus {
 	outline: none
+}
+
+blockquote {
+	border-left: 2px solid #ddd;
+	padding-left: .3em;
+	line-height: 1.4;
+	color: #999;
 }
 
 html {
@@ -42,7 +55,7 @@ html {
 
 body {
 	height: 100%;
-	font-family: '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", "sans-serif", "Helvetica", "STHeiti STXihei", "Microsoft JhengHei", "Microsoft YaHei", "Arial";
+	font-family: '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", "sans-serif", "Helvetica", "STHeiti STXihei", "Microsoft YaHei", "Arial";
 	color: #353535;
 	padding: 0;
 	max-width: 750px;
@@ -278,8 +291,20 @@ a {
 
 #playingpage {
 	background: url('../../static/images/cm2_default_play_bg-ip6@2x.jpg') center top no-repeat;
-	-webkit-background-size: 100% auto;
 	background-size: 100% auto;
+}
+
+#fm-covermain {
+	margin: 20% auto 2em;
+	border-radius: 1em;
+	overflow: hidden;
+	position: relative;
+	z-index: 3;
+	width: 80%;
+	height: 0;
+	padding-top: 80%;
+	background: url('../../static/images/fm/cm2_default_cover_fm-ip6@2x.png') center center no-repeat;
+	background-size: 100% 100%;
 }
 
 #playing-zz {
@@ -376,12 +401,12 @@ a {
 
 .pa-maction img {
 	width: 55%;
-	margin-top: 8%
+	margin-top: 10%
 }
 
 .pa-saction img {
 	width: 70%;
-	margin-top: .5em
+	margin-top: 5%
 }
 
 .playing #playing-main {
@@ -432,6 +457,10 @@ a {
 
 .fc_gray {
 	color: #949597;
+}
+
+.fc_blue {
+	color: blue;
 }
 
 #playingpage {
@@ -709,13 +738,10 @@ a {
 	color: #537fb0
 }
 
-
-
 #lrclist {
 	position: absolute;
 	left: 1em;
-	top: 40px;
-	margin-top: 1.2em;
+	top: 50px;
 	right: 1em;
 	bottom: 9em;
 	text-align: center;
@@ -723,20 +749,32 @@ a {
 	color: #fff;
 	z-index: 3;
 }
+
 .playinghidden {
 	z-index: -1 !important;
 	opacity: 0;
 	pointer-events: none;
 }
-#lrcontent{position: absolute;left: 0;top: 0;right: 0;bottom: 0;}
-.noscroll{overflow: auto !important;}
+
+#lrcontent {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.noscroll {
+	overflow: auto !important;
+}
+
 #lrcwrap {
 	top: 50%;
 	position: absolute;
 	width: 100%;
 	transition: all ease 1s;
 	text-align: center;
-	padding-bottom: 14.4em;
+	padding-bottom: 20em;
 }
 
 #lrcwrap .lrcur {
@@ -753,16 +791,16 @@ a {
 }
 
 #lrcwrap div {
-	line-height: 1.2;
+	line-height: 1.3;
 	word-break: break-word;
 	opacity: .5;
-	height: 2.4em;
 	overflow: hidden;
 	transition: all ease .5s;
 	display: flex;
 	align-items: center;
 	width: 100%;
-	text-align: center
+	text-align: center;
+	padding: .4em 0;
 }
 
 #lrcwrap .notext {
@@ -856,6 +894,11 @@ a {
 	margin: 1% 1% 1% 0;
 }
 
+.flex-one .tl_cnt {
+	flex: 1;
+	margin: 0;
+}
+
 .flex-two .tl_cnt:nth-child(2n) {
 	margin-right: 0;
 }
@@ -933,7 +976,6 @@ a {
 
 .disabled {
 	color: #aaa;
-	background-color: #fbfbfb
 }
 
 .album .cover {
@@ -980,8 +1022,7 @@ a {
 	width: auto;
 }
 
-
-.flexlist:last-child .flexlist {
+.flexlist .nonebd {
 	border-bottom: none;
 }
 
@@ -1043,9 +1084,16 @@ a {
 	word-break: keep-all;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
 	width: 100%;
+	white-space: nowrap;
 	word-wrap: break-word
+}
+
+.flexmain .fm_title {
+	white-space: normal;
+	max-height: 3em;
+	word-break: break-all;
+	white-space: normal
 }
 
 .flexmain div span {
@@ -1159,6 +1207,15 @@ a {
 	width: 4em;
 }
 
+.coverplay {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	z-index: 3;
+	line-height: 1;
+	transform: translate(-50%,-50%);
+}
+
 .radiolist img {
 	vertical-align: middle;
 	position: relative;
@@ -1189,7 +1246,7 @@ a {
 	right: 0;
 	top: 0;
 	color: #fff;
-	z-index: 1;
+	z-index: 2;
 	font-size: .8em;
 	padding: .5em;
 	background-image: linear-gradient(rgba(0, 0, 0, .4), rgba(0, 0, 0, 0));
@@ -1206,8 +1263,24 @@ a {
 	width: auto;
 }
 
+.ip_leftb {
+	left: 0;
+	bottom: 0;
+	right: auto;
+	top: auto;
+	text-align: left;
+	background: none;
+}
+
+.ip_rightb {
+	bottom: 0;
+	top: auto;
+	background: none;
+	color: #fff;
+}
+
 .listheader {
-	padding: .5em 1% .2em 0;
+	padding: .5em;
 	overflow: hidden;
 	position: relative;
 	display: block;
@@ -1229,13 +1302,14 @@ a {
 
 .listheader:before {
 	display: inline-block;
-	width: 2px;
+	width: 4px;
 	background-color: red;
 	height: 1em;
 	content: "";
 	margin-right: .3em;
 	border-radius: 10px;
-	vertical-align: middle
+	vertical-align: middle;
+	border-radius: 2px;
 }
 
 #playall .flexlist {
@@ -1592,6 +1666,36 @@ a {
 .cl_ico_hot {
 	content: "";
 	position: absolute;
+}
+
+.detail_des {
+	padding: 0 .5em 1em;
+	color: #444;
+	display: block;
+	line-height: 1.6;
+}
+
+.des_7 {
+	/*标题类*/
+	text-align: center;
+	line-height: 2;
+	margin: 20px 0 0;
+}
+
+.des_7 span {
+	font-size: 7000;
+	font-size: 20px;
+	border-top: 3px solid #333;
+	display: inline-block;
+}
+
+.topicfl {
+	align-items: center;
+	background-color: #f0f0f0;
+}
+
+.topicfl .fl-image {
+	margin: .5em;
 }
 
 .cl_ico_hot {

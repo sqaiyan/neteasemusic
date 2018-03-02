@@ -1,7 +1,7 @@
 <template>
 	<div id="fixheader" :class="{'page_t':!st,'stfixed':st}" v-infinite-scroll="getprogram" infinite-scroll-disabled="busy">
 		<mt-header id="artheader" fixed :title="(djradio.name||'电台')">
-			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
+			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
 			<playico slot="right"></playico>
 		</mt-header>
 		<div id="artist_header" ref="main" :style="{top:-st+'px'}">
@@ -24,7 +24,7 @@
 				<div class="infowrap">主播</div>
 				<div class="infowrap">
 					<router-link :to="{path:'/playlist',param:{id:djradio.dj.userId}}" class="flexlist flex-image">
-						<div class="flexlist">
+						<div class="flexlist nonebd">
 							<div class="flexleft fl-image">
 								<img :src="djradio.dj.avatarUrl+'?param=100y100'" class="user_avator" />
 							</div>
@@ -129,8 +129,7 @@
 				id: -1,
 				loaded: false,
 				programs: {},
-				busy: true,
-				cw: window.screen.width
+				busy: true
 			}
 		},
 		components: {
@@ -210,7 +209,8 @@
 			},
 			...mapState([
 				"scrolltop",
-				"music"
+				"music",
+				"cw"
 			])
 		}
 	}

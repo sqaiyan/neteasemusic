@@ -44,26 +44,5 @@
 </script>
 
 <style>
-	#playing-status {
-		color: #fff;
-		font-size: .8em;
-		padding: .5em 1em;
-		display: flex;
-		align-items:center
-	}
-	.mu-slider{margin: 0 1em;}
-	.loading .mu-slider-thumb:after {
-		border-color: #000;
-		background: url(../../static/images/loading.gif) center center no-repeat;
-		-webkit-background-size: 100% 100%;
-		background-size: 100% 100%;
-		width: 80%;
-		height: 80%;
-		left: 10%;
-		top: 10%;
-		border: none;
-		margin: 0;
-	}
-	
 	
 </style>

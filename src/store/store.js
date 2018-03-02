@@ -3,14 +3,20 @@ import Vuex from 'vuex';
 import api from '@/api';
 import u from "@/utils"
 import { Toast } from 'mint-ui';
+const defaultMusic = {
+	al: {},
+	ar: [{}],
+	artists: [{}],
+	album: {},
+	dj: {},
+	radio: {},
+	mainSong: {
+		album: {}
+	}
+}
 export default new Vuex.Store({
 	state: {
-		music: {
-			al: {},
-			ar: [{}],
-			artists: [{}],
-			album: {}
-		},
+		music: defaultMusic,
 		playing: false,
 		lrcObj: {
 			lrc: [{}]
@@ -33,7 +39,8 @@ export default new Vuex.Store({
 		bgmchange: false,
 		uplaylist: [],
 		shuffle_am: 0,
-		shuffle_dj: 0
+		shuffle_dj: 0,
+		cw: document.getElementById("app").offsetWidth
 	},
 	mutations: {
 		scroll(state, st) {
@@ -49,7 +56,7 @@ export default new Vuex.Store({
 		},
 		setplaying(state, t) {
 			state.playing = t;
-			if(t) {
+			if(state.playing) {
 				state.musicload = true;
 				state.musicloading = false;
 				audio.play()
@@ -58,6 +65,7 @@ export default new Vuex.Store({
 			}
 		},
 		setmusic(state, res) {
+			res = res || defaultMusic;
 			res.heart = false;
 			if(res.id && state.likeall.indexOf(res.id) > -1) {
 				res.heart = true
@@ -113,11 +121,12 @@ export default new Vuex.Store({
 		playindex(state, i) {
 			if(state.playtype == 1) {
 				state.index_am = i;
-				state.music = state.music.id == state.list_am[i].id ? state.music : state.list_am[i]
+				//state.music = state.music.id == state.list_am[i].id ? state.music : state.list_am[i]
 			} else {
 				state.index_dj = i;
-				state.music = state.music.id == state.list_dj[i].id ? state.music : state.list_dj[i]
+				//state.music = state.music.id == state.list_dj[i].id ? state.music : state.list_dj[i]
 			}
+			//this.commit("resetmusic")
 		},
 		delplaylist(state, i) {
 			if(i > -1) {
@@ -128,6 +137,9 @@ export default new Vuex.Store({
 				state.playtype == 1 ? (state.index_am = 0) : (state.index_dj = 0);
 				state.playtype == 1 ? (state.list_am = []) : (state.list_dj = [])
 			}
+		},
+		playingtoggle(state) {
+			state.playing = !state.playing
 		},
 		shuffle(state, i) {
 			if(state.playtype == 1) {
@@ -157,7 +169,6 @@ export default new Vuex.Store({
 
 		},
 		prev(state) { // 播放上一曲
-			console.log("prev")
 			if(state.playtype == 1) {
 				if(!state.list_am.length) return;
 				state.index_am--;
@@ -185,7 +196,6 @@ export default new Vuex.Store({
 				return i.creator.userId == state.user.account.id;
 			})
 			state.uplaylist = res;
-			console.log("uplaylist", res)
 		},
 		setlikeall(state, res) {
 			state.likeall = res;
@@ -197,7 +207,6 @@ export default new Vuex.Store({
 			state,
 			dispatch
 		}, opt) {
-			console.log("end")
 			commit("setbgmchange", true);
 			if(state.playtype == 2) {
 				dispatch("next_fm")
@@ -212,18 +221,18 @@ export default new Vuex.Store({
 		}) {
 			if(state.index_fm >= state.list_fm.length - 1) {
 				api.fm().then(res => {
-					if(res.data.code==200){
+					if(res.data.code == 200) {
 						commit("setfm", {
 							list: res.data.data,
 							index: -1
 						});
-					}else{
+					} else {
 						Toast({
-							message:res.data.msg,
+							message: res.data.msg,
 							duration: 3000
 						});
 					}
-					
+
 				})
 			} else {
 				commit('setfm', {
@@ -237,6 +246,12 @@ export default new Vuex.Store({
 		}, id) {
 			// 歌曲详情
 			var res = await api.music_detail(id);
+			if(res.data.privileges[0].st < 0) {
+				Toast({
+					message: "歌曲已下架",
+					duration: 3000
+				});
+			}
 			commit("setmusic", res.data.songs[0] || {});
 		},
 		async getmusic_url({
@@ -286,8 +301,21 @@ export default new Vuex.Store({
 			state,
 			commit
 		}, id) {
+			[].map
 			api.lyric(id).then(res => {
-				var lrc = u.parse_lrc(res.data.lrc && res.data.lrc.lyric ? res.data.lrc.lyric : '');
+				let lrc = u.parse_lrc(res.data.lrc && res.data.lrc.lyric ? res.data.lrc.lyric : '');
+				let tlrc = u.parse_lrc(res.data.tlyric && res.data.tlyric.lyric ? res.data.tlyric.lyric : '');
+				tlrc = tlrc.now_lrc;
+				if(tlrc.length) {
+					lrc.now_lrc.map((v, i) => {
+						tlrc.forEach(k => {
+							if(k.lrc_sec == v.lrc_sec) {
+								v.tlrc = k.lrc == v.lrc ? '' : k.lrc
+							}
+						})
+						return v
+					})
+				}
 				res.data.lrc = lrc.now_lrc;
 				res.data.scroll = lrc.scroll ? 1 : 0;
 				commit("setlrc", res.data)

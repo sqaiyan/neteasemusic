@@ -36,9 +36,10 @@
 				</router-link>
 			</div>
 			<!-- -->
-			<router-link :to="{path: 'newsonglist'}" class="listheader"><span>最新音乐</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
+			<div class="listheader"><span>最新音乐</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></div>
 			<div class="flex-boxlist">
-				<router-link class="tl_cnt" :to="{name: 'album'}">
+				<!-- 
+				<div class="tl_cnt">
 					<div class="cover">
 						<img src="../../../../static/images/cm4_disc_cover_new@2x.png" class="music_cover" />
 					</div>
@@ -46,8 +47,8 @@
 						<div>新歌推荐</div>
 						<div class="tli_des">推荐合口味的新歌</div>
 					</div>
-				</router-link>
-				<router-link class="tl_cnt" :key="item.id" v-for="(item,index) in rec_ns" v-if="index<5" :to="{name: 'album',params: { id: item.song.album.id},query:{img:item.song.album.picId_str||item.song.album.picId||item.song.album.pic}}">
+				</div> -->
+				<router-link class="tl_cnt" :key="item.id" v-for="(item,index) in rec_ns" v-if="index<6" :to="{name: 'album',params: { id: item.song.album.id},query:{img:item.song.album.picId_str||item.song.album.picId||item.song.album.pic}}">
 					<div class="cover">
 						<img :src="item.song.album.picUrl+'?param=200y200'" class="music_cover" />
 					</div>
@@ -58,7 +59,7 @@
 				</router-link>
 			</div>
 			<!-- -->
-			<router-link :to="{path: 'mvlist'}" class="listheader"><span>推荐Mv</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
+			<div class="listheader"><span>推荐Mv</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></div>
 			<div class="flex-boxlist  mvs flex-two">
 				<router-link class="tl_cnt" :key="item.id" v-for="item in rec_mv" :to="{name: 'mv',params: { id: item.id, name: item.name}}">
 					<div class="cover">
@@ -71,7 +72,7 @@
 				</router-link>
 			</div>
 			<!-- -->
-			<router-link :to="{name: 'program'}" class="listheader"><span>推荐节目</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></router-link>
+			<div class="listheader"><span>推荐节目</span><img src="../../../../static/images/common_icon_arrow@2x.png" alt="" /></div>
 			<div class="flex-boxlist">
 				<router-link class="tl_cnt" :key="item.id" v-for="item in rec_dj" :to="{name: 'program',params: { id: item.id, name: item.name}}">
 					<div class="cover">

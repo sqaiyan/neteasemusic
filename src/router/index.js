@@ -23,6 +23,10 @@ var router = new Router({
 			},
 			component: resolve => require(['@/pages/mv'], resolve)
 		}, {
+			path: '/topic/detail/:id',
+			name: 'topicDetail',
+			component: resolve => require(['@/pages/topicDetail'], resolve)
+		}, {
 			path: '/comment/:id',
 			name: 'comment',
 			meta: {
@@ -151,7 +155,8 @@ var router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-	if(to.meta.auth && !logined) {
+	let user = JSON.parse(localStorage.getItem("user"))
+	if(to.meta.auth && !logined && !user.account) {
 		console.error("需先登录")
 		next(false);
 		router.push({

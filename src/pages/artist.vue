@@ -1,6 +1,6 @@
 <template>
 	<div id="fixheader" :class="{'page_t':!st,'stfixed':st}" v-infinite-scroll="loadmore" infinite-scroll-disabled="busy">
-		<mt-header id="artheader" fixed :title="(art.artist.name||'歌手')">
+		<mt-header id="artheader" fixed :title="art.artist.name||'歌手'">
 			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
 			<playico slot="right"></playico>
 		</mt-header>
@@ -34,8 +34,7 @@
 							<div>{{re.name}}
 								<span v-if="re.alias[0]">({{re.alias[0]}})</span>
 							</div>
-							<div class="relistdes">{{re.artist.name}}
-								<span v-if="re.artist.alias[re.artist.alias.length-1]">({{re.artist.alias[re.artist.alias.length-1]}})</span>
+							<div class="relistdes">{{re.publishTime|artptime}} 歌曲{{re.size|playcount}}
 							</div>
 						</div>
 					</div>
@@ -63,15 +62,33 @@
 					<div class="listheader">
 						<span>歌手简介</span>
 					</div>
-					<span class="artist_des">{{tab[3].desc.briefDesc}}</span>
-					<div class="cntloading" id="descallbtn" @click="popupVisible=true">查看完整介绍>
+					<span class="detail_des">{{tab[3].desc.briefDesc||'暂无简介'}}</span>
+					<div class="cntloading" id="descallbtn" @click="popupVisibleDesc=true" v-if="tab[3].desc.introduction.length">查看完整介绍>
 					</div>
+
+					<div v-if="tab[3].desc.topicData">
+						<div class="listheader">
+							<span>相关专栏</span>
+						</div>
+						<router-link :to="{name:'topicDetail',params:{id:re.id}}" class="flexlist flex-image mvs" v-for="re in tab[3].desc.topicData" @click="topicDetail(re)">
+							<div class="flexleft fl-image">
+								<img :src="re.rectanglePicUrl+'?param=320y180'" class="mv_cover" />
+							</div>
+							<div class="flexlist">
+								<div class="flexmain">
+									<div class="fm_title">{{re.mainTitle}}</div>
+									<div class="relistdes">by{{re.creator.nickname}}　阅读{{re.readCount|playcount}}</div>
+								</div>
+							</div>
+						</router-link>
+					</div>
+
 					<div class="listheader" v-if="tab[3].artists.artists.length">
 						<span>相似歌手</span>
 					</div>
 					<div id="simiwrap">
 						<div class="flex-boxlist" :style="{'width':cw/4*tab[3].artists.artists.length+'px'}">
-							<router-link replace :style="{'flex':'0 0 '+cw*0.21+'px','margin':'.5em '+(cw*0.02)+'px 1em'}" redirect :to="{name:'artist',params:{id:item.id}}" :key="item.id" class="tl_cnt" v-for="item in tab[3].artists.artists">
+							<router-link replace :style="{'flex':'0 0 '+cw*0.21+'px','margin':'.5em '+(cw*0.02)+'px .5em'}" redirect :to="{name:'artist',params:{id:item.id}}" :key="item.id" class="tl_cnt" v-for="item in tab[3].artists.artists">
 								<div class="cover">
 									<img :src="item.img1v1Url+'?param=100y100'" class="music_cover" />
 								</div>
@@ -83,20 +100,45 @@
 				<loading v-else></loading>
 			</div>
 		</div>
-		<mt-popup v-model="popupVisible" position="right">
+		<!-- 歌手详情介绍 -->
+		<mt-popup v-model="popupVisibleDesc" position="right">
 			<mt-header fixed title="歌手介绍">
-				<mt-button slot="left" @click="popupVisible=false" icon="back"></mt-button>
+				<mt-button slot="left" @click="popupVisibleDesc=false" icon="back"></mt-button>
 			</mt-header>
-			<div id="pop_cnt">
+			<div class="pop_cnt">
 				<div class="listheader" id="pop_hasheader">
 					<span>歌手简介</span>
 				</div>
-				<span class="artist_des">{{tab[3].desc.briefDesc}}</span>
+				<span class="detail_des">{{tab[3].desc.briefDesc}}</span>
 				<div v-for="item in tab[3].desc.introduction">
-					<div class="listheader">
+					<div class="listheader" v-if="item.ti">
 						<span>{{item.ti}}</span>
 					</div>
-					<span class="artist_des">{{item.txt}}</span>
+					<span class="detail_des">{{item.txt}}</span>
+				</div>
+			</div>
+		</mt-popup>
+		<!-- 相关专栏详情 -->
+		<mt-popup v-model="popupVisibleTopic" position="right">
+			<mt-header fixed :title="topic.title">
+				<mt-button slot="left" @click="popupVisibleTopic=false" icon="back"></mt-button>
+			</mt-header>
+			<div class="pop_cnt">
+				<div class="topic_header">
+					<h2>{{topic.mainTitle}}</h2>
+					<p>{{topic.addTime|time}}　阅读：{{topic.readCount|playcount}}</p>
+					<p><img :src="topic.creator.avatarUrl+'?param=30y30'" class="user_avator" :alt="topic.creator.nickname" />　{{topic.creator.nickname}}</p>
+				</div>
+				<div v-for="item in topic.topic.content" :class="'detail_des des_'+item.type">
+					<!-- 电台 -->
+					<topicontent v-if="item.type==5" :type="item.type" :tid="item.id"></topicontent>
+					<!--歌单-->
+					<topicontent v-if="item.type==4" :type="item.type" :tid="item.id"></topicontent>
+					<!--单曲-->
+					<topicontent v-if="item.type==3" :type="item.type" :tid="item.id"></topicontent>
+					<!--标题-->
+					<span v-if="item.type==7">{{item.content}}</span>
+					<div v-if="item.type==13&&item.content" v-html="item.content"></div>
 				</div>
 			</div>
 		</mt-popup>
@@ -112,6 +154,7 @@
 	import songlist from "@/components/songlist";
 	import utils from "@/utils"
 	import { mapState } from 'vuex'
+	import topicontent from "@/components/topicontent"
 	const tabcnt = [{
 		name: '热门50',
 		loaded: false
@@ -146,21 +189,26 @@
 				cur: '0',
 				id: -1,
 				cover: "",
-				popupVisible: false,
+				popupVisibleDesc: false,
+				popupVisibleTopic: false,
+				topic: {
+					creator: {},
+					topic: {}
+				},
 				busy: false,
 				loaded: false,
 				art: {
 					artist: {}
 				},
-				tab: utils.clone(tabcnt),
-				cw:document.body.clientWidth 
+				tab: utils.clone(tabcnt)
 			}
 		},
 		components: {
 			songlist,
 			tab,
 			loading,
-			playico
+			playico,
+			topicontent
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
@@ -207,7 +255,7 @@
 						this.tab[3].loaded = true;
 						this.tab[3].desc = res.data;
 						api.artist_simi(this.id).then(res => {
-							res.data.code==200&&(this.tab[3].artists = res.data)
+							res.data.code == 200 && (this.tab[3].artists = res.data)
 						})
 					})
 				}
@@ -271,8 +319,15 @@
 			},
 			...mapState([
 				"scrolltop",
-				"music"
+				"music",
+				"cw"
 			])
+		},
+		filters: {
+			artptime(v) {
+				let t = new Date(v);
+				return t.getFullYear() + '.' + (t.getMonth() + 1) + '.' + t.getDate()
+			}
 		}
 	}
 </script>
@@ -303,16 +358,7 @@
 		padding-top: 56.2%
 	}
 	
-	.mvs {
-		padding-right: 1em;
-	}
 	
-	.artist_des {
-		padding: 0 .5em 1em;
-		color: #666;
-		display: block;
-		line-height: 1.8;
-	}
 	
 	#simiwrap {
 		overflow: hidden;
@@ -324,10 +370,11 @@
 		position: fixed;
 	}
 	
-	#pop_cnt {
+	.pop_cnt {
 		padding-top: 50px;
 		height: 100%;
 		overflow: auto;
+		word-break: break-all;
 		box-sizing: border-box
 	}
 	
@@ -338,4 +385,6 @@
 		margin-left: 2%;
 		margin-right: 2%;
 	}
+	
+	
 </style>

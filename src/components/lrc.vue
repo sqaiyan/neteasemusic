@@ -5,7 +5,9 @@
 			<div v-if="lrc.scroll&&!lrc.nolyric&&!lrc.uncollected" class="notext">*歌词不支持滚动*</div>
 			<div v-if="lrc.uncollected" class="notext">暂无歌词</div>
 			<div v-for="(item,idx) in lrc.lrc" :key="(item.lrc_sec||idx)" :data-t="item.lrc_sec" :class="((idx==lrcindex)&&!lrc.scroll?'lrcur':'')">
-				<span>{{item.lrc}}</span>
+				<span>{{item.lrc}}<br/>{{item.tlrc}}</span>
+				<!-- 
+				<span v-if="lrc.tlrc.length">{{lrc.tlrc[idx].lrc}}</span> -->
 			</div>
 		</div>
 		<loading text="歌词加载中..." v-show="lrc.code!=200"></loading>
@@ -27,7 +29,7 @@
 			}
 		},
 		props: {
-			lrc: Object,
+			lrc: {type:Object,default:{}},
 			showlrc: Boolean
 		},
 		watch: {

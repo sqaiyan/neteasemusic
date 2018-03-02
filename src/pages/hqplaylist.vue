@@ -4,7 +4,7 @@
 			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
 			<playico slot="right"></playico>
 		</mt-header>
-		<div class="tab"><span class="ml">{{checked}}</span><span class="pw" @click="cateshow=true"><img src="../../static/images/cm2_list_icn_filter@2x.png" alt="" /> 筛选</span></div>
+		<div class="tab"><span class="ml">{{checked}}</span><span class="pw" @click="cateshow=true"><img src="/static/images/cm2_list_icn_filter@2x.png" alt="" /> 筛选</span></div>
 		<div class='flex-boxlist flex sortlist'>
 			<router-link class=" flexlist " :to="{name: 'playlist',query:{name: re.name},params: { id: re.id}}" v-for="re in list.playlists" :key="re.id">
 				<div class="cover flexleft fl-image">

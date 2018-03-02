@@ -8,8 +8,8 @@
 				<div class="rm_header">
 					<div>
 						<span>{{item.likedCount}}</span>
-						<img src="../../..../../static/images/xg.png" v-if="!item.liked" />
-						<img src="../../..../../static/images/xi.png" v-else />
+						<img src="../../static/images/xg.png" v-if="!item.liked" />
+						<img src="../../static/images/xi.png" v-else />
 					</div>
 					<span class="fmh_name">{{item.user.nickname}}</span>
 					<span class="fmh_time">{{item.time|time}}</span>

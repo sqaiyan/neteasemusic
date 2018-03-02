@@ -29,7 +29,7 @@
 					</div>
 					<div class="flexlist">
 						<div class="flexmain">
-							<div>{{re.name}}</div>
+							<div  class="fm_title">{{re.name}}</div>
 							<div class="relistdes">{{re.artistName}}</div>
 						</div>
 					</div>
@@ -39,13 +39,13 @@
 		</div>
 
 		<div v-show="cur=='2'" class="mt">
-			<router-link :to="{name:'radio',params:{id:re.id}}" class="flexlist flex-image zllist" v-for="re in st[2].data.data" :key="re.id">
+			<router-link :to="{name:'radio',params:{id:re.id}}" class="flexlist flex-image zllist mvs" v-for="re in st[2].data.data" :key="re.id">
 				<div class="flexleft fl-image ">
-					<img :src="re.rectanglePicUrl" class="album_cover" />
+					<img :src="re.rectanglePicUrl+'?param=320y200'" class="mv_cover" />
 				</div>
 				<div class="flexlist">
 					<div class="flexmain">
-						<div>{{re.title}}</div>
+						<div class="fm_title">{{re.title}}</div>
 						<div class="relistdes">by {{re.author}}　阅读 {{re.readCount}}</div>
 					</div>
 				</div>

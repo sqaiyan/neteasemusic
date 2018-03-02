@@ -1,5 +1,5 @@
 import axios from "axios"
-let limit = 20;
+const limit = 20;
 export default {
 	index_rec() {
 		// 首页个人推荐内容：歌单，新歌，mv，电台
@@ -63,7 +63,7 @@ export default {
 	search_multimatch(s, t) {
 		return axios("search/multimatch?type=" + t + '&keywords=' + s)
 	},
-	playlist(id, offset, limit) {
+	playlist(id, offset) {
 		return axios.get("playlist/detail?id=" + id + '&offset=' + offset + '&limit=' + limit);
 	},
 	album(id) {
@@ -290,6 +290,13 @@ export default {
 	},
 	video_info(id){
 		return axios("video/info",{
+			params:{
+				id:id
+			}
+		})
+	},
+	topic_detail(id){
+		return axios("topic/detail",{
 			params:{
 				id:id
 			}

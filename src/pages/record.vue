@@ -8,7 +8,7 @@
 		<tab :tabs="tab" :tabidx="type" v-on:switchtab="switchtab"></tab></div>
 		<div class="plist-detail" v-show="type==0">
 			<div v-if="tab[0].loaded">
-				<router-link :to="{name: 'playing',params:{id:re.song.id}}" :key="re.id" class="flexlist flex-center" v-for="(re,idx) in allData.allData">
+				<div @click="play(re.song)" :key="re.id" :class="'flexlist flex-center '+(re.song.privilege.st<0?'disabled':'')" v-for="(re,idx) in allData.allData">
 					<div class="flexleft flexnum ">
 						<span :class="{'topindex':idx<3}">{{idx+1}}</span>
 					</div>
@@ -21,7 +21,7 @@
 							<img src="../../static/images/pl-playall.png" width="20" /> {{re.playCount}}次
 						</div>
 					</div>
-				</router-link>
+				</div>
 				<p class="cntloading">{{allData.msg}}</p>
 			</div>
 			
@@ -30,7 +30,7 @@
 		
 		<div class="plist-detail" v-show="type==1">
 			<div v-if="tab[1].loaded">
-				<router-link :to="{name: 'playing',params:{id:re.song.id}}" :key="re.id" class="flexlist flex-center" v-for="(re,idx) in weekly.weekData">
+				<div :key="re.id" @click="play(re.song)" :class="'flexlist flex-center '+(re.song.privilege.st<0?'disabled':'')" v-for="(re,idx) in weekly.weekData">
 					<div class="flexleft flexnum ">
 						<span :class="{'topindex':idx<3}">{{idx+1}}</span>
 					</div>
@@ -43,7 +43,7 @@
 							<img src="../../static/images/pl-playall.png" width="20" /> {{re.playCount}}次
 						</div>
 					</div>
-				</router-link>
+				</div>
 				<p class="cntloading">{{weekly.msg}}</p>
 			</div>
 			
@@ -51,8 +51,9 @@
 		</div>
 	</div>
 </template>
-
+ 
 <script>
+	import { Toast } from 'mint-ui';
 	import { mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
@@ -92,6 +93,14 @@
 			})
 		},
 		methods: {
+			play(re){
+				if(re.privilege.st<0){
+					Toast("歌曲已下架")
+					return;
+				}
+				this.$store.commit("setmusic",re)
+				this.$router.push({name:'playing',params:{id:re.id},query:{img:re.al.pic_str}})
+			},
 			switchtab(index) {
 				this.type = index.toString();
 				this.recordList()

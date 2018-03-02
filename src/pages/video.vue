@@ -107,7 +107,7 @@
 					if(res.data.code == 200) {
 						this.video = res.data.data;
 						this.loaded = true;
-						api.video_playurl(this.id,this.video.resolutions[this.video.resolutions.length-1]).then(u => {
+						api.video_playurl(this.id,this.video.resolutions[this.video.resolutions.length-1].resolution).then(u => {
 							u.data.code==200&&(this.videourl=u.data.urls[0].url)
 						})
 					}

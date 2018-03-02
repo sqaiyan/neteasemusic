@@ -47,10 +47,10 @@
 						<router-link :to="{name:item,params:{id:re.id},query:{img:re.picId_str||re.picId||re.pic}}" :class="'flexlist flex-image '+item" v-for="re in multimatch[item]" :key="re.id">
 							<div class="flexlist">
 								<div class="flexleft fl-image">
-									<img :src="(re.picUrl||re.cover||re.avatarUrl)+'?param=100y100'" class="album_cover" />
+									<img :src="(re.picUrl||re.cover||re.avatarUrl||re.coverUrl)+'?param=100y100'" class="album_cover" />
 								</div>
 								<div class="flexmain">
-									<div>{{item|mo2name}}：{{re.name||re.nickname}} <span class="fm_tdes" v-if="re.trans">({{re.trans}})</span></div>
+									<div>{{item|mo2name}}：{{re.name||re.nickname||re.title}} <span class="fm_tdes" v-if="re.trans">({{re.trans}})</span></div>
 									<div class="relistdes" v-if="re.artistName">{{re.artistName}}</div>
 								</div>
 								<div class="flexact">
@@ -327,7 +327,9 @@
 					case "artist":
 					return "歌手";
 					case "user":
-					return "用户"
+					return "用户";
+					case "video":
+					return "视频";
 				}
 			}
 		},

@@ -4,7 +4,7 @@
 			<img :src="cover" class="blurbg" :style="{'background-image':'url('+cover+')','top':-st+'px'}"/>
 		</div>
 		<mt-header fixed :title="(title||name||list.album.name)">
-			<mt-button slot="left" @click="$router.go(-1)" icon="back">返回</mt-button>
+			<mt-button slot="left" @click="$router.go(-1)" icon="back"></mt-button>
 			<playico slot="right"></playico>
 		</mt-header>
 		<div id="plist-header" ref="main">

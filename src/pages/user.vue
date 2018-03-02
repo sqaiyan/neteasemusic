@@ -6,9 +6,9 @@
 				<playico slot="right"></playico>
 			</mt-header>
 			<div id="artist_header" ref="main" :style="{top:-st+'px'}">
-				<img id="art_cover" :src="user.profile.backgroundUrl" />
-				<div id="user_hmain">
-					<img id="uh_avatar" class="user_avator" :src="user.profile.avatarUrl+'?param=100y100'" alt="" />
+				<img id="art_cover" :src="user.profile.backgroundUrl" :style="{'filter':'blur('+opa+'px) brightness(.8)'} "  />
+				<div id="user_hmain" v-show="title==' '">
+					<img id="uh_avatar" class="user_avator" :src="user.profile.avatarUrl+'?param=80y80'" :alt="user.profile.nickname" />
 					<div id="uh_name">{{user.profile.nickname}}<img src="../../static/images/cm2_pro_icn_girl@2x.png" v-if="user.profile.gender==2" /><img src="../../static/images/cm2_pro_icn_boy@2x.png" v-else alt="" /></div>
 					<p>关注{{user.profile.follows}} | 粉丝{{user.profile.followeds}}</p>
 					<div class="ahw_btn">
@@ -310,15 +310,19 @@
 		},
 		computed: {
 			st() {
-				var st = window.screen.width * 0.62 - 40;
-				return this.scrolltop > st ? st : 0
+				var t = this.cw * 0.62 - 40;
+				return this.scrolltop > t ? t : 0
+			},
+			opa() {
+				return this.scrolltop / this.cw * 10
 			},
 			title() {
-				return this.scrolltop > window.screen.width * 0.4 ? '' : ' ';
+				return this.scrolltop > this.cw* 0.5 ? '' : ' ';
 			},
 			...mapState([
 				"scrolltop",
-				"music"
+				"music",
+				"cw"
 			])
 		}
 	}

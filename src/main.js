@@ -4,17 +4,18 @@ import router from './router'
 import 'mint-ui/lib/style.css'
 import mint from "mint-ui";
 import '@/assets/layout.css'
+import '@/assets/icon.css'
 import store from '@/store/store'
 import axios from 'axios'
 import api from "@/api";
-import vconsole from 'vconsole';
+//import vconsole from 'vconsole';
 Vue.use(mint);
-let FastClick = require('FastClick')
-if('addEventListener' in document) {
-	document.addEventListener('DOMContentLoaded', function() {
-		FastClick.attach(document.body);
-	}, false);
-};
+//let FastClick = require('FastClick')
+//if('addEventListener' in document) {
+//	document.addEventListener('DOMContentLoaded', function() {
+//		FastClick.attach(document.body);
+//	}, false);
+//};
 Vue.config.devtools = true
 axios.defaults.timeout = 5000; // 默认5s超时
 axios.defaults.baseURL = 'http://192.168.48.53:3000/v1/';
@@ -68,7 +69,7 @@ new Vue({
 })
 Vue.filter('playcount', function(v) {
 	if(!v) return "";
-	return v < 1e4 ? v : ((v / 1e4).toFixed(0) + '万')
+	return v < 1e5 ? v : ((v / 1e4).toFixed(1) + '万')
 })
 Vue.filter('dateM', function(v) {
 	v = new Date(v);

@@ -57,7 +57,7 @@
 						</span>
 					</div>
 				</div>
-				<songlist :list="list.playlist.tracks" v-on:playindex="playindex" :curplay="music.id" :toplist="istoptype" :trackids="list.playlist.trackIds"></songlist>
+				<songlist :list="list.playlist.tracks" v-on:playindex="playindex" :curplay="music.id" :privileges="list.privileges" :toplist="istoptype" :trackids="list.playlist.trackIds"></songlist>
 			</div>
 			<loading v-else></loading>
 		</div>

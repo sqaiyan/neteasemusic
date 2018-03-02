@@ -1,6 +1,6 @@
 <template>
-	<div class="songs">
-		<router-link v-for="(re,idx) in list" :key="re.id" :to="{name: 'playing',params:{id:re.id},query:{img:re.al.pic_str||re.al.pic}}" @click.native="playindex(idx)" :class="'flexlist flex-center '+(re.id===curplay?'cur ':' ')+(toplist==1?'istop':'')+(nonum=='a'?'':'ml')">
+	<div class="songs"><!--  -->
+		<div v-for="(re,idx) in list" :key="re.id" @click="playindex(idx,re,privileges)" :class="'flexlist flex-center '+(re.id===curplay?'cur ':' ')+(toplist==1?'istop ':' ')+(nonum=='a'?' ':'ml ')+((re.privilege&&re.privilege.st<0)||(privileges&&privileges[idx].st<0)?'disabled':'')">
 			<div class="flexleft flexnum " v-if="nonum=='a'">
 				<div v-if="re.id===curplay">
 					<img src="../../static/images/aal.png" alt="">
@@ -41,11 +41,12 @@
 					</div>
 				</div>
 			</div>
-		</router-link>
+		</div>
 	</div>
 </template>
 
 <script>
+	import { Toast } from 'mint-ui';
 	export default {
 		name: 'songlist',
 		props: {
@@ -66,7 +67,23 @@
 			}
 		},
 		methods: {
-			playindex(index) {
+			playindex(index, re,privileges) {
+				if((re.privilege&&re.privilege.st<0)||(privileges&&privileges[index].st<0)) {
+					Toast({
+						message: '应合作方的要求，此歌曲已下架'
+					});
+					return;
+				}
+				let url = {
+					name: 'playing',
+					params: {
+						id: re.id
+					},
+					query: {
+						img: (re.al.pic_str || re.al.pic)
+					}
+				};
+				this.$router.push(url)
 				this.$store.commit("setbgmchange", false)
 				this.$emit("playindex", index)
 			}

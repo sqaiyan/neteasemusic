@@ -13,6 +13,7 @@
 			},
 			errormp3(e) {
 				//出错再重新请求一次
+				console.log("mp3请求出错",e);
 				//this.playurl && this.$store.dispatch('only_murl'), console.log("music loading error", e);
 			},
 			...mapActions([
