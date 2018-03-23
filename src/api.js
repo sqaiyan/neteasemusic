@@ -1,4 +1,3 @@
-import axios from "axios"
 const limit = 20;
 export default {
 	index_rec() {

@@ -143,49 +143,54 @@
 
 <style scoped>
 #playing-status {
-		color: #fff;
-		font-size: .8em;
-		padding: .5em 1em;
-		display: flex;
-		align-items:center
-	}
-	.mu-slider{margin: 0 1em;}
-	.loading .mu-slider-thumb:after {
-		border-color: #000;
-		background: url(../../static/images/loading.gif) center center no-repeat;
-		-webkit-background-size: 100% 100%;
-		background-size: 100% 100%;
-		width: 80%;
-		height: 80%;
-		left: 10%;
-		top: 10%;
-		border: none;
-		margin: 0;
-	}
-	#fm-action {
-		margin: 2% 0 4%;
-		display: flex
-	}
-	
-	#fm-action div {
-		flex: 1;
-		text-align: center;
-		position: relative;
-		width: 100%
-	}
-	
-	#fm-action .playbtn {
-		flex: 0 0 1
-	}
-	
-	#fm-action img {
-		width: 80%;
-		vertical-align: top;
-		margin-top: 5%;
-	}
-	
-	#fm-action .playbtn img {
-		width: 90%;
-		margin-top: 0
-	}
+	color: #fff;
+	font-size: .8em;
+	padding: .5em 1em;
+	display: flex;
+	align-items: center
+}
+
+.mu-slider {
+	margin: 0 1em;
+}
+
+.loading .mu-slider-thumb:after {
+	border-color: #000;
+	background: url(../../static/images/loading.gif) center center no-repeat;
+	-webkit-background-size: 100% 100%;
+	background-size: 100% 100%;
+	width: 80%;
+	height: 80%;
+	left: 10%;
+	top: 10%;
+	border: none;
+	margin: 0;
+}
+
+#fm-action {
+	margin: 2% 0 4%;
+	display: flex
+}
+
+#fm-action div {
+	flex: 1;
+	text-align: center;
+	position: relative;
+	width: 100%
+}
+
+#fm-action .playbtn {
+	flex: 0 0 1
+}
+
+#fm-action img {
+	width: 80%;
+	vertical-align: top;
+	margin-top: 5%;
+}
+
+#fm-action .playbtn img {
+	width: 90%;
+	margin-top: 0
+}
 </style>

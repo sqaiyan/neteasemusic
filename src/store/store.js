@@ -1,6 +1,4 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import api from '@/api';
+ import api from '@/api';
 import u from "@/utils"
 import { Toast } from 'mint-ui';
 const defaultMusic = {

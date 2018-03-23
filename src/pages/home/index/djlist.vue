@@ -3,7 +3,7 @@
 
 		<mt-swipe :auto="5000" v-show="djcate.categories.length">
 			<mt-swipe-item v-for="item in [1,2,3]" class="djcatewrap" :key="item">
-				<div bindtap="djradiotype" v-if="(idx<item*8)&&(idx>=(item-1)*8)" class="djcatelist" data-djtype="re.id" v-for="(re,idx) in djcate.categories">
+				<div v-if="(idx<item*8)&&(idx>=(item-1)*8)" class="djcatelist" data-djtype="re.id" v-for="(re,idx) in djcate.categories">
 					<img :src="re.pic56x56Url" class="slide-image" width="56" height="56" />
 					<div>{{re.name}}</div>
 				</div>

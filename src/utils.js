@@ -1,4 +1,4 @@
-function time(date) {
+	function time(date) {
 	var d = new Date(date)
 	var year = d.getFullYear()
 	var month = d.getMonth() + 1

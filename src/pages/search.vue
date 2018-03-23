@@ -1,5 +1,5 @@
 <template>
-	<div v-infinite-scroll="loadmore" infinite-scroll-disabled="busy"  style="padding-top:82px;">
+	<div v-infinite-scroll="loadmore" infinite-scroll-disabled="busy" style="padding-top:82px;">
 		<div id="searcheader">
 			<form @submit.prevent="search(true,false)">
 				<label><input type="search" v-model="value" required autofocus="autofocus" @input="search_sug" placeholder="搜索音乐、电台、歌手"/><span @click="$router.back()">取消</span></label>
@@ -42,23 +42,23 @@
 			<mt-tab-container v-model="cur" swipeable>
 				<mt-tab-container-item id="0">
 					<div v-if="multimatch">
-					<div class="gray_title">最佳匹配</div>
-					<div v-for="item in multimatch.orders">
-						<router-link :to="{name:item,params:{id:re.id},query:{img:re.picId_str||re.picId||re.pic}}" :class="'flexlist flex-image '+item" v-for="re in multimatch[item]" :key="re.id">
-							<div class="flexlist">
-								<div class="flexleft fl-image">
-									<img :src="(re.picUrl||re.cover||re.avatarUrl||re.coverUrl)+'?param=100y100'" class="album_cover" />
+						<div class="gray_title">最佳匹配</div>
+						<div v-for="item in multimatch.orders">
+							<router-link :to="{name:item,params:{id:re.id},query:{img:re.picId_str||re.picId||re.pic}}" :class="'flexlist flex-image '+item" v-for="re in multimatch[item]" :key="re.id">
+								<div class="flexlist">
+									<div class="flexleft fl-image">
+										<img :src="(re.picUrl||re.cover||re.avatarUrl||re.coverUrl)+'?param=100y100'" class="album_cover" />
+									</div>
+									<div class="flexmain">
+										<div>{{item|mo2name}}：{{re.name||re.nickname||re.title}} <span class="fm_tdes" v-if="re.trans">({{re.trans}})</span></div>
+										<div class="relistdes" v-if="re.artistName">{{re.artistName}}</div>
+									</div>
+									<div class="flexact">
+										<img src="../../static/images/cm2_runfm_icn_arr@2x.png" class="fa_list " width="12" alt="" />
+									</div>
 								</div>
-								<div class="flexmain">
-									<div>{{item|mo2name}}：{{re.name||re.nickname||re.title}} <span class="fm_tdes" v-if="re.trans">({{re.trans}})</span></div>
-									<div class="relistdes" v-if="re.artistName">{{re.artistName}}</div>
-								</div>
-								<div class="flexact">
-									<img src="../../static/images/cm2_runfm_icn_arr@2x.png" class="fa_list " width="12" alt="" />
-								</div>
-							</div>
-						</router-link>
-					</div>
+							</router-link>
+						</div>
 					</div>
 					<songlist :list="st[0].relist.songs" :curplay="music.id" nonum="''"></songlist>
 					<div class="cntloading" v-if="st[0].loaded&&!st[0].relist.songs">暂无结果</div>
@@ -175,7 +175,7 @@
 </template>
 
 <script>
-	import { mapState} from 'vuex'
+	import { mapState } from 'vuex'
 	import api from "@/api"
 	import tab from "@/components/tabs";
 	import pl from "@/components/playlist";
@@ -204,7 +204,7 @@
 					}],
 					songs: []
 				},
-				hot:[],
+				hot: [],
 				busy: true,
 				focus: false,
 				multimatch: {},
@@ -214,7 +214,8 @@
 		components: {
 			tab,
 			songlist,
-			loading,pl
+			loading,
+			pl
 		},
 		activated() {
 			this.busy = false;
@@ -226,8 +227,8 @@
 			var k = this.$route.query.key;
 			this.value = k;
 			k && this.search(k, false, false);
-			api.search_hot().then(res=>{
-				this.hot=res.data.result.hots||[]
+			api.search_hot().then(res => {
+				this.hot = res.data.result.hots || []
 			})
 		},
 		watch: {
@@ -262,7 +263,7 @@
 				this.focus = true;
 				if(!this.value) return
 				api.search_suggest(this.value).then(res => {
-					this.suggest = res.data.result||{};
+					this.suggest = res.data.result || {};
 				})
 			},
 			search(notw = true, more = false) {
@@ -271,7 +272,7 @@
 				var curt = this.st[this.cur];
 				if(curt.none || !this.value) return;
 				this.busy = true;
-				(curt.type == 1) && api.search_multimatch(this.value, curt.type).then(res => {
+				(curt.type == 1) && notw && api.search_multimatch(this.value, curt.type).then(res => {
 					this.multimatch = res.data.result
 				})
 				api.search(this.value, curt.type, curt.offset).then(res => {
@@ -284,7 +285,7 @@
 					size = size ? size : 0;
 					curt.offset += rarry.length;
 					curt.loaded = true
-					curt.none = ((curt.offset >= size)||rarry.length<20) ? true : false;
+					curt.none = ((curt.offset >= size) || rarry.length < 20) ? true : false;
 					if(more) {
 						this.cur == 0 && (curt.relist.songs = curt.relist.songs.concat(res.songs))
 						this.cur == 1 && (curt.relist.artists = curt.relist.artists.concat(res.artists))
@@ -308,28 +309,28 @@
 					this.busy = false;
 				});
 			},
-			urltn(str){
-				if(!str)return "";
-				str=str.split("/");
-				str=str[str.length-1];
+			urltn(str) {
+				if(!str) return "";
+				str = str.split("/");
+				str = str[str.length - 1];
 				return str.split(".")[0];
 			}
 		},
-		filters:{
-			mo2name(v){
-				switch(v){
+		filters: {
+			mo2name(v) {
+				switch(v) {
 					case "mv":
-					return 'MV';
+						return 'MV';
 					case 'radio':
-					return "电台";
+						return "电台";
 					case "album":
-					return "专辑";
+						return "专辑";
 					case "artist":
-					return "歌手";
+						return "歌手";
 					case "user":
-					return "用户";
+						return "用户";
 					case "video":
-					return "视频";
+						return "视频";
 				}
 			}
 		},
@@ -406,15 +407,25 @@
 	.sr_lists .flexnum img {
 		height: 1.2em
 	}
-	.hot_list{overflow: hidden;padding: 1em;}
-	.hot_list span{display: inline-block;
-    height: 32px;
-    margin-right: 8px;
-    margin-bottom: 8px;
-    padding: 0 14px;
-    font-size: 14px;
-    line-height: 32px;
-    color: #333;border: 1px solid #dfdfdf;border-radius: 2em;}
+	
+	.hot_list {
+		overflow: hidden;
+		padding: 1em;
+	}
+	
+	.hot_list span {
+		display: inline-block;
+		height: 32px;
+		margin-right: 8px;
+		margin-bottom: 8px;
+		padding: 0 14px;
+		font-size: 14px;
+		line-height: 32px;
+		color: #333;
+		border: 1px solid #dfdfdf;
+		border-radius: 2em;
+	}
+	
 	#suggest {
 		position: absolute;
 		top: 40px;

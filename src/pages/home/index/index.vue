@@ -6,7 +6,7 @@
 		</div>
 		<div class="page_tab">
 			<div class="page" id="indexwrap">
-				<tab :tabs="tabs" :url="taburl" v-on:switchtab="switchtab"></tab>
+				<tab :tabs="tabs" :url="taburl"></tab>
 				<keep-alive>
 					<router-view></router-view>
 				</keep-alive>
@@ -42,9 +42,6 @@
 		components: {
 			tab,
 			playico
-		},
-		methods: {
-			switchtab(index) {}
 		}
 	}
 </script>

@@ -70,7 +70,7 @@
 						<div class="listheader">
 							<span>相关专栏</span>
 						</div>
-						<router-link :to="{name:'topicDetail',params:{id:re.id}}" class="flexlist flex-image mvs" v-for="re in tab[3].desc.topicData" @click="topicDetail(re)">
+						<router-link :to="{name:'topicDetail',params:{id:re.id}}" class="flexlist flex-image mvs" :key="index" v-for="(re,index) in tab[3].desc.topicData" @click="topicDetail(re)">
 							<div class="flexleft fl-image">
 								<img :src="re.rectanglePicUrl+'?param=320y180'" class="mv_cover" />
 							</div>
@@ -129,7 +129,7 @@
 					<p>{{topic.addTime|time}}　阅读：{{topic.readCount|playcount}}</p>
 					<p><img :src="topic.creator.avatarUrl+'?param=30y30'" class="user_avator" :alt="topic.creator.nickname" />　{{topic.creator.nickname}}</p>
 				</div>
-				<div v-for="item in topic.topic.content" :class="'detail_des des_'+item.type">
+				<div v-for="item in topic.topic.content" :key="item.id" :class="'detail_des des_'+item.type">
 					<!-- 电台 -->
 					<topicontent v-if="item.type==5" :type="item.type" :tid="item.id"></topicontent>
 					<!--歌单-->
@@ -358,8 +358,6 @@
 		padding-top: 56.2%
 	}
 	
-	
-	
 	#simiwrap {
 		overflow: hidden;
 		overflow-x: auto;
@@ -385,6 +383,4 @@
 		margin-left: 2%;
 		margin-right: 2%;
 	}
-	
-	
 </style>

@@ -21,7 +21,7 @@
           </div>
           <div class="flexlist tl_info">
             <div class="sort_fl_list " v-for="(r,idx) in re.artistToplist.artists">
-              {{idx+1}}. {{r.first}} 　　　<img src="../../../../static/images/cm2_radio_icn_hot_sml@2x.png" style="width:1em"/><span>{{r.third}}</span>
+              {{idx+1}}. {{r.first}} <img src="../../../../static/images/cm2_radio_icn_hot_sml@2x.png" style="width:1em"/><span>{{r.third}}</span>
             </div>
           </div>
          </router-link>

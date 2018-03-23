@@ -5,7 +5,6 @@
       <span class="cl2"></span>
       <span class="cl3"></span>
     </div>
-    
   </div>
 </template>
 <script>

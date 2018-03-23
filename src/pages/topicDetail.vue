@@ -18,7 +18,7 @@
 						<router-link :to="{name:'topicDetail',params:{id:topic.topicSeries.id}}" class="fc_blue">{{topic.topicSeries.name}}</router-link>
 					</div>
 				</div>
-				<topicres :type="item.type" v-for="item in topic.resources" :resource="item.resource"></topicres>
+				<topicres :type="item.type" v-for="(item,index) in topic.resources" :key="index" :resource="item.resource"></topicres>
 			</div>
 			<div id="topic_comments">
 				<div class="sm_title">精彩评论</div>
@@ -27,7 +27,7 @@
 			</div>
 			<div id="topic_relates">
 				<div class="sm_title">往期回顾</div>
-				<router-link :to="{name:'topicDetail',params:{id:re.id}}" class="flexlist flex-image mvs" replace v-for="(re,index) in relates" v-if="index<3">
+				<router-link :to="{name:'topicDetail',params:{id:re.id}}" class="flexlist flex-image mvs" replace :key="index" v-for="(re,index) in relates" v-if="index<3">
 					<div class="flexleft fl-image">
 						<img :src="re.rectanglePicUrl+'?param=320y180'" class="mv_cover" />
 					</div>

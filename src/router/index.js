@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import Router from 'vue-router';
 Vue.use(Router)
 var router = new Router({
@@ -147,7 +146,8 @@ var router = new Router({
 					component: resolve => require(['@/pages/home/index/sort'], resolve)
 				}]
 			}]
-		}, {
+		},
+		{
 			path: '*',
 			redirect: '/home/index/find'
 		}
@@ -162,7 +162,9 @@ router.beforeEach((to, from, next) => {
 		router.push({
 			name: 'login'
 		});
-	} else {
+	} 
+	
+	else {
 		next();
 	}
 

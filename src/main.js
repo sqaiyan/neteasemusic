@@ -1,12 +1,9 @@
-import Vue from 'vue'
 import App from './App'
 import router from './router'
 import 'mint-ui/lib/style.css'
 import mint from "mint-ui";
 import '@/assets/layout.css'
-import '@/assets/icon.css'
 import store from '@/store/store'
-import axios from 'axios'
 import api from "@/api";
 //import vconsole from 'vconsole';
 Vue.use(mint);
@@ -101,6 +98,6 @@ Vue.filter("btdto", function(v) {
 	v = new Date(v);
 	var m = v.getMonth() + 1;
 	var d = v.getDate();
-	var xz = "魔羯水瓶双鱼牡羊金牛双子巨蟹狮子处女天秤天蝎射手魔羯".substr(m * 2 - (d < "102223444433".charAt(m - 1) - -19) * 2, 2);
+	var xz = "魔羯水瓶双鱼牡羊金牛双子巨蟹狮子处女天秤天蝎射手魔羯".substr(m * 2 - (d < "102223444433".charAt(m - 1) - 19) * 2, 2);
 	return xz + '座'
 })
