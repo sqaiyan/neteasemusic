@@ -57,10 +57,6 @@
 	import { mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
-	import topicres from "@/components/topicres"
-	import playico from "@/components/playico"
-	import loading from "@/components/loading"
-	import cmt from "@/components/comments"
 	export default {
 		name: 'topicDetail',
 		data() {
@@ -74,12 +70,6 @@
 				comments: [],
 				loading: true
 			}
-		},
-		components: {
-			playico,
-			topicres,
-			loading,
-			cmt
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {

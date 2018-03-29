@@ -37,9 +37,6 @@
 <script>
 	import { mapState } from 'vuex'
 	import api from '@/api';
-	import loading from "@/components/loading"
-	import playico from "@/components/playico"
-	import songlist from "@/components/songlist";
 	export default {
 		name: 'playlist',
 		data() {
@@ -52,11 +49,6 @@
 				busy:true,
 				offset:0
 			}
-		},
-		components: {
-			songlist,
-			loading,
-			playico
 		},
 		created() {
 			this.get()

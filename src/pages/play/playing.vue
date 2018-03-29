@@ -34,7 +34,7 @@
 				</div>
 			</div>
 			<playaction v-on:psaction="psaction"></playaction>
-			
+
 		</div>
 		<pop :show="pop_tg==1" v-on:closepop="pop_tg=0">
 			<div class='ppm_header'>{{music.name}}</div>
@@ -129,9 +129,6 @@
 	} from 'mint-ui';
 	import u from "@/utils.js";
 	import bs64 from "@/base64";
-	import lrcTpl from "@/components/lrc";
-	import pop from "@/components/pop"
-	import playaction from "@/components/playaction"
 	export default {
 		name: 'playing',
 		data() {
@@ -143,15 +140,10 @@
 				pop_tg: 0
 			}
 		},
-		components: {
-			playaction,
-			lrcTpl,
-			pop
-		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
 				//当前播放的音乐的id与路由的id不一样
-				if(parseInt(to.params.id) !== parseInt(vm.music.id) || vm.playtype != 1||!vm.playurl) {
+				if(parseInt(to.params.id) !== parseInt(vm.music.id) || vm.playtype != 1 || !vm.playurl) {
 					console.log("enter playing page");
 					vm.$store.commit("setplaytype", 1);
 					if(vm.bgmchange && vm.music.id) {
@@ -185,7 +177,7 @@
 				if(!this.music.id || this.playtype != 1) return;
 				this.showlrc && this.loadLrc(v.id);
 				this.$store.commit("resetmusic");
-				
+
 				if(!this.playurl) {
 					this.cover = "";
 					this.$store.dispatch('only_murl');
@@ -244,8 +236,8 @@
 					add: true
 				})
 			},
-			psaction(){
-				this.pop_tg=3
+			psaction() {
+				this.pop_tg = 3
 			},
 			...mapMutations([
 				'playindex',

@@ -52,7 +52,7 @@
 					<div class="flexleft flexnum ">
 						<img src="../../static/images/pl-playall.png" />
 					</div>
-					<div class="flexlist" >
+					<div class="flexlist">
 						<span id="pa-count">播放全部 <span> (共{{list.playlist.trackCount}}首)</span>
 						</span>
 					</div>
@@ -65,12 +65,10 @@
 </template>
 
 <script>
-	import {mapState } from 'vuex'
+	import { mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
-	import loading from "@/components/loading"
-	import playico from "@/components/playico"
-	import songlist from "@/components/songlist";
+
 	export default {
 		name: 'playlist',
 		data() {
@@ -89,18 +87,13 @@
 				canplay: []
 			}
 		},
-		components: {
-			songlist,
-			loading,
-			playico
-		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
 				if(parseInt(to.params.id) !== parseInt(vm.id)) {
 					vm.name = "";
 					vm.loaded = false;
 					vm.cover = "";
-					vm.canplay=[];
+					vm.canplay = [];
 					vm.list = {
 						playlist: {
 							creator: {}
@@ -118,7 +111,7 @@
 				this.id = this.$route.params.id;
 				this.istoptype = this.$route.query.istop;
 				img && (this.cover = bs64.id2Url(img));
-				api.playlist(this.id,0, 1000).then(res => {
+				api.playlist(this.id, 0, 1000).then(res => {
 					this.loaded = true;
 					var canplay = res.data.playlist.tracks.map(item => {
 						if(item.st >= 0) return item;
@@ -128,14 +121,14 @@
 					this.list = res.data;
 				});
 			},
-			playindex(i){
+			playindex(i) {
 				//this.$store.commit("setplaytype",1);
-				this.$store.commit("setplaylist",this.canplay);
-				this.$store.commit("playindex",i);
+				this.$store.commit("setplaylist", this.canplay);
+				this.$store.commit("playindex", i);
 			},
-			playall(){
+			playall() {
 				this.playindex(0);
-				this.$store.commit("setplaytype",1);
+				this.$store.commit("setplaytype", 1);
 				this.$store.dispatch("only_murl");
 				api.comments(this.music.id, 0, 2).then(res => {
 					this.$store.commit('commentscount', res.data.total);
@@ -143,12 +136,12 @@
 			}
 		},
 		computed: {
-			title(){
+			title() {
 				return this.scrolltop > 100 ? '' : '歌单';
 			},
-			st(){
+			st() {
 				var main = this.$refs.main;
-				main =main? main.getBoundingClientRect().height:0;
+				main = main ? main.getBoundingClientRect().height : 0;
 				return this.scrolltop > main ? main : this.scrolltop
 			},
 			...mapState([

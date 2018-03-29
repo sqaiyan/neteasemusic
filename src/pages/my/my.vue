@@ -57,7 +57,6 @@
 	import loading from "@/components/loading"
 	import playico from "@/components/playico";
 	import utils from "@/utils"
-	import pl from "@/components/playlist";
 	export default {
 		name: 'user',
 		data() {
@@ -72,7 +71,6 @@
 		components: {
 			loading,
 			playico,
-			pl
 		},
 		mounted() {
 			console.log(".........................created my page",this.user);

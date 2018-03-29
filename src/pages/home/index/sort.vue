@@ -42,7 +42,6 @@
 </template>
 
 <script>
-  import loading from '@/components/loading'
   import api from "@/api"
   export default {
     name: 'playlist',
@@ -52,9 +51,6 @@
         re: []
       }
     },
-    components: {
-      loading
-    },
     created() {
       this.getsort()
     },
@@ -63,7 +59,6 @@
         api.index_sort().then(res => {
           this.re = res.data
           this.loaded = true;
-          console.log(this.re, this.loaded)
         })
       }
     }

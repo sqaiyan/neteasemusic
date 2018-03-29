@@ -46,9 +46,6 @@
 	import { mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
-	import songlist from "@/components/songlist";
-	import loading from "@/components/loading"
-	import playico from "@/components/playico";
 	import utils from "@/utils"
 	export default {
 		name: 'cloud',
@@ -60,11 +57,6 @@
 					data: []
 				}
 			}
-		},
-		components: {
-			loading,
-			playico,
-			songlist
 		},
 		created() {
 			this.cloud()

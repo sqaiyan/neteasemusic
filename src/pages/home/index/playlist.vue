@@ -54,7 +54,6 @@
 
 <script>
 	import api from '@/api'
-	import loading from "@/components/loading"
 	export default {
 		name: 'playlist',
 		data() {
@@ -71,9 +70,6 @@
 				hiqulity: {},
 				busy: true
 			}
-		},
-		components: {
-			loading
 		},
 		created() {
 			this.getcatelist();

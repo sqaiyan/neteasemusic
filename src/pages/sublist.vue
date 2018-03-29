@@ -75,9 +75,6 @@
 	import { mapState } from 'vuex'
 	import api from '@/api';
 	import u from "@/utils.js"
-	import tab from "@/components/tabs";
-	import loading from "@/components/loading"
-	import playico from "@/components/playico"
 	const type = [{
 		name: '歌手',
 		text: 0,
@@ -119,11 +116,6 @@
 				st: u.clone(type),
 				cur: '0'
 			}
-		},
-		components: {
-			loading,
-			playico,
-			tab
 		},
 		created() {
 			this.get();

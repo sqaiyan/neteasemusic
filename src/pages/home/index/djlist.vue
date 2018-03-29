@@ -53,7 +53,6 @@
 
 <script>
 	import api from '@/api'
-	import loading from "@/components/loading"
 	export default {
 		name: 'djlist',
 		data() {
@@ -71,9 +70,6 @@
 				busy: true,
 				loaded: false
 			}
-		},
-		components: {
-			loading
 		},
 		created() {
 			this.djall();

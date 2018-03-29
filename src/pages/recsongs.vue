@@ -102,10 +102,7 @@
 <script>
 	import { mapState } from 'vuex'
 	import api from '@/api';
-	import loading from "@/components/loading"
-	import playico from "@/components/playico";
 	import utils from "@/utils";
-	import pop from "@/components/pop"
 	import {
 		Toast
 	} from 'mint-ui';
@@ -124,11 +121,6 @@
 				comments: 0,
 				idx: -1
 			}
-		},
-		components: {
-			loading,
-			playico,
-			pop
 		},
 		created() {
 			api.user_recs().then(res => {

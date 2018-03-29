@@ -85,9 +85,6 @@
 		Toast
 	} from 'mint-ui';
 	import bs64 from "@/base64";
-	import pop from "@/components/pop"
-	import lrcTpl from "@/components/lrc"
-	import playaction from "@/components/playaction"
 	export default {
 		name: 'fm',
 		data() {
@@ -97,11 +94,6 @@
 				showlrc: false,
 				pop_tg: 0
 			}
-		},
-		components: {
-			lrcTpl,
-			pop,
-			playaction
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {

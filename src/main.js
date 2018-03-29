@@ -46,6 +46,26 @@ axios.interceptors.response.use((res) => {
 })
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
+// common component
+
+import lrcTpl from "@/components/lrc";
+import pop from "@/components/pop"
+import playaction from "@/components/playaction"
+import songlist from "@/components/songlist";
+import loading from "@/components/loading";
+import cmt from "@/components/comments";
+import tab from "@/components/tabs";
+import pl from "@/components/playlist";
+import playico from "@/components/playico"
+Vue.component("playico", playico);
+Vue.component("lrcTpl", lrcTpl)
+Vue.component("pop", pop)
+Vue.component("playaction", playaction)
+Vue.component("songlist", songlist)
+Vue.component("loading", loading)
+Vue.component("cmt", cmt)
+Vue.component("tab", tab)
+Vue.component("pl", pl)
 let audio = null;
 new Vue({
 	el: '#app',

@@ -42,7 +42,7 @@
 		</div>
 		<div v-if="rec.total">
 			<div class="sm_title">评论（{{rec.total}}）</div>
-			<comments :list="rec.comments"></comments>
+			<cmt :list="rec.comments"></cmt>
 		</div>
 		<loading v-if="!loaded||rec.more"></loading>
 	</div>
@@ -51,9 +51,6 @@
 <script>
 	import api from '@/api';
 	import bs64 from "@/base64";
-	import loading from "@/components/loading"
-	import playico from "@/components/playico";
-	import comments from "@/components/comments"
 	export default {
 		name: 'mv',
 		data() {
@@ -70,11 +67,6 @@
 				busy: true,
 				mvurl: ''
 			}
-		},
-		components: {
-			loading,
-			playico,
-			comments
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {

@@ -63,9 +63,6 @@
 	import {mapState} from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
-	import playico from "@/components/playico"
-	import loading from "@/components/loading"
-	import songlist from "@/components/songlist";
 	export default {
 		name: 'album',
 		data() {
@@ -85,11 +82,6 @@
 				loaded: false,
 				canplay: []
 			}
-		},
-		components: {
-			songlist,
-			loading,
-			playico
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {

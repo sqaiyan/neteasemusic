@@ -177,13 +177,9 @@
 <script>
 	import { mapState } from 'vuex'
 	import api from "@/api"
-	import tab from "@/components/tabs";
-	import pl from "@/components/playlist";
 	import {
 		Toast
 	} from 'mint-ui';
-	import songlist from "@/components/songlist"
-	import loading from "@/components/loading"
 	import st from "@/assets/searchtype.js";
 	import u from "@/utils.js"
 	export default {
@@ -210,12 +206,6 @@
 				multimatch: {},
 				recent: JSON.parse(localStorage.getItem('recent')) || {}
 			}
-		},
-		components: {
-			tab,
-			songlist,
-			loading,
-			pl
 		},
 		activated() {
 			this.busy = false;

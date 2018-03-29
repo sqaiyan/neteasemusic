@@ -147,11 +147,7 @@
 
 <script>
 	import api from '@/api';
-	import loading from "@/components/loading";
-	import tab from "@/components/tabs";
 	import bs64 from "@/base64";
-	import playico from "@/components/playico"
-	import songlist from "@/components/songlist";
 	import utils from "@/utils"
 	import { mapState } from 'vuex'
 	import topicontent from "@/components/topicontent"
@@ -204,10 +200,6 @@
 			}
 		},
 		components: {
-			songlist,
-			tab,
-			loading,
-			playico,
 			topicontent
 		},
 		beforeRouteEnter: (to, from, next) => {

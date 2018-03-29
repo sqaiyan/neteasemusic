@@ -104,11 +104,7 @@
 	import {mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
-	import tab from "@/components/tabs";
 	import utils from "@/utils"
-	import loading from "@/components/loading"
-	import playico from "@/components/playico"
-	import songlist from "@/components/songlist";
 	export default {
 		name: 'djlist',
 		data() {
@@ -131,12 +127,6 @@
 				programs: {},
 				busy: true
 			}
-		},
-		components: {
-			songlist,
-			loading,
-			playico,
-			tab
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {

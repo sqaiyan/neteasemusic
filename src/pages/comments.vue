@@ -19,8 +19,6 @@
 
 <script>
 	import api from '@/api';
-	import loading from "@/components/loading"
-	import cmt from "@/components/comments"
 	export default {
 		name: 'comments',
 		data() {
@@ -35,10 +33,6 @@
 				offset: 0,
 				busy: true
 			}
-		},
-		components: {
-			loading,
-			cmt
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {
@@ -57,7 +51,7 @@
 		},
 		methods: {
 			comments(more = true, id) {
-				if(this.$route.name!='comment')return;
+				if(this.$route.name != 'comment') return;
 				this.busy = true;
 				this.id = this.$route.params.id;
 				if(more && !this.rec.more) return;

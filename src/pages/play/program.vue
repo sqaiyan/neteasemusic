@@ -128,9 +128,6 @@
 	} from 'mint-ui';
 	import u from "@/utils.js";
 	import bs64 from "@/base64";
-	import lrcTpl from "@/components/lrc";
-	import pop from "@/components/pop"
-	import playaction from "@/components/playaction"
 	export default {
 		name: 'program',
 		data() {
@@ -140,11 +137,6 @@
 				id: 0,
 				pop_tg: 0
 			}
-		},
-		components: {
-			playaction,
-			lrcTpl,
-			pop
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {

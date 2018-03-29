@@ -16,8 +16,6 @@
 </template>
 
 <script>
-	import tab from "@/components/tabs.vue"
-	import playico from "@/components/playico"
 	export default {
 		name: 'index',
 		data() {
@@ -38,10 +36,6 @@
 					url: 'sort'
 				}]
 			}
-		},
-		components: {
-			tab,
-			playico
 		}
 	}
 </script>

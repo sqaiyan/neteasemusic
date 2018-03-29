@@ -170,10 +170,6 @@
 	import { mapState } from 'vuex'
 	import api from '@/api';
 	import bs64 from "@/base64";
-	import tabs from "@/components/tabs";
-	import pl from "@/components/playlist";
-	import loading from "@/components/loading"
-	import playico from "@/components/playico";
 	import utils from "@/utils"
 	let tab = [{
 		name: '音乐',
@@ -208,12 +204,6 @@
 				e_offset: 0,
 				busy:true
 			}
-		},
-		components: {
-			loading,
-			playico,
-			tabs,
-			pl
 		},
 		beforeRouteEnter: (to, from, next) => {
 			next(vm => {

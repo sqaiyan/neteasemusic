@@ -44,8 +44,6 @@
 <script>
 	import { mapState } from 'vuex'
 	import api from '@/api';
-	import loading from "@/components/loading"
-	import playico from "@/components/playico"
 	export default {
 		name: 'subradio',
 		data() {
@@ -60,10 +58,6 @@
 					djRadios: []
 				}
 			}
-		},
-		components: {
-			loading,
-			playico,
 		},
 		created() {
 			this.get();
