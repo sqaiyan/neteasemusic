@@ -94,8 +94,8 @@ npm run build --report
 5.预览地址中webpack无法获取动态图片地址，这个问题稍后研究下。
 
 ### 如果本例对您学习Vue有帮助，欢迎赏杯奶茶喝
-![1](https://github.com/sqaiyan/NeteaseMusicWxMiniApp/raw/master/screenshot/wx.jpg)
-![1](https://github.com/sqaiyan/NeteaseMusicWxMiniApp/raw/master/screenshot/zfb.jpg)
+<img src="https://github.com/sqaiyan/NeteaseMusicWxMiniApp/raw/master/screenshot/wx.jpg" width="220"/>
+<img src="https://github.com/sqaiyan/NeteaseMusicWxMiniApp/raw/master/screenshot/zfb.jpg" width="220"/>
 
 
 
