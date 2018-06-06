@@ -92,8 +92,10 @@ npm run build --report
 
 4. 手机真机性能不咋地吧，可能功能多js太大了，有的页面逻辑不好影响的吧。整体keepalive了，这。。。有时间研究下怎么搞
 5.预览地址中webpack无法获取动态图片地址，这个问题稍后研究下。
-6.手机端无法自动播放歌曲，稍后解决
-7.手机端无法播放MV
+
+### 如果本例对您学习Vue有帮助，欢迎赏杯奶茶喝
+![1](https://github.com/sqaiyan/NeteaseMusicWxMiniApp/raw/master/screenshot/wx.jpg)
+![1](https://github.com/sqaiyan/NeteaseMusicWxMiniApp/raw/master/screenshot/zfb.jpg)
 
 
 
