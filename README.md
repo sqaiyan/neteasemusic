@@ -88,14 +88,9 @@ npm run build --report
 
 2. 目前的api基本都是根据官网版扒下来的，git上发布的一些也基本都是这样，客户端接口用的是最新版的 没有能力扒出来。存在问题是banner接口请求到的是老接口数据，已经不维护了的数据 
 
-3. mint-ui库就用到几个功能，准备单独扣出来或自己写，去掉对这个库的引用。
-
-4. 手机真机性能不咋地吧，可能功能多js太大了，有的页面逻辑不好影响的吧。整体keepalive了，这。。。有时间研究下怎么搞
-5.预览地址中webpack无法获取动态图片地址，这个问题稍后研究下。
 
 ### 如果本例对您学习Vue有帮助，欢迎赏杯奶茶喝
-<img src="https://github.com/sqaiyan/NeteaseMusicWxMiniApp/raw/master/screenshot/wx.jpg" width="220"/>
-<img src="https://github.com/sqaiyan/NeteaseMusicWxMiniApp/raw/master/screenshot/zfb.jpg" width="220"/>
+<img src="https://github.com/sqaiyan/NeteaseMusicWxMiniApp/raw/master/screenshot/zfb.jpg" width="220"/><img src="https://github.com/sqaiyan/NeteaseMusicWxMiniApp/raw/master/screenshot/wx.jpg" width="220"/>
 
 
 
